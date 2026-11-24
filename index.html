@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
+<title>任務森林｜扭蛋養樹與毛孩</title>
+<meta name="description" content="完成待辦任務、收集扭蛋券，在四個療癒場景中培育專屬植物與毛孩夥伴！支援每日習慣模式、成就系統與本機備份。">
+<meta property="og:title" content="任務森林｜扭蛋養樹與毛孩">
+<meta property="og:description" content="把待辦清單變成療癒養成遊戲！完成任務抽扭蛋，培育森林、花田、沙漠與雪地的植物與夥伴。">
+<meta property="og:type" content="website">
+<meta name="theme-color" id="themeColor" content="#2f9e6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="任務森林">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" id="appleIcon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌳</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Huninn&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e6f6ea;--card:#fff;--ink:#22352c;--mut:#5f7a6c;--g:#2f9e6e;--gd:#1f6b4f;--pink:#ff6f91;--sun:#ffc93c;--lil:#7b6cf6;--lilt:#6a5ae0;--line:#d3e8da;--soft:#f2faf4;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#112018;--card:#1b2e24;--ink:#e6f4ea;--mut:#9bb8a8;--line:#2c4739;--soft:#16271e;--lilt:#b9b1ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#112018;--card:#1b2e24;--ink:#e6f4ea;--mut:#9bb8a8;--line:#2c4739;--soft:#16271e;--lilt:#b9b1ff;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+html,body{height:100%;overflow:hidden}
+.wrap{max-width:1100px;margin:auto;height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));padding:12px;display:grid;gap:12px;grid-template-columns:1fr;grid-template-rows:auto minmax(0,46dvh) minmax(0,1fr);grid-template-areas:"top" "world" "tasks"}
+@media(min-width:900px){.wrap{grid-template-columns:1.1fr .9fr;grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "tasks world"}}
+@media(max-height:520px) and (orientation:landscape){.wrap{grid-template-columns:1fr 1fr;grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "tasks world";gap:8px;padding:8px}.meter{display:none!important}.top p{display:none}h1{font-size:20px}.card{padding:10px}.tabs{margin-top:6px}.sc{font-size:16px;padding:1px 0}.sc small{display:none}.world-act{margin-top:6px;gap:6px}.wact-btn{min-width:0;padding:4px 8px;font-size:12px}}
+@media(max-height:520px) and (orientation:portrait) and (max-width:899px){.wrap{grid-template-rows:auto minmax(0,150px) minmax(0,1fr)}.meter{display:none!important}.tabs{margin-top:6px}.sc{font-size:16px;padding:1px 0}.sc small{display:none}.world-act{margin-top:6px;gap:6px}.wact-btn{min-width:0;padding:4px 8px;font-size:12px}}
+.top{grid-area:top;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.top-l,.top-r{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h1{margin:0;font-size:26px;color:var(--gd)}
+:root[data-theme="dark"] h1{color:#7ee0ad}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) h1{color:#7ee0ad}}
+.top p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;background:var(--sun);color:#4a3600;font-size:17px}
+.pill.bump{animation:bump .5s}
+.ibtn{position:relative;width:40px;height:40px;border-radius:50%;border:2px solid var(--line);background:var(--card);font-size:18px;display:grid;place-items:center;transition:transform .15s,border-color .15s}
+.ibtn:hover{transform:scale(1.07);border-color:var(--g)}
+.ibtn.off{opacity:.65}
+.ibtn.ready{border-color:var(--sun);animation:wob 1.8s infinite}
+.abdg{position:absolute;right:-5px;top:-5px;min-width:19px;padding:0 5px;border-radius:99px;background:#e8384f;color:#fff;font-size:11px;font-weight:400;line-height:19px;text-align:center}
+.card{background:var(--card);border:2px solid var(--line);border-radius:26px;padding:16px}
+h2{margin:0 0 10px;font-size:19px}
+.task-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.task-head h2{margin:0}
+.mini-tog{border:2px solid var(--line);background:var(--soft);color:var(--mut);border-radius:99px;padding:3px 10px;font-size:13px;display:inline-flex;align-items:center;gap:4px;transition:border-color .15s,background .15s,color .15s}
+.mini-tog.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 12%,var(--card));color:var(--g)}
+#world{grid-area:world;display:flex;flex-direction:column;min-height:0}#tasks{grid-area:tasks;display:flex;flex-direction:column;min-height:0}
+#gacha,#daily,#bk,#stats,#decoPop{text-align:center;position:relative;width:100%;max-width:360px;max-height:94dvh;overflow:auto}
+#stats,#decoPop{max-width:440px}
+#gov,#dov,#bov,#sov,#decov{z-index:40}
+#bk textarea{display:block;width:100%;margin:8px 0;padding:10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-size:12px;word-break:break-all;resize:vertical}#bk h3{margin:18px 0 0;font-size:16px}#bk .btn{width:100%}
+/* scene */
+.scene{position:relative;flex:1;min-height:90px;border-radius:20px;overflow:hidden;background:linear-gradient(#8fd6ff,#e9fbff 64%,#8fd694 64%,#59b06a);user-select:none;touch-action:none;transition:background .8s ease,box-shadow .5s ease;isolation:isolate}
+.scene.star-1{box-shadow:inset 0 0 0 3px #ffc93c,0 0 14px #ffc93c55}
+.scene.star-1 #tree{filter:drop-shadow(0 0 8px #ffb3c7aa) hue-rotate(-14deg) saturate(1.16)}
+.scene.star-1 #pet{filter:drop-shadow(0 0 8px #ffd95acc)}
+.scene.star-2{box-shadow:inset 0 0 0 3px #a78bfa,0 0 16px #a78bfa66}
+.scene.star-2 #tree{filter:drop-shadow(0 0 10px #7ee0adbb) hue-rotate(24deg) saturate(1.25)}
+.scene.star-2 #pet{filter:drop-shadow(0 0 10px #c4b5fdcc)}
+.scene.star-3{box-shadow:inset 0 0 0 3px #ff6f91,0 0 18px #ffc93c88}
+.scene.star-3 #tree{filter:drop-shadow(0 0 12px #ffc93ccc) hue-rotate(-28deg) saturate(1.32) brightness(1.06)}
+.scene.star-3 #pet{filter:drop-shadow(0 0 12px #ff9a9ecc) saturate(1.15)}
+.scene.star-4{animation:s4glow 4s ease-in-out infinite}
+.scene.star-4 #tree{filter:drop-shadow(0 0 14px #38f9d7cc) hue-rotate(40deg) saturate(1.35)}
+.scene.star-4 #pet{filter:drop-shadow(0 0 14px #b9b1ffcc) saturate(1.2)}
+.scene.star-5{animation:s5glow 5s linear infinite}
+.scene.star-5 #tree{filter:drop-shadow(0 0 16px #ffd95aee) drop-shadow(0 0 5px #fff) saturate(1.4) brightness(1.08)}
+.scene.star-5 #pet{filter:drop-shadow(0 0 16px #ffd95aee) drop-shadow(0 0 4px #fff) saturate(1.25)}
+@keyframes s4glow{0%,100%{box-shadow:inset 0 0 0 3px #38f9d7,0 0 18px #38f9d788}50%{box-shadow:inset 0 0 0 3px #7b6cf6,0 0 24px #7b6cf688}}
+@keyframes s5glow{0%,100%{box-shadow:inset 0 0 0 4px #ff6f91,0 0 22px #ff6f9188}20%{box-shadow:inset 0 0 0 4px #ffc93c,0 0 22px #ffc93c88}40%{box-shadow:inset 0 0 0 4px #8fe08f,0 0 22px #8fe08f88}60%{box-shadow:inset 0 0 0 4px #6fd0ff,0 0 22px #6fd0ff88}80%{box-shadow:inset 0 0 0 4px #b78cff,0 0 22px #b78cff88}}
+#auraLayer{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.aura-p{position:absolute;font-size:14px;opacity:0;animation:auraFloat 3.6s ease-in-out infinite}
+@keyframes auraFloat{0%{transform:translateY(12px) scale(.7);opacity:0}40%{opacity:1}100%{transform:translateY(-36px) scale(1.1);opacity:0}}
+.sun{position:absolute;right:16px;top:10px;font-size:38px;pointer-events:none;z-index:2;transition:transform .4s}
+.cloud{position:absolute;font-size:34px;animation:drift 30s linear infinite;pointer-events:none;z-index:2}
+.hill{position:absolute;bottom:-40px;left:-10%;width:70%;height:110px;border-radius:50%;background:#6cc47b;pointer-events:none;z-index:1;transition:background .8s ease}
+#starLayer,#weatherLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#starLayer{z-index:1;opacity:0;transition:opacity .8s ease}
+#starLayer.on{opacity:1}
+#nightShade{position:absolute;inset:0;z-index:7;pointer-events:none;background:#6f7fc0;mix-blend-mode:multiply;opacity:0;transition:opacity .8s ease}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fffbe0;box-shadow:0 0 6px #fff;animation:twinkle 2.6s ease-in-out infinite alternate}
+#weatherLayer{z-index:6}
+.wp-rain{position:absolute;top:-16px;width:2px;height:14px;border-radius:2px;background:linear-gradient(transparent,#dff6ff);opacity:.7;animation:rainFall linear infinite}
+.wp-petal{position:absolute;top:-24px;font-size:15px;opacity:.9;animation:petalFall linear infinite}
+.wp-snow{position:absolute;top:-20px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 5px #fff;opacity:.85;animation:snowFall linear infinite}
+.wp-meteor{position:absolute;width:64px;height:2px;border-radius:99px;background:linear-gradient(90deg,transparent,#fff8c4,#ffffff);box-shadow:0 0 8px #ffe484;opacity:0;animation:meteorFall linear infinite}
+.wp-aurora{position:absolute;top:-10%;left:-10%;width:120%;height:58%;background:linear-gradient(120deg,transparent 10%,#38f9d755 32%,#7b6cf666 56%,#ff6f9144 76%,transparent 92%);filter:blur(14px);mix-blend-mode:screen;animation:auroraWave 7s ease-in-out infinite alternate}
+.wp-rainbow{position:absolute;left:50%;top:14%;width:92%;height:78%;transform:translateX(-50%);border-radius:50% 50% 0 0;border:16px solid transparent;box-shadow:inset 0 0 0 4px #ff6f9155,inset 0 0 0 8px #ffc93c55,inset 0 0 0 12px #8fe08f55,inset 0 0 0 16px #6fd0ff55,inset 0 0 0 20px #b78cff55;opacity:.75;pointer-events:none}
+.wp-sparkle{position:absolute;font-size:13px;opacity:.85;animation:twinkle 1.8s ease-in-out infinite alternate}
+.scene-hud{position:absolute;left:10px;top:10px;z-index:9;display:flex;flex-wrap:nowrap;gap:6px;max-width:calc(100% - 62px)}
+.deco-btn{border:2px solid #ffffffaa;background:#ffffffcc;color:#22352c;border-radius:99px;padding:4px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px;backdrop-filter:blur(4px);transition:transform .15s;white-space:nowrap}
+.deco-btn:hover{transform:scale(1.05)}
+.world-act{display:none;gap:8px;margin-top:8px;flex-wrap:wrap}
+.world-act.on{display:flex}
+.wact-btn{flex:1;min-width:140px;border:2px solid var(--line);border-radius:14px;padding:6px 12px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:transform .15s}
+.wact-btn:hover{transform:translateY(-1px)}
+.wact-btn.ascend{background:linear-gradient(135deg,#fff3b0,#ffd166);border-color:#ff9f1c;color:#4a3000;box-shadow:0 2px 0 #e09f1c}
+.wact-btn.grow-pick{background:color-mix(in srgb,var(--g) 14%,var(--card));border-color:var(--g);color:var(--g);box-shadow:0 2px 0 var(--gd)}
+#tree{position:absolute;left:2%;bottom:0;width:60%;height:100%;transform-origin:50% 92%;cursor:pointer;z-index:2;transition:filter .5s ease}
+#tree.boing{animation:boing .6s}
+#pet{position:absolute;right:9%;bottom:18px;line-height:1;cursor:pointer;transform-origin:bottom;animation:bob 1.7s ease-in-out infinite;transition:font-size .4s,filter .5s ease;z-index:5;display:inline-flex;align-items:center;justify-content:center}
+#pet.hop{animation:hop .7s}
+.pet-hat{position:absolute;top:-0.42em;left:50%;transform:translateX(-50%);font-size:0.52em;pointer-events:none;filter:drop-shadow(0 2px 3px #0004);line-height:1}
+.pet-hat.shades{top:0.18em;font-size:0.46em}
+#tree:focus-visible,#pet:focus-visible{outline:3px solid var(--lil);outline-offset:2px;border-radius:14px}
+.bubble{position:absolute;right:4%;top:50px;max-width:56%;padding:7px 12px;border-radius:14px;background:#fff;color:#22352c;font-size:13px;line-height:1.4;opacity:0;transform:translateY(6px);transition:.25s;pointer-events:none;z-index:8;box-shadow:0 4px 12px #0002}
+.bubble.on{opacity:1;transform:none}
+.deco-item{position:absolute;transform:translate(-50%,-50%);font-size:30px;line-height:1;cursor:grab;z-index:4;filter:drop-shadow(0 3px 4px #0003);transition:transform .15s;touch-action:none}
+.deco-item:active{cursor:grabbing;transform:translate(-50%,-50%) scale(1.2);z-index:7}
+.meter{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;margin-top:10px;font-size:14px}
+.meter b{font-weight:400}
+.bar{height:12px;border-radius:9px;background:var(--soft);border:1px solid var(--line);overflow:hidden;grid-column:2}
+.bar i{display:block;height:100%;width:0;border-radius:9px;transition:width .6s cubic-bezier(.3,1.4,.5,1)}
+.m-tree i{background:linear-gradient(90deg,#8fe08f,#2f9e6e)}.m-pet i{background:linear-gradient(90deg,#ffd36b,#ff8a4c)}
+.meter small{grid-column:2;color:var(--mut)}
+/* tasks */
+.add{display:grid;grid-template-columns:1fr auto auto auto;gap:7px;align-items:center}
+.add input,.add select{padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--soft);min-width:0}
+.add input:focus,.add select:focus{outline:3px solid var(--lil);border-color:transparent}
+.add-rep{padding:9px 10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);color:var(--mut);font-size:13px;white-space:nowrap;transition:border-color .15s,background .15s,color .15s}
+.add-rep.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 15%,var(--card));color:var(--g)}
+.btn{padding:10px 18px;border:0;border-radius:14px;background:var(--g);color:#fff;font-size:16px;box-shadow:0 4px 0 var(--gd);transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--gd)}
+.btn:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--lil);outline-offset:2px}
+.hint{display:none;margin:8px 0 0;font-size:13px;color:var(--lilt)}.hint.on{display:block}
+.hint button{border:0;background:none;color:inherit;text-decoration:underline}
+#list{margin-top:12px;display:grid;align-content:start;gap:7px;flex:1;min-height:0;overflow:auto;padding:2px}
+.task{display:flex;align-items:center;gap:7px;padding:9px 10px;border-radius:16px;border:2px solid var(--line);background:var(--soft);margin-left:calc(var(--lv,0) * 20px)}.task.new{animation:pop .3s}
+@media(max-width:600px){.task{margin-left:calc(var(--lv,0) * 12px)}}
+.task.l0{border-color:var(--lil);background:color-mix(in srgb,var(--lil) 10%,var(--card))}
+.task.l1{border-color:#7fd1a5}
+.task.l2{border-style:dashed}
+.task.done{opacity:.55}.task.done .nm{text-decoration:line-through;cursor:default}
+.task input[type="checkbox"]{width:22px;height:22px;accent-color:var(--g);flex:none}
+.nm{flex:1;min-width:0;overflow-wrap:anywhere;cursor:text}
+.nm-edit{flex:1;min-width:0;padding:2px 8px;border-radius:8px;border:2px solid var(--lil);background:var(--card)}
+.l0 .nm{font-size:17px}.l2 .nm{font-size:14px}
+.cnt{font-style:normal;font-size:13px;padding:1px 8px;border-radius:9px;background:var(--card);border:1px solid var(--line);white-space:nowrap}
+.rep-tag{border:1px solid var(--g)!important;background:color-mix(in srgb,var(--g) 12%,var(--card))!important;color:var(--g)!important;width:auto!important;height:24px!important;padding:0 7px!important;border-radius:99px!important;font-size:12px!important;white-space:nowrap}
+.rep-tag.off{border:1px solid var(--line)!important;background:var(--card)!important;color:var(--mut)!important;width:28px!important;height:28px!important;padding:0!important;border-radius:10px!important;font-size:13px!important;opacity:.65}.rep-tag.off:hover{opacity:1;border-color:var(--g)!important;background:color-mix(in srgb,var(--g) 15%,var(--card))!important;color:var(--g)!important}.task button.del-cfm{width:auto;padding:0 8px;background:var(--pink);color:#fff;font-size:12px;white-space:nowrap;animation:pop .2s}
+.fold-btn{width:24px!important;height:24px!important;font-size:12px!important;border-radius:8px!important;background:transparent!important}
+.fold-btn:hover{background:var(--line)!important;color:var(--ink)!important}
+.rw{font-size:13px;color:var(--mut);white-space:nowrap}
+.task button{border:0;background:var(--card);border-radius:10px;width:28px;height:28px;color:var(--mut);flex:none;display:grid;place-items:center}
+.task button:hover{background:var(--pink);color:#fff}
+.task button[data-a="edit"]:hover{background:var(--lil);color:#fff}
+.task button[data-a="sub"]:hover{background:var(--g);color:#fff}
+.empty{text-align:center;color:var(--mut);padding:26px 0}
+.cd{font-size:12px;color:var(--lilt);white-space:nowrap;font-variant-numeric:tabular-nums;padding:1px 7px;border-radius:99px;border:1px dashed var(--lil);background:var(--card)}
+.task.locked input[type="checkbox"]{opacity:.4;cursor:not-allowed}
+.foot{margin-top:10px;font-size:13px;color:var(--mut);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}.fa{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+.foot button{border:0;background:none;color:var(--mut);text-decoration:underline}
+/* gacha */
+.machine{width:210px;margin:6px auto 0;position:relative}
+.globe{height:150px;border-radius:50% 50% 42% 42%;border:7px solid var(--pink);position:relative;overflow:hidden;background:radial-gradient(circle at 30% 25%,#fff 0,#fff0 14%),linear-gradient(145deg,#e4f8ff,#a7e1ee)}
+.cap{position:absolute;width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,var(--c) 50%,#fff 50%);box-shadow:inset -3px -4px 6px #0003;animation:idle 2.6s ease-in-out infinite alternate}
+.base{height:96px;margin-top:-8px;border-radius:20px 20px 28px 28px;background:linear-gradient(#ff8fa8,#e0476b);position:relative;box-shadow:0 8px 0 #b3314f}
+.knob{position:absolute;left:26px;top:20px;width:56px;height:56px;border-radius:50%;border:4px solid #b3314f;background:radial-gradient(#fff3b0,var(--sun));display:grid;place-items:center;cursor:pointer;transition:transform .9s cubic-bezier(.5,0,.3,1)}
+.knob:after{content:"";width:34px;height:10px;border-radius:9px;background:#fff;border:2px solid #c98a00}
+.knob.turn{transform:rotate(540deg)}
+.chute{position:absolute;right:26px;top:26px;width:60px;height:46px;border-radius:12px 12px 16px 16px;background:#4d1a2a;border:4px solid #ffd0a0;display:grid;place-items:center}
+#drop{width:32px;height:32px;border-radius:50%;opacity:0;background:linear-gradient(180deg,var(--c,#8fe08f) 50%,#fff 50%)}
+#drop.go{animation:drop .6s cubic-bezier(.3,1.5,.5,1) forwards}
+.machine.shake .globe{animation:shake .3s 3}
+.machine.shake .cap{animation:chaos .22s infinite alternate}
+#spin{margin-top:16px;width:100%;max-width:280px;padding:13px;font-size:18px;background:var(--pink);box-shadow:0 5px 0 #b3314f}
+#spin:disabled{opacity:.45;pointer-events:none}
+#spinAll{display:block;margin:10px auto 0;width:100%;max-width:280px;padding:11px;font-size:16px;background:var(--lil);box-shadow:0 5px 0 #4b3fc0}#spinAll:disabled{opacity:.45;pointer-events:none}
+.odds{margin:10px 0 0;font-size:13px;color:var(--mut)}
+.gbtn{position:relative;width:52px;height:52px;border-radius:50%;border:3px solid var(--pink);background:var(--card);font-size:25px;display:grid;place-items:center;box-shadow:0 4px 0 #b3314f;transition:transform .15s}.gbtn:hover{transform:rotate(-8deg) scale(1.08)}.gbtn.ready{animation:wob 1.8s infinite}.gbtn b{position:absolute;right:-6px;top:-6px;min-width:22px;padding:0 6px;border-radius:99px;background:var(--pink);color:#fff;font-size:13px;font-weight:400;line-height:22px}.gx{position:absolute;right:12px;top:10px;border:0;background:var(--soft);width:32px;height:32px;border-radius:50%;color:var(--mut)}
+@keyframes wob{0%,70%,100%{transform:none}78%{transform:rotate(-12deg)}86%{transform:rotate(12deg)}94%{transform:rotate(-6deg)}}
+.tabs{display:flex;gap:6px;margin-top:8px}.sc{position:relative;flex:1;border:2px solid var(--line);background:var(--soft);border-radius:14px;padding:3px 0;font-size:20px;line-height:1.2}.sc small{display:block;font-size:12px;color:var(--mut)}.sc.on{border-color:var(--g);background:var(--card);box-shadow:0 3px 0 var(--g)}.sc:disabled{opacity:.5;cursor:not-allowed}
+.sc .st-tag{position:absolute;right:4px;top:2px;font-size:11px;padding:0 5px;border-radius:99px;background:var(--sun);color:#4a3000;line-height:1.5}
+.gbtn.d{border-color:var(--g);box-shadow:0 4px 0 var(--gd)}.gbtn.d b{background:#e8384f}
+.q{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;text-align:left;padding:12px;margin-top:10px;border:2px solid var(--line);border-radius:18px;background:var(--soft)}.q .e{font-size:30px}.q p{margin:0;color:var(--mut);font-size:13px}.q.ok{opacity:.6}.q .btn{padding:8px 14px;font-size:15px}.q .btn:disabled{opacity:.5;box-shadow:none}
+/* stats & achievements */
+.sgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.sbox{background:var(--soft);border:2px solid var(--line);border-radius:16px;padding:10px 8px;text-align:center}
+.sbox b{display:block;font-size:22px;color:var(--g)}
+.sbox small{font-size:13px;color:var(--mut)}
+.ach-h{margin:16px 0 8px;font-size:16px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ach-all{border:0;border-radius:99px;background:var(--sun);color:#4a3000;padding:4px 11px;font-size:12px;box-shadow:0 2px 0 #c98a00}
+.ach-list{display:grid;gap:7px;text-align:left}
+.ach{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:16px;border:2px solid var(--line);background:var(--soft);opacity:.6}
+.ach.ok{opacity:1;border-color:var(--g);background:color-mix(in srgb,var(--g) 10%,var(--card))}
+.ach.claim{opacity:1;border-color:var(--sun);background:color-mix(in srgb,var(--sun) 16%,var(--card))}
+.ach .ae{font-size:26px;flex:none}
+.ach .at{flex:1;min-width:0}
+.ach .at b{display:block;font-size:14px}
+.ach .at small{display:block;font-size:13px;color:var(--mut)}
+.ach .st{font-size:13px;padding:3px 9px;border-radius:99px;background:var(--card);border:1px solid var(--line);white-space:nowrap}
+.ach.ok .st{background:var(--g);color:#fff;border-color:var(--g)}
+.ach .claim-btn{border:0;border-radius:99px;background:var(--sun);color:#4a3000;padding:5px 11px;font-size:12px;white-space:nowrap;box-shadow:0 2px 0 #c98a00}
+/* collection modal */
+.ctabs{display:flex;gap:6px;margin-top:10px}
+.ctab{flex:1;padding:7px 6px;border-radius:12px;border:2px solid var(--line);background:var(--soft);font-size:13px;color:var(--mut)}
+.ctab.on{border-color:var(--g);background:var(--card);color:var(--g);box-shadow:0 2px 0 var(--g)}
+.dsec{margin-top:14px;text-align:left}
+.dsec-h{font-size:14px;margin:0 0 6px;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
+.dsec-h small{font-size:12px;color:var(--mut)}
+.dsec.cur .dsec-h{color:var(--g)}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dcard{border:2px solid var(--line);border-radius:16px;background:var(--soft);padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;transition:transform .15s,border-color .15s}
+.dcard .de{font-size:28px;line-height:1.1}
+.dcard.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 12%,var(--card));box-shadow:0 3px 0 var(--g)}
+.dcard.lock{opacity:.48;cursor:not-allowed}
+.dcard small{font-size:12px;color:var(--mut)}
+/* popup & toasts */
+.ov{position:fixed;inset:0;background:#0008;display:none;place-items:center;z-index:50;padding:16px}.ov.on{display:grid}
+.box{background:var(--card);border-radius:30px;padding:26px 24px;text-align:center;max-width:340px;width:100%;max-height:94dvh;overflow:auto;animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+.box .big{font-size:84px;line-height:1.1;animation:bob 1.2s ease-in-out infinite}
+.box h3{margin:6px 0 2px;font-size:22px}.box p{margin:4px 0;color:var(--mut)}
+.up{color:var(--g);font-size:17px;margin-top:8px!important}
+.fx{position:fixed;z-index:99;pointer-events:none;font-size:22px;animation:fly .95s cubic-bezier(.15,.9,.3,1) forwards}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;transition:.3s;z-index:60;max-width:92%;display:inline-flex;align-items:center;gap:10px;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#toast button{border:0;background:var(--sun);color:#4a3600;padding:3px 10px;border-radius:99px;font-size:13px;white-space:nowrap}
+#achToast{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translate(-50%,-130px);opacity:0;background:linear-gradient(135deg,#fff5c0,#ffd166);color:#4a3000;border:2px solid #ff9f1c;padding:9px 16px;border-radius:99px;box-shadow:0 8px 20px #0003;transition:.35s cubic-bezier(.3,1.4,.5,1);z-index:65;max-width:92%;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:14px}
+#achToast.on{opacity:1;transform:translate(-50%,0)}
+@keyframes drift{from{left:-15%}to{left:110%}}
+@keyframes twinkle{from{opacity:.25;transform:scale(.8)}to{opacity:1;transform:scale(1.25)}}
+@keyframes rainFall{0%{transform:translate(0,0) rotate(12deg)}100%{transform:translate(-28px,380px) rotate(12deg)}}
+@keyframes petalFall{0%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(22px,180px) rotate(160deg)}100%{transform:translate(-16px,380px) rotate(320deg)}}
+@keyframes snowFall{0%{transform:translate(0,0)}50%{transform:translate(16px,180px)}100%{transform:translate(-12px,380px)}}
+@keyframes meteorFall{0%{transform:translate(0,0) rotate(-32deg);opacity:0}12%{opacity:1}70%{opacity:.9}100%{transform:translate(-240px,150px) rotate(-32deg);opacity:0}}
+@keyframes auroraWave{0%{transform:translateX(-6%) skewX(-8deg) scaleY(.92);opacity:.65}50%{transform:translateX(6%) skewX(8deg) scaleY(1.08);opacity:.95}100%{transform:translateX(-3%) skewX(-4deg) scaleY(.96);opacity:.75}}
+@keyframes bob{50%{transform:translateY(-7px)}}
+@keyframes hop{30%{transform:translateY(-40px) scale(1.1,.9)}60%{transform:scale(1.1,.9)}}
+@keyframes boing{30%{transform:scale(1.1,.88)}60%{transform:scale(.94,1.1)}}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+@keyframes bump{40%{transform:scale(1.25) rotate(-4deg)}}
+@keyframes idle{to{transform:translateY(-5px) rotate(8deg)}}
+@keyframes shake{25%{transform:translate(-6px,2px) rotate(-3deg)}75%{transform:translate(6px,-2px) rotate(3deg)}}
+@keyframes chaos{to{transform:translate(10px,-34px) rotate(80deg)}}
+@keyframes drop{from{transform:translateY(-34px) scale(.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1.2);opacity:0}}
+@media(max-width:600px){
+ .top p{display:none}h1{font-size:20px}.card{padding:12px}.pill{padding:6px 10px;font-size:14px}.pill-tx{display:none}
+ .meter small{display:none}.meter{margin-top:6px}.gbtn{width:44px;height:44px;font-size:21px}.ibtn{width:36px;height:36px;font-size:16px}.ibtn::after{content:"";position:absolute;inset:-4px}
+ .top-l,.top-r{gap:6px}.task{gap:4px;padding:8px 7px}.task{flex-wrap:wrap}.nm{flex:1 1 56px}.rw{display:none}.lv-ic{font-size:13px;flex:none}.task.l0{border-left:6px solid var(--lil)}.task.l1{border-left:6px solid #3fbf7f}.task.l2{border-left:6px solid #a9c7b6}.task button{position:relative;width:28px;height:28px;font-size:14px}.task button::after{content:"";position:absolute;inset:-3px}.rep-tag.off{width:28px!important;height:28px!important}.fold-btn{width:28px!important;height:28px!important}
+ .hud-tx{display:none}.deco-btn{padding:4px 8px}
+ .add{grid-template-columns:1fr auto auto}.add input{grid-column:1 / -1}
+ .foot-tip{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="top-l">
+      <button class="gbtn d" id="dOpen" aria-label="開啟每日任務" title="每日任務">📅<b id="dBadge">0</b></button>
+      <button class="ibtn" id="statOpen" aria-label="開啟森林紀錄" title="森林紀錄與成就">🏆<b class="abdg" id="aBadge" style="display:none">0</b></button>
+      <div><h1>任務森林</h1><p>完成任務、扭蛋，培育四個場景的植物與夥伴</p></div>
+    </div>
+    <div class="top-r">
+      <button class="ibtn" id="muteBtn" aria-label="切換音效" title="開啟／關閉音效">🔊</button>
+      <button class="ibtn" id="themeBtn" aria-label="切換深淺色模式" title="切換深淺色模式">🌙</button>
+      <div class="pill" id="pill">🎟️ <span class="pill-tx">扭蛋券 </span><b id="tk">0</b></div>
+      <button class="gbtn" id="gOpen" aria-label="開啟扭蛋機" title="開啟扭蛋機">🎰<b id="gBadge">0</b></button>
+    </div>
+  </header>
+
+  <section class="card" id="world">
+    <div class="scene" id="sceneBox">
+      <div class="scene-hud">
+        <button class="deco-btn" id="decoOpen" title="查看與穿戴裝飾品、頭飾與限定天氣">🎨 <span class="hud-tx">收藏 </span><span id="decoCnt">0/21</span></button>
+        <button class="deco-btn" id="timeBtn" title="目前時段（點一下可預覽不同時段）"><span id="timeIc">☀️</span><span class="hud-tx" id="timeTx"> 白天</span></button>
+        <button class="deco-btn" id="wxBtn" title="目前天氣（點一下可切換天氣）"><span id="wxIc">🌤️</span><span class="hud-tx" id="wxTx"> 晴朗</span></button>
+      </div>
+      <div id="starLayer"></div>
+      <div id="nightShade"></div>
+      <div class="sun" id="sun">☀️</div>
+      <div class="cloud" style="top:18px">☁️</div>
+      <div class="cloud" style="top:56px;animation-delay:-14s;font-size:26px;opacity:.8">☁️</div>
+      <div class="hill" id="hill"></div>
+      <div id="decoLayer"></div>
+      <div id="auraLayer"></div>
+      <div id="tree" tabindex="0" role="button" aria-label="戳戳小樹" title="戳戳小樹"></div>
+      <div class="bubble" id="bub"></div>
+      <div id="pet" tabindex="0" role="button" aria-label="摸摸毛孩" title="摸摸毛孩"><span id="petHat" class="pet-hat"></span><span id="petBody"></span></div>
+      <div id="weatherLayer"></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="world-act" id="worldAct">
+      <button class="wact-btn ascend" id="ascendBtn" style="display:none" title="重置此場景成長條並晉升星級，解鎖隱藏光環與星級徽章">⭐ 升星轉生</button>
+      <button class="wact-btn grow-pick" id="growPickBtn" style="display:none" title="切換扭蛋機目前培育的目標場景">🌱 設為扭蛋培育目標</button>
+    </div>
+    <div class="meter m-tree"><b id="tName">🌱 種子</b><div class="bar"><i id="tBar"></i></div><small id="tTxt"></small></div>
+    <div class="meter m-pet"><b id="pName">🥚 神祕蛋</b><div class="bar"><i id="pBar"></i></div><small id="pTxt"></small></div>
+  </section>
+
+  <section class="card" id="tasks">
+    <div class="task-head">
+      <h2>我的任務</h2>
+      <button class="mini-tog on" id="sinkBtn" title="開啟時，已完成的任務會自動排到下方">⬇️ 已完成沉底</button>
+    </div>
+    <div class="add">
+      <input id="inp" maxlength="60" placeholder="寫下一個任務，按 Enter 新增" aria-label="任務名稱">
+      <select id="lv" aria-label="任務層級"><option value="0">🌳 大任務 +3</option><option value="1" selected>🌿 小任務 +2</option><option value="2">🍃 子任務 +1</option></select>
+      <button type="button" class="add-rep" id="repBtn" aria-pressed="false" title="開啟後，此任務每天 0 點會自動重置為未完成（習慣模式）">🔁 每日</button>
+      <button class="btn" id="addBtn">新增</button>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div id="list"></div>
+    <div class="foot"><span class="foot-tip">大任務 +3、小任務 +2、子任務 +1 張券；新任務需冷卻 5／3／1 分鐘才能勾選，細項全完成會自動完成上層</span><span class="fa"><button id="pwaBtn">📲 安裝 App</button><button id="bkOpen">備份／還原</button><button id="clrDone">清除已完成</button><button id="clrAll">清空清單</button><button id="reset">重新開始</button></span></div>
+  </section>
+
+  <div class="ov" id="gov"><section class="card" id="gacha" role="dialog" aria-modal="true" aria-label="森林扭蛋機">
+    <button class="gx" id="gClose" aria-label="關閉扭蛋機">✕</button>
+    <h2>森林扭蛋機</h2>
+    <div class="machine" id="mach">
+      <div class="globe" id="globe"></div>
+      <div class="base"><div class="knob" id="knob" title="點一下扭蛋"></div><div class="chute"><div id="drop"></div></div></div>
+    </div>
+    <button class="btn" id="spin">扭一下！</button>
+    <button class="btn" id="spinAll">一鍵扭完</button>
+    <p class="odds" id="gOdds">綠色道具讓植物長大，橘色道具讓夥伴長大。目前培育中：<b id="gTarget"></b><br>連續 5 抽沒出稀有，第 6 抽必出稀有。</p>
+  </section></div>
+</div>
+
+<div class="ov" id="bov"><section class="card" id="bk" role="dialog" aria-modal="true" aria-label="備份與還原">
+  <button class="gx" id="bClose" aria-label="關閉備份視窗">✕</button>
+  <h2>備份與還原</h2>
+  <p class="odds">資料僅儲存於目前瀏覽器，清除快取或更換裝置前建議先複製備份碼保存。備份碼包含所有任務、習慣設定、培育進度、星級、成就、裝飾品、頭飾與限定天氣。</p>
+  <textarea id="bkOut" readonly rows="3" aria-label="備份碼"></textarea>
+  <button class="btn" id="bCopy">複製備份碼</button>
+  <h3>還原進度</h3>
+  <textarea id="bkIn" rows="3" placeholder="貼上備份碼，再按還原" aria-label="貼上備份碼"></textarea>
+  <button class="btn" id="bRestore" style="background:var(--lil);box-shadow:0 4px 0 #4b3fc0">還原</button>
+</section></div>
+
+<div class="ov" id="dov"><section class="card" id="daily" role="dialog" aria-modal="true" aria-label="每日任務">
+  <button class="gx" id="dClose" aria-label="關閉每日任務">✕</button>
+  <h2>每日任務</h2>
+  <p class="odds">每天 0 點重置，完成就能多拿扭蛋券</p>
+  <div id="dList"></div>
+</section></div>
+
+<div class="ov" id="sov"><section class="card" id="stats" role="dialog" aria-modal="true" aria-label="森林紀錄與成就">
+  <button class="gx" id="sClose" aria-label="關閉森林紀錄">✕</button>
+  <h2>🏆 森林紀錄</h2>
+  <div class="sgrid" id="sGrid"></div>
+  <div class="ach-h"><span>成就牆 <small id="achCnt" style="color:var(--mut);font-size:12px"></small></span><button class="ach-all" id="achClaimAll" style="display:none">一鍵領取全部</button></div>
+  <div class="ach-list" id="achList"></div>
+</section></div>
+
+<div class="ov" id="decov"><section class="card" id="decoPop" role="dialog" aria-modal="true" aria-label="森林收藏圖鑑">
+  <button class="gx" id="decoClose" aria-label="關閉收藏視窗">✕</button>
+  <h2 id="decoTitle">🎨 森林收藏圖鑑</h2>
+  <div class="ctabs" id="cTabs">
+    <button class="ctab on" data-ct="deco">🎨 場景裝飾</button>
+    <button class="ctab" data-ct="hat">👑 夥伴頭飾</button>
+    <button class="ctab" data-ct="wx">🌠 限定天氣</button>
+  </div>
+  <p class="odds" id="decoSub"></p>
+  <div id="decoGrid"></div>
+</section></div>
+
+<div class="ov" id="pwaov"><section class="card" id="pwaPop" role="dialog" aria-modal="true" aria-label="安裝任務森林到手機" style="text-align:center;position:relative;width:100%;max-width:360px;max-height:94dvh;overflow:auto">
+  <button class="gx" id="pwaClose" aria-label="關閉安裝說明">✕</button>
+  <h2>📲 安裝到手機／桌面</h2>
+  <p class="odds" id="pwaDesc" style="text-align:left;line-height:1.65"></p>
+  <button class="btn" id="pwaAct" style="margin-top:12px;width:100%">知道了</button>
+</section></div>
+
+<div class="ov" id="ov"><div class="box" role="dialog" aria-modal="true" aria-label="扭蛋結果">
+  <div class="big" id="pE"></div><h3 id="pN"></h3><p id="pD"></p><p class="up" id="pU"></p>
+  <button class="btn" id="pOk" style="margin-top:14px">收下！</button>
+</div></div>
+<div id="toast" role="status"></div>
+<div id="achToast" role="status" title="點一下前往領取成就獎勵"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const L=[{i:"🌳",t:3},{i:"🌿",t:2},{i:"🍃",t:1}];
+const PRIZES=[
+ {n:"晨露",i:"💧",k:"tree",v:1,w:30,c:"#6fd0ff"},
+ {n:"陽光碎片",i:"☀️",k:"tree",v:2,w:16,c:"#8fe08f"},
+ {n:"魔法肥料",i:"🧪",k:"tree",v:4,w:5,r:1,c:"#3fbf7f"},
+ {n:"野莓",i:"🍓",k:"pet",v:1,w:30,c:"#ff9a6b"},
+ {n:"小魚乾",i:"🐟",k:"pet",v:2,w:16,c:"#ffc24d"},
+ {n:"蜂蜜蛋糕",i:"🍰",k:"pet",v:4,w:5,r:1,c:"#ff7a3d"},
+ {n:"彩虹星塵",i:"🌈",k:"both",v:3,w:3,r:1,c:"#b78cff"}];
+const DECOS=[
+ {id:"camp",sc:0,i:"🔥",n:"溫暖營火",x:26,y:78,c:"#ff8a4c"},
+ {id:"bench",sc:0,i:"🪑",n:"森林長椅",x:68,y:74,c:"#c98a4b"},
+ {id:"mush",sc:0,i:"🍄",n:"發光蘑菇",x:12,y:82,c:"#ff6f91"},
+ {id:"picnic",sc:1,i:"🧺",n:"花田野餐籃",x:24,y:80,c:"#ffc93c"},
+ {id:"fountain",sc:1,i:"⛲",n:"許願噴泉",x:68,y:72,c:"#6fd0ff"},
+ {id:"rainbow",sc:1,i:"🌈",n:"雙層彩虹",x:50,y:24,c:"#b78cff"},
+ {id:"tent",sc:2,i:"⛺",n:"綠洲帳篷",x:70,y:70,c:"#ff9a6b"},
+ {id:"meteor",sc:2,i:"🌠",n:"沙漠流星",x:44,y:22,c:"#ffd95a"},
+ {id:"lamp",sc:2,i:"🏮",n:"旅人營燈",x:24,y:78,c:"#ff6f61"},
+ {id:"snowman",sc:3,i:"⛄",n:"圍巾雪人",x:68,y:74,c:"#a1c4fd"},
+ {id:"cabin",sc:3,i:"🏠",n:"暖爐木屋",x:22,y:70,c:"#d98a5b"},
+ {id:"aurora",sc:3,i:"🌌",n:"極光緞帶",x:48,y:22,c:"#7b6cf6"}
+];
+const HATS=[
+ {id:"crown",i:"👑",n:"黃金皇冠",c:"#ffc93c"},
+ {id:"shades",i:"🕶️",n:"酷炫墨鏡",c:"#4a5568"},
+ {id:"ribbon",i:"🎀",n:"可愛蝴蝶結",c:"#ff6f91"},
+ {id:"tophat",i:"🎩",n:"紳士禮帽",c:"#7b6cf6"},
+ {id:"flower",i:"🌺",n:"熱帶花環",c:"#ff8a4c"},
+ {id:"halo",i:"😇",n:"天使光環",c:"#6fd0ff"}
+];
+const SPECIAL_WX=[
+ {id:"meteor",i:"🌠",n:"流星雨",c:"#ffd95a"},
+ {id:"aurora",i:"🌌",n:"極光之夜",c:"#7b6cf6"},
+ {id:"rainbow",i:"🌈",n:"彩虹微風",c:"#ff9a9e"}
+];
+const TOTAL_COLL=DECOS.length+HATS.length+SPECIAL_WX.length;
+
+const TREE_LINES=[
+ "沙沙～你每一次努力，都在悄悄替未來扎根喔。",
+ "風吹過葉子的聲音，是在替認真的你拍拍手！",
+ "別急著看結果，樹也是在看不見的地方先長好根的。",
+ "休息一下看看綠意吧，今天的你已經比昨天更成長了！",
+ "每完成一件小事，就替自己多留下一片綠蔭 🌿",
+ "陽光、水分、還有你的堅持，就是最棒的養分！",
+ "累的時候就在樹下乘個涼，充好電再繼續往前走吧。",
+ "沙沙沙…這片森林因為你的行動越來越有生氣了！"
+];
+const TIME_CFG={
+ dawn:{n:"清晨",ic:"🌅",sky:"#ffb6c1,#ffe7b8 64%",sun:"🌅"},
+ day:{n:"白天",ic:"☀️",sky:null,sun:null},
+ dusk:{n:"黃昏",ic:"🌇",sky:"#ff7e6b,#ffd27d 64%",sun:"🌇"},
+ night:{n:"星空",ic:"🌙",sky:"#0f1b3d,#283c63 64%",sun:"🌙"}
+};
+const WX_CFG={
+ clear:{n:"晴朗",ic:"🌤️"},
+ rain:{n:"微雨",ic:"🌧️"},
+ petal:{n:"飄花瓣",ic:"🌸"},
+ snow:{n:"下小雪",ic:"❄️"},
+ meteor:{n:"流星雨",ic:"🌠",special:true},
+ aurora:{n:"極光之夜",ic:"🌌",special:true},
+ rainbow:{n:"彩虹微風",ic:"🌈",special:true}
+};
+const TIME_ORDER=["auto","dawn","day","dusk","night"];
+const BASE_WX=["clear","rain","petal","snow"];
+let timeMode="auto",curWeather="clear",wxManual=false,colTab="deco",newRepeat=false;
+
+const TT=[2,5,9,14],PT=[2,6,12],MUL=[1,1.4,1.8,2.2];
+// 星級難度：★1~★5 每星 +20%，★6 起每星 +10%（持續成長但趨緩）
+const th=(i,a,st=0)=>a.map(x=>Math.round(x*MUL[i]*(1+Math.min(st,5)*0.2+Math.max(0,st-5)*0.1)));
+const PS=[46,54,64,78];
+const CD_MIN=[5,3,1],HONOR_PER=10,STAR_T=["","閃耀","幻彩","璀璨","極光","傳說"];
+const starTitle=st=>STAR_T[Math.min(st,5)];
+let lastSingle=false,auraBuilt=-1;
+const lockLeft=t=>t.done?0:Math.max(0,(t.created||0)+CD_MIN[t.level]*60000-Date.now());
+const fmtLeft=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+function subEnd(idx){const lv=S.tasks[idx].level;let e=idx+1;while(e<S.tasks.length&&S.tasks[e].level>lv)e++;return e}
+function undoneDesc(idx){let n=0;const e=subEnd(idx);for(let k=idx+1;k<e;k++)if(!S.tasks[k].done)n++;return n}
+function parentIdx(idx){const lv=S.tasks[idx].level;for(let k=idx-1;k>=0;k--)if(S.tasks[k].level<lv)return k;return -1}
+const shortNm=s=>s.length>10?s.slice(0,10)+"…":s;
+function renderAura(tier){
+ if(auraBuilt===tier)return;auraBuilt=tier;
+ const n=tier>=5?10:tier===4?6:0,em=tier>=5?["✨","🌟","💫"]:["✨","💫"];let h="";
+ for(let k=0;k<n;k++){const x=(6+Math.random()*58).toFixed(1),y=(25+Math.random()*60).toFixed(1),dl=(Math.random()*3.6).toFixed(2);h+='<span class="aura-p" style="left:'+x+'%;top:'+y+'%;animation-delay:-'+dl+'s">'+em[k%em.length]+'</span>'}
+ $("auraLayer").innerHTML=h;
+}
+const SC=[
+{n:"森林",ic:"🌳",pl:"小樹",pn:"孔雀",skyTop:"#8fd6ff,#e9fbff 64%",ground:"#8fd694 64%,#59b06a",hill:"#6cc47b",sun:"☀️",dc:"☁️",wxPool:["clear","clear","rain","petal"],svg:treeSVG,P:["🌱 種子","🌿 嫩芽","🌳 小樹苗","🌲 綠蔭樹","🌸 開花神木"],A:["🥚","🐣","🐥","🦚"],AN:["神祕蛋","破殼寶寶","活力小雞","孔雀王"],
+ lines:[
+  ["咚…蛋殼裡好安靜，好像有人在幫我加油。","輕輕搖晃中…快帶我去看看森林吧！","就算現在只是小小一步，對我來說都是很棒的暖意喔。","慢慢來沒關係，我會在蛋殼裡安靜等你準備好。"],
+  ["啾！原來陽光這麼暖，我們今天要做什麼呢？","羽毛還沒長齊，但我已經準備好陪你囉！","剛開始總是最需要勇氣的，你已經踏出第一步了，超棒！","啾啾！累了就看看森林的綠色，休息一下再出發吧。"],
+  ["看我整理羽毛的樣子，是不是很有架勢？","一步一步來，森林裡的樹也是慢慢長高的。","專注的你閃閃發光，不用跟別人比，跟昨天的自己比就好！","卡關的時候別責怪自己，把大任務拆小一點就會順很多喔。"],
+  ["為了慶祝你的努力，特別為你開屏一次！","優雅的人做事從容不迫，你今天也超亮眼。","一路走來你克服了好多事，這份自律真的很迷人。","無論今天進度多少，願意面對待辦清單的你，都值得掌聲！"]
+ ],
+ mood:{
+  z:["早安！先挑一件最小的事開始，我陪你暖身。","還沒開工也沒關係，完成第一項就會順起來喔！","只要先打開檔案或寫下第一行，你就已經贏過一半的拖延了。","深呼吸，挑一個 5 分鐘內能搞定的小事，我們一起破冰吧！"],
+  m:["今天已經完成 {n} 項任務了，節奏抓得很優雅呢！","已經推進 {n} 件事了，繼續保持這份從容吧！","看著清單一點一點被打勾，是不是很有踏實感？你做得很棒！","完成 {n} 項囉！喝口水、伸個懶腰，再穩穩拿下下一件吧。"],
+  h:["今天竟然完成了 {n} 項任務！我的尾羽都要為你閃耀了！","太佩服了，{n} 項任務全數拿下，記得也休息一下喔！","整整 {n} 項的累積，今天的你真的超級可靠！","已經完成 {n} 件事了，今晚請毫無愧疚地好好犒賞自己吧！"]
+ }},
+{n:"花田",ic:"🌻",pl:"向日葵",pn:"蝴蝶",skyTop:"#ffd0e6,#fff3df 64%",ground:"#b6e08a 64%,#7fc45a",hill:"#98d46a",sun:"🌞",dc:"☁️",wxPool:["clear","petal","petal","rain"],svg:flowerSVG,P:["🌱 花種子","🌿 嫩芽","🌼 花苞","🌻 向日葵","🌈 巨大向日葵"],A:["🐛","🐝","🦋","🧚"],AN:["毛毛蟲","小蜜蜂","彩蝶","花仙子"],
+ lines:[
+  ["喀滋喀滋…嚼葉子的同時也在等你完成任務喔！","別看我小小一隻，我可是藏著翅膀的夢想家！","每天進步一點點，就像我每天吃掉一片葉子一樣踏實！","別小看微小的小任務，它們都是在幫你累積蛻變的能量喔！"],
+  ["嗡嗡嗡～採蜜就像做任務，一點一點就會變甜！","今天的風好香，我們一起把清單變輕鬆吧！","嗡嗡！遇到不想做的事，就當成採一朵難搞的花，搞定超有成就感！","別忘了眨眨眼、放鬆肩膀，開心做事效率會更高喔！"],
+  ["呼哇～在花田裡飛翔的感覺太棒了，謝謝你帶我長大！","每次你勾選完成，花瓣都像在灑彩帶一樣！","你努力的樣子超可愛，連花田的太陽都為你笑得更燦爛了！","偶爾飛得慢一點也沒關係，重點是你一直都在往前飛呀！"],
+  ["撒點花瓣魔法給你！願你今天的待辦都順順利利✨","你認真生活的樣子，比整片向日葵花田還燦爛！","施展「專注力滿點」魔法～叮！祝你靈感源源不絕！","你已經做得非常好了，記得也要對自己溫柔一點喔💐"]
+ ],
+ mood:{
+  z:["花田的微風吹來囉～先完成一件小事當今天的開場吧！","還沒開始嗎？沒關係，挑一朵最可愛的任務先摘下來！","啟動的第一步最難，我幫你加油打氣，三、二、一，開始！","不用一次做到完美，先完成 60 分就很棒了喔！"],
+  m:["哇！已經完成 {n} 項了，花田裡飄起甜甜的成就感！","完成了 {n} 件事耶～你就像勤勞的小蜜蜂一樣棒！","{n} 項達標！每打一個勾，就替自己種下一朵小花🌼","進展超順利的～趁著這股好手感，再來一項吧！"],
+  h:["天呀！今天完成了 {n} 項任務，整片花田都在為你開派對！","{n} 項任務達成！給你灑滿一整個夏天的魔法花瓣✨","完成了 {n} 件耶，你根本是時間管理小天才！","今天超額發光了！剩下的時間就留給喜歡的事和好好休息吧！"]
+ }},
+{n:"沙漠",ic:"🌵",pl:"仙人掌",pn:"恐龍",skyTop:"#ffd59a,#fff0d0 64%",ground:"#f2cf8a 64%,#e0b265",hill:"#e8c47a",sun:"🌞",dc:"🌤️",wxPool:["clear","clear","clear","rain"],svg:cactusSVG,P:["🌱 仙人掌種子","🌵 小仙人球","🌵 小仙人掌","🌵 壯碩仙人掌","🌺 開花仙人掌"],A:["🥚","🦎","🐊","🦖"],AN:["恐龍蛋","小蜥蜴","鱷魚","暴龍王"],
+ lines:[
+  ["咚咚咚！這顆蛋裡裝滿了破殼而出的熱血！","沙漠太陽這麼大，感覺我隨時都要孵化啦！","準備好大幹一場了嗎？我在蛋殼裡都熱血沸騰了！","別猶豫！現在動手，五分鐘後你就會感謝自己！"],
+  ["刷刷！在沙地上衝刺超痛快，任務也一口氣衝掉吧！","別小看我的小爪子，爬過沙丘沒在怕的！","拖延症算什麼，我們直接正面迎擊把它甩在後頭！","專注 15 分鐘試試看，你會發現自己比想像中更能幹！"],
+  ["嘿！困難越大，越能證明我們的實力！","只要咬定目標不放，沒有過不了的難關！","最硬的那塊骨頭啃下來，後面就全都是順風局了！","穩住呼吸、鎖定目標，把眼前這件大事漂亮收尾吧！"],
+  ["吼——！有我暴龍王罩著，今天所有任務通通碾壓！","痛快！跟你並肩作戰是這片沙漠最熱血的事！","強者不是不會累，而是累了休息完依然會站起來往前衝！","你的執行力簡直無敵，這片沙漠都為你震動啦！"]
+ ],
+ mood:{
+  z:["熱身時間到！挑一個任務當第一個獵物，衝吧！","還沒出手嗎？來吧，先解決一項就能點燃幹勁！","別等靈感自己來，動手做的那一刻引擎就會發動！","選好目標沒？拿出氣勢，先拿下一血再說！"],
+  m:["好樣的！已經拿下 {n} 項任務，火力正在升溫！","{n} 項通關！這股氣勢直接往下一關推進吧！","連過 {n} 關，手感正燙！趁勝追擊！","乾脆俐落！這才是我們的風格，繼續保持！"],
+  h:["吼——！今天狂掃 {n} 項任務，你根本是效率界霸主！","整整 {n} 項任務！這份戰鬥力連暴龍王都甘拜下風！","一天幹掉 {n} 件事，今晚你就是這片綠洲的傳奇！","大獲全勝！戰士也需要補充體力，快去好好休息慶功吧！"]
+ }},
+{n:"雪地",ic:"🌲",pl:"杉樹",pn:"北極熊",skyTop:"#9fb8ff,#e8f0ff 64%",ground:"#ffffff 64%,#d7e6f5",hill:"#f4f9ff",sun:"🌙",dc:"❄️",wxPool:["snow","snow","clear"],svg:pineSVG,P:["🌱 杉樹種子","🌿 小杉苗","🌲 小杉樹","🌲 雪松","🎄 聖誕神木"],A:["🥚","🐧","🦭","🐻‍❄️"],AN:["冰凍蛋","小企鵝","海豹","北極熊王"],
+ lines:[
+  ["呼…雪地很安靜，但蛋殼裡被你暖得剛剛好。","慢慢來就好，雪花也是靜靜落下來才堆成銀白世界。","今天如果覺得有點累，只做一點點也沒關係喔。","不管外頭多忙碌，這裡永遠是你安靜喘口氣的小角落。"],
+  ["啪嗒啪嗒～走路雖然搖搖晃晃，但我會一直跟著你。","冷的時候就靠過來吧，我幫你擋風。","步子小也沒關係，只要方向對了，走著走著就會到的。","滑倒了就拍拍雪站起來，你其實一直都做得很努力喔。"],
+  ["呼嚕嚕…在冰原上曬太陽好舒服，做完任務也休息一下吧。","不疾不徐地往前走，我們已經走了很遠喔。","把注意力放回當下這一件事就好，別被未來的煩惱嚇到了。","你默默付出的每一分努力，時間都會溫柔地記住。"],
+  ["厚實的毛皮借你靠一下，辛苦的時刻有我在。","在安靜的雪夜裡，你每完成一件事都像點亮一盞燈。","不必總是勉強自己當滿分的人，真實努力的你就已經很珍貴。","如果感到壓力太大，就放下手機深呼吸三次，我會靜靜陪你。"]
+ ],
+ mood:{
+  z:["雪地很寧靜，深呼吸一下，先從最不費力的一件開始吧。","今天剛起步，不用急，我會安靜陪在你旁邊。","先倒杯溫水，挑一件最溫和的小事，慢慢進入狀態就好。","沒關係的，開始永遠不嫌晚，現在就是剛剛好的時候。"],
+  m:["你已經穩穩完成 {n} 項任務了，喝口熱水再繼續吧。","默默累積了 {n} 件事，這份踏實感最讓人安心了。","一步一腳印走了 {n} 步，雪地上留下了很漂亮的足跡呢。","做得很好喔，眼睛看累了記得看看遠方休息一分鐘。"],
+  h:["今天完成了 {n} 項任務，真的非常努力，該給自己一個溫暖的擁抱了。","{n} 項任務都完成了！今晚可以安心在雪光下好好放鬆囉。","謝謝你今天這麼照顧自己的目標，完成 {n} 件事真的很了不起。","辛苦了，今天已經足夠閃耀，剩下的交給明天的自己就好。"]
+ }}
+];
+function fresh(){
+ return{
+  tasks:[],tickets:1,
+  sc:[0,1,2,3].map(()=>({p:0,a:0})),
+  stars:[0,0,0,0],
+  unlocked:0,grow:0,view:0,allEverDone:false,
+  pulls:0,dry:0,done:0,
+  decos:[],placed:{},
+  hats:[],equippedHat:{},
+  specialWx:[],
+  achClaimed:[],
+  honor:0,honorTotal:0,honorTk:0,
+  wxPref:{manual:false,wx:"clear",time:"auto"},
+  daily:{d:"",signed:false,small:false,claimed:false,streak:0,maxStreak:0,last:"",todayDone:0,maxToday:0}
+ };
+}
+let S=fresh(),lastK="",lastI=null;
+let parent=null,busy=false,newTaskId=null,wxBuilt=null;
+const KEY="taskForestV2",PKEY="taskForestPrefs";
+let prefs={theme:"auto",muted:false,sinkDone:true,lastBackup:0,nudgeAt:0};
+try{const pr=localStorage.getItem(PKEY);if(pr)prefs=Object.assign(prefs,JSON.parse(pr))}catch(e){}
+function savePrefs(){try{localStorage.setItem(PKEY,JSON.stringify(prefs))}catch(e){}}
+function isDarkNow(){return prefs.theme==="dark"||(prefs.theme==="auto"&&matchMedia("(prefers-color-scheme:dark)").matches)}
+function applyPrefs(){
+ if(prefs.theme==="light"||prefs.theme==="dark")document.documentElement.dataset.theme=prefs.theme;
+ else delete document.documentElement.dataset.theme;
+ const tm=prefs.theme||"auto";
+ $("themeBtn").textContent=tm==="auto"?"🌓":tm==="light"?"☀️":"🌙";
+ $("themeBtn").title=tm==="auto"?"深淺色：跟隨系統（點一下切換淺色）":tm==="light"?"深淺色：淺色模式（點一下切換深色）":"深淺色：深色模式（點一下切回跟隨系統）";
+ {const tc=$("themeColor");if(tc)tc.content=isDarkNow()?"#112018":"#2f9e6e"}
+ $("muteBtn").textContent=prefs.muted?"🔇":"🔊";
+ $("muteBtn").classList.toggle("off",prefs.muted);
+ $("muteBtn").title=prefs.muted?"目前靜音（點一下開啟音效）":"目前有聲（點一下靜音）";
+ $("sinkBtn").classList.toggle("on",!!prefs.sinkDone);
+ $("sinkBtn").textContent=prefs.sinkDone?"⬇️ 已完成沉底":"↕️ 原始排序";
+}
+
+let lastSer="",saveErrShown=false;
+const ser=()=>{const{savedAt,...r}=S;return JSON.stringify(r)};
+function save(){
+ const s=ser();if(s===lastSer)return;lastSer=s;S.savedAt=Date.now();
+ try{localStorage.setItem(KEY,JSON.stringify(S));saveErrShown=false}
+ catch(e){if(!saveErrShown){saveErrShown=true;setTimeout(()=>toast("⚠️ 無法儲存進度（瀏覽器空間不足或限制），請至「備份／還原」複製備份碼保存！"),150)}}
+}
+
+function applySavedAtmosphere(){
+ const wp=S.wxPref||{manual:false,wx:"clear",time:"auto"};
+ timeMode=TIME_ORDER.includes(wp.time)?wp.time:"auto";
+ const avail=availWxList();
+ if(wp.manual&&avail.includes(wp.wx)){
+  wxManual=true;curWeather=wp.wx;
+ }else{
+  wxManual=false;rollWeather(S.view);
+ }
+}
+function syncWxPref(){
+ S.wxPref={manual:wxManual,wx:curWeather,time:timeMode};
+}
+
+function normalize(o){
+ const base=fresh();
+ const m=Object.assign(base,o);
+ m.daily=Object.assign(base.daily,o.daily||{});
+ m.wxPref=Object.assign(base.wxPref,o.wxPref||{});
+ const scBase=[0,1,2,3].map(()=>({p:0,a:0}));
+ if(Array.isArray(o.sc)){
+  for(let i=0;i<4;i++){
+   if(o.sc[i]&&typeof o.sc[i]==="object"){
+    scBase[i]={p:Math.max(0,+o.sc[i].p||0),a:Math.max(0,+o.sc[i].a||0)};
+   }
+  }
+ }
+ m.sc=scBase;
+ if(o.tree!==undefined&&!o.sc)m.sc[0]={p:Math.max(0,+o.tree||0),a:Math.max(0,+o.pet||0)};
+ delete m.tree;delete m.pet;
+ const stBase=[0,0,0,0];
+ if(Array.isArray(o.stars)){for(let i=0;i<4;i++)stBase[i]=Math.max(0,Math.floor(+o.stars[i]||0))}
+ m.stars=stBase;
+ const nn=(v,lo,hi,def)=>{v=+v;return isFinite(v)?Math.max(lo,Math.min(hi,v)):def};
+ const cnt=v=>Math.max(0,Math.floor(nn(v,0,1e9,0)));
+ const seen=new Set();
+ m.tasks=Array.isArray(m.tasks)?m.tasks.filter(t=>t&&typeof t==="object").map(t=>{
+  let id=String(t.id||"").replace(/[^\w-]/g,"").slice(0,16);
+  if(!id||seen.has(id))id=uid();
+  seen.add(id);
+  return{id,name:String(t.name||"").slice(0,60),level:Math.max(0,Math.min(2,Math.floor(+t.level||0))),done:!!t.done,doneDay:/^\d{4}-\d{1,2}-\d{1,2}$/.test(t.doneDay)?t.doneDay:"",repeat:!!t.repeat,collapsed:!!t.collapsed,created:Math.max(0,Math.min(Date.now(),Math.floor(+t.created||0)))}
+ }):[];
+ m.tickets=cnt(m.tickets);m.done=cnt(m.done);m.pulls=cnt(m.pulls);m.dry=cnt(m.dry);
+ m.honor=cnt(m.honor)%HONOR_PER;m.honorTotal=cnt(m.honorTotal);m.honorTk=cnt(m.honorTk);
+ m.decos=(Array.isArray(m.decos)?m.decos:[]).filter(id=>DECOS.some(d=>d.id===id));
+ m.hats=(Array.isArray(m.hats)?m.hats:[]).filter(id=>HATS.some(h=>h.id===id));
+ m.specialWx=(Array.isArray(m.specialWx)?m.specialWx:[]).filter(id=>SPECIAL_WX.some(w=>w.id===id));
+ m.achClaimed=(Array.isArray(m.achClaimed)?m.achClaimed:[]).filter(id=>typeof id==="string"&&/^\w+$/.test(id));
+ const pl={};
+ if(m.placed&&typeof m.placed==="object")DECOS.forEach(d=>{const q=m.placed[d.id];if(q&&typeof q==="object")pl[d.id]={on:!!q.on,x:Math.round(nn(q.x,6,94,d.x)),y:Math.round(nn(q.y,14,90,d.y))}});
+ m.placed=pl;
+ const eh={};
+ if(m.equippedHat&&typeof m.equippedHat==="object")[0,1,2,3].forEach(i=>{const h=m.equippedHat[i];if(HATS.some(x=>x.id===h)&&m.hats.includes(h))eh[i]=h});
+ m.equippedHat=eh;
+ {const wp=m.wxPref;m.wxPref={manual:!!wp.manual,wx:BASE_WX.concat(SPECIAL_WX.map(w=>w.id)).includes(wp.wx)?wp.wx:"clear",time:TIME_ORDER.includes(wp.time)?wp.time:"auto"}}
+ m.grow=Math.max(0,Math.min(3,+m.grow||0));
+ m.unlocked=Math.max(m.grow,Math.min(3,o.unlocked!==undefined?(+o.unlocked||0):m.grow));
+ m.view=Math.max(0,Math.min(m.unlocked,+m.view||0));
+ const allMaxNow=[0,1,2,3].every(i=>stage(m.sc[i].p,th(i,TT,m.stars[i]))>=4&&stage(m.sc[i].a,th(i,PT,m.stars[i]))>=3);
+ m.allEverDone=!!(o.allEverDone||allMaxNow||m.stars.some(x=>x>0)||m.decos.length>0||m.hats.length>0||m.specialWx.length>0);
+ if(m.allEverDone)m.unlocked=3;
+ {const D=m.daily,ds=v=>/^\d{4}-\d{1,2}-\d{1,2}$/.test(v)?v:"";D.d=ds(D.d);D.last=ds(D.last);D.signed=!!D.signed;D.small=!!D.small;D.claimed=!!D.claimed;D.streak=cnt(D.streak);D.maxStreak=cnt(D.maxStreak);D.todayDone=cnt(D.todayDone);D.maxToday=cnt(D.maxToday)}
+ m.daily.maxStreak=Math.max(m.daily.maxStreak||0,m.daily.streak||0);
+ m.daily.maxToday=Math.max(m.daily.maxToday||0,m.daily.todayDone||0);
+ return m}
+
+document.addEventListener("visibilitychange",()=>{
+ if(!document.hidden){
+  if(dayCheck()){renderTasks();save()}
+  dailyBadge();renderAtmosphere();
+  if($("dov").classList.contains("on"))renderDaily();
+ }
+});
+function load(){try{const r=localStorage.getItem(KEY);if(r){S=normalize(JSON.parse(r));return true}}catch(e){}return false}
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const stage=(xp,thArr)=>thArr.filter(x=>xp>=x).length;
+
+let audioCtx=null;
+function tone(f){
+ if(prefs.muted)return;
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  if(!audioCtx||audioCtx.state==="closed")audioCtx=new AC();
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  const n=audioCtx.currentTime;
+  f.forEach((q,i)=>{
+   const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+   o.type="triangle";o.frequency.value=q;o.connect(g);g.connect(audioCtx.destination);
+   g.gain.setValueAtTime(.0001,n+i*.08);
+   g.gain.exponentialRampToValueAtTime(.12,n+i*.08+.02);
+   g.gain.exponentialRampToValueAtTime(.0001,n+i*.08+.25);
+   o.start(n+i*.08);o.stop(n+i*.08+.26);
+  });
+ }catch(e){}
+}
+function fx(x,y,em,n=9){for(let i=0;i<n;i++){const s=document.createElement("span"),a=Math.PI*2*i/n,d=50+Math.random()*60;s.className="fx";s.textContent=em[i%em.length];s.style.left=x+"px";s.style.top=y+"px";s.style.setProperty("--x",Math.cos(a)*d+"px");s.style.setProperty("--y",Math.sin(a)*d-24+"px");s.style.setProperty("--r",Math.random()*240-120+"deg");document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+let tt,achT;
+function toast(m,undoFn){
+ const t=$("toast");
+ t.innerHTML="<span>"+esc(m)+"</span>"+(undoFn?'<button id="tUndo">復原</button>':"");
+ if(undoFn){$("tUndo").onclick=()=>{clearTimeout(tt);t.classList.remove("on");undoFn()}}
+ t.classList.add("on");
+ clearTimeout(tt);
+ tt=setTimeout(()=>t.classList.remove("on"),undoFn?4200:2400);
+}
+function showAchBanner(ach){
+ const el=$("achToast");
+ el.textContent="🏆 達成成就「"+ach.n+"」！點 🏆 領取 +"+ach.rw+" 🎟️";
+ el.classList.add("on");
+ clearTimeout(achT);
+ achT=setTimeout(()=>el.classList.remove("on"),3800);
+}
+$("achToast").onclick=()=>{$("achToast").classList.remove("on");renderStats();$("sov").classList.add("on")};
+
+// Real-time Day/Night & Weather System (with saved preferences)
+function getTimePhase(){
+ if(timeMode!=="auto")return timeMode;
+ const h=new Date().getHours();
+ if(h>=5&&h<8)return"dawn";
+ if(h>=8&&h<17)return"day";
+ if(h>=17&&h<20)return"dusk";
+ return"night";
+}
+function initStars(){
+ let h="";
+ for(let i=0;i<24;i++){
+  const x=(Math.random()*94+3).toFixed(1),y=(Math.random()*54+4).toFixed(1),d=(Math.random()*2.5).toFixed(2);
+  h+='<span class="star" style="left:'+x+'%;top:'+y+'%;animation-delay:-'+d+'s"></span>';
+ }
+ $("starLayer").innerHTML=h;
+}
+function availWxList(){return [...BASE_WX,...S.specialWx.filter(id=>WX_CFG[id])]}
+function rollWeather(scIdx){
+ const pool=SC[scIdx].wxPool;
+ curWeather=pool[Math.floor(Math.random()*pool.length)];
+}
+function renderWeatherParticles(){
+ if(wxBuilt===curWeather)return;wxBuilt=curWeather;const w=$("weatherLayer");
+ if(curWeather==="clear"){w.innerHTML="";return}
+ let h="";
+ if(curWeather==="rain"){
+  for(let i=0;i<22;i++){
+   const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*4).toFixed(2),dur=(0.7+Math.random()*0.45).toFixed(2);
+   h+='<span class="wp-rain" style="left:'+left+'%;animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
+  }
+ }else if(curWeather==="petal"){
+  for(let i=0;i<16;i++){
+   const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*4).toFixed(2),dur=(4.5+Math.random()*2.8).toFixed(2),em=i%3===0?"🌼":"🌸";
+   h+='<span class="wp-petal" style="left:'+left+'%;animation-duration:'+dur+'s;animation-delay:-'+delay+'s">'+em+'</span>';
+  }
+ }else if(curWeather==="snow"){
+  for(let i=0;i<16;i++){
+   const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*4).toFixed(2),dur=(3.8+Math.random()*2.6).toFixed(2),sz=(4+Math.random()*4).toFixed(1);
+   h+='<span class="wp-snow" style="left:'+left+'%;width:'+sz+'px;height:'+sz+'px;animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
+  }
+ }else if(curWeather==="meteor"){
+  for(let i=0;i<8;i++){
+   const left=(30+Math.random()*75).toFixed(1),top=(2+Math.random()*36).toFixed(1),delay=(Math.random()*4.5).toFixed(2),dur=(1.8+Math.random()*1.4).toFixed(2);
+   h+='<span class="wp-meteor" style="left:'+left+'%;top:'+top+'%;animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
+  }
+ }else if(curWeather==="aurora"){
+  h+='<div class="wp-aurora"></div><div class="wp-aurora" style="animation-delay:-3.5s;top:4%;opacity:.55"></div>';
+ }else if(curWeather==="rainbow"){
+  h+='<div class="wp-rainbow"></div>';
+  for(let i=0;i<10;i++){
+   const left=(10+Math.random()*80).toFixed(1),top=(12+Math.random()*45).toFixed(1),delay=(Math.random()*2).toFixed(2);
+   h+='<span class="wp-sparkle" style="left:'+left+'%;top:'+top+'%;animation-delay:-'+delay+'s">✨</span>';
+  }
+ }
+ w.innerHTML=h;
+}
+function renderAtmosphere(){
+ const c=SC[S.view],ph=getTimePhase(),tc=TIME_CFG[ph];
+ let sky=tc.sky||c.skyTop;
+ let sunIc=tc.sun||c.sun;
+ let showStars=ph==="night";
+ if(curWeather==="meteor"||curWeather==="aurora"){
+  sky="#0b1330,#1e2f5c 64%";
+  sunIc="🌙";
+  showStars=true;
+ }
+ $("sceneBox").style.background="linear-gradient(180deg,"+sky+","+c.ground+")";
+ $("sun").textContent=sunIc;
+ $("starLayer").classList.toggle("on",showStars);
+ const special=curWeather==="meteor"||curWeather==="aurora";
+ $("nightShade").style.opacity=special?".22":ph==="night"?".42":"0";
+ $("timeIc").textContent=tc.ic;
+ $("timeTx").textContent=" "+tc.n+(timeMode==="auto"?"":"*");
+ const wcfg=WX_CFG[curWeather]||WX_CFG.clear;
+ $("wxIc").textContent=wcfg.ic;
+ $("wxTx").textContent=" "+wcfg.n;
+ renderWeatherParticles();
+}
+
+function treeSVG(s){
+ const cfg=[0,0,{t:130,c:[[100,116,30],[80,130,20],[120,130,20]]},{t:100,c:[[100,80,44],[64,108,32],[136,108,32]]},{t:96,c:[[100,68,52],[56,104,38],[144,104,38],[100,110,34]]}][s];
+ let o='<svg viewBox="0 0 200 200" width="100%" height="100%" style="overflow:visible"><ellipse cx="100" cy="186" rx="'+(30+s*9)+'" ry="8" fill="#0002"/>';
+ if(s===0)return o+'<ellipse cx="100" cy="182" rx="26" ry="9" fill="#8a5a3b"/><path d="M100 176q-12-4-14-16 12 1 14 16zM100 176q12-4 14-16-12 1-14 16z" fill="#4ecb86"/></svg>';
+ if(s===1)return o+'<path d="M100 186v-40" stroke="#6b9b3f" stroke-width="7" stroke-linecap="round"/><path d="M100 156q-30-4-34-34 30 2 34 34zM100 146q30-4 34-32-30 0-34 32z" fill="#3fbf7f"/><circle cx="100" cy="138" r="6" fill="#ffd95a"/></svg>';
+ o+='<path d="M'+(92-s*2)+' 186L'+(95-s)+' '+cfg.t+'h'+(10+s*2)+'L'+(108+s*2)+' 186z" fill="#8a5a3b"/>';
+ cfg.c.forEach(([x,y,r])=>o+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="#2f9e6e"/>');
+ cfg.c.forEach(([x,y,r])=>o+='<circle cx="'+(x-r*.15)+'" cy="'+(y-r*.18)+'" r="'+r*.78+'" fill="#4ecb86"/>');
+ if(s===4){[[70,70],[110,50],[140,96],[56,106],[100,100],[128,70]].forEach(([x,y],i)=>o+='<circle cx="'+x+'" cy="'+y+'" r="6" fill="'+(i%2?"#ff6f91":"#ffb3c7")+'"/>');[[84,92],[120,112],[48,98]].forEach(([x,y])=>o+='<circle cx="'+x+'" cy="'+y+'" r="5" fill="#e8384f"/>');o+='<text x="150" y="40" font-size="22">✨</text><text x="34" y="64" font-size="18">✨</text>'}
+ return o+'</svg>'}
+
+function meter(xp,thArr,st){const n=thArr[st],p=thArr[st-1]||0;return{pct:n?(xp-p)/(n-p)*100:100,txt:n?"再收集 "+(n-xp)+" 點成長值升級（目前 "+xp+"）":"已達最高等級！（"+xp+"）"}}
+const G='<svg viewBox="0 0 200 200" width="100%" height="100%" style="overflow:visible">';
+const sh=s=>'<ellipse cx="100" cy="186" rx="'+(30+s*9)+'" ry="8" fill="#0002"/>';
+function sunHead(x,y,r){let o="";for(let k=0;k<12;k++)o+='<ellipse cx="'+x+'" cy="'+(y-r*.95)+'" rx="'+r*.27+'" ry="'+r*.48+'" fill="#ffc93c" transform="rotate('+k*30+' '+x+' '+y+')"/>';return o+'<circle cx="'+x+'" cy="'+y+'" r="'+r*.55+'" fill="#7a4a21"/>'}
+function flowerSVG(s){
+ let o=G+sh(s);
+ if(s===0)return o+'<ellipse cx="100" cy="182" rx="26" ry="9" fill="#8a5a3b"/><path d="M100 176q-12-4-14-16 12 1 14 16zM100 176q12-4 14-16-12 1-14 16z" fill="#7fd45a"/></svg>';
+ const h=[0,150,120,100,80][s];
+ o+='<path d="M100 186V'+h+'" stroke="#4aa33a" stroke-width="'+(5+s*2)+'" stroke-linecap="round"/><path d="M100 170q-34-4-40-30 34 2 40 30zM100 150q34-4 40-30-34 2-40 30z" fill="#5cc04a"/>';
+ if(s===1)return o+'</svg>';
+ if(s===2)return o+'<ellipse cx="100" cy="'+(h-6)+'" rx="16" ry="22" fill="#8fd45a"/><path d="M100 '+(h-26)+'q-8 12 0 40" stroke="#ffc93c" stroke-width="5" fill="none"/></svg>';
+ if(s===4)o+='<path d="M50 152v34M152 148v38" stroke="#4aa33a" stroke-width="6"/>'+sunHead(50,130,22)+sunHead(152,124,24);
+ o+=sunHead(100,h-6,s===3?32:44);
+ return o+(s===4?'<text x="150" y="40" font-size="22">✨</text>':"")+'</svg>'}
+function cactusSVG(s){
+ let o=G+sh(s)+'<ellipse cx="100" cy="184" rx="'+(34+s*6)+'" ry="9" fill="#e0b265"/>';
+ if(s===0)return o+'<circle cx="100" cy="176" r="7" fill="#6b4a2a"/><path d="M100 172q-6-8-4-14M100 172q6-8 4-14" stroke="#4aa86a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>';
+ const h=[0,60,84,104,112][s],w=[0,38,40,46,52][s],c="#3f9b5b",arm=(d)=>'<path d="'+d+'" stroke="'+c+'" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>';
+ o+='<rect x="'+(100-w/2)+'" y="'+(184-h)+'" width="'+w+'" height="'+h+'" rx="'+w/2+'" fill="'+c+'"/><path d="M'+(100-w*.15)+' '+(190-h)+'v'+(h-14)+'M'+(100+w*.15)+' '+(190-h)+'v'+(h-14)+'" stroke="#5fc07d" stroke-width="3" stroke-linecap="round" opacity=".7"/>';
+ if(s>=3)o+=arm("M"+(100-w/2+2)+" 150H64V118")+arm("M"+(100+w/2-2)+" 138H136V106");
+ if(s===4)o+='<circle cx="100" cy="'+(184-h)+'" r="10" fill="#ff6f91"/><circle cx="100" cy="'+(184-h)+'" r="4" fill="#ffd95a"/><circle cx="64" cy="114" r="6" fill="#ffb3c7"/><circle cx="136" cy="102" r="6" fill="#ffb3c7"/>';
+ return o+'</svg>'}
+function pineSVG(s){
+ let o=G+sh(s)+'<ellipse cx="100" cy="184" rx="'+(32+s*8)+'" ry="9" fill="#fff" stroke="#c9dcef"/>';
+ if(s===0)return o+'<path d="M100 178q-10-4-12-16 10 1 12 16zM100 178q10-4 12-16-10 1-12 16z" fill="#3f9b6b"/></svg>';
+ o+='<rect x="93" y="150" width="14" height="36" fill="#7a4f33"/>';
+ for(let k=0;k<s;k++){const yb=172-k*26,hw=s*10+14-k*9,ya=yb-44;
+  o+='<polygon points="'+(100-hw)+','+yb+' '+(100+hw)+','+yb+' 100,'+ya+'" fill="#2f8f64"/><polygon points="'+(100-hw*.42)+','+(ya+(yb-ya)*.4)+' '+(100+hw*.42)+','+(ya+(yb-ya)*.4)+' 100,'+ya+'" fill="#fff"/>'}
+ if(s===4)o+='<text x="88" y="54" font-size="24">⭐</text><circle cx="76" cy="150" r="5" fill="#e8384f"/><circle cx="126" cy="128" r="5" fill="#ffc93c"/><circle cx="92" cy="104" r="5" fill="#6fd0ff"/>';
+ return o+'</svg>'}
+
+const key=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+const yest=()=>key(new Date(Date.now()-864e5));
+let pendingResetMsg="";
+function dayCheck(){
+ const D=S.daily,t=key(new Date());
+ if(D.d!==t){
+  const hadPrev=!!D.d;
+  D.d=t;D.signed=false;D.small=false;D.claimed=false;D.todayDone=0;
+  let resetRep=0;
+  if(hadPrev){
+   S.tasks.forEach(tk=>{if(tk.repeat&&tk.done){tk.done=false;tk.doneDay="";resetRep++}});
+   if(resetRep>0){
+    pendingResetMsg="🌅 新的一天！已自動重置 "+resetRep+" 個每日習慣任務";
+    setTimeout(()=>{if(pendingResetMsg){toast(pendingResetMsg);pendingResetMsg=""}},250);
+   }
+  }
+  return true;
+ }
+ return false;
+}
+function curStreak(){dayCheck();const D=S.daily;return(D.last===D.d||D.last===yest())?(D.streak||0):0}
+function dailyBadge(){dayCheck();const D=S.daily,n=(D.signed?0:1)+(D.small&&!D.claimed?1:0),b=$("dBadge");b.textContent=n;b.style.display=n?"":"none";$("dOpen").classList.toggle("ready",n>0)}
+function renderDaily(){dayCheck();const D=S.daily,ns=D.signed?D.streak:(D.last===yest()?D.streak+1:1),g=2+(ns>=3?1:0);
+ $("dList").innerHTML='<div class="q'+(D.signed?" ok":"")+'"><span class="e">📅</span><div><b>每日簽到</b><p>🔥 連續 '+ns+' 天，連續 3 天起多 +1 張</p></div><button class="btn" data-q="sign" '+(D.signed?"disabled":"")+'>'+(D.signed?"已簽到":"+"+g+" 🎟️ 簽到")+'</button></div><div class="q'+(D.claimed?" ok":"")+'"><span class="e">🌿</span><div><b>完成 1 個小任務或大任務</b><p>今天完成任一個 🌿 小任務或 🌳 大任務（'+(D.small?1:0)+'/1）</p></div><button class="btn" data-q="claim" '+(D.small&&!D.claimed?"":"disabled")+'>'+(D.claimed?"已領取":D.small?"+2 🎟️ 領取":"未完成")+'</button></div>'}
+
+function sst(i){const d=S.sc[i],st=S.stars[i]||0;return[stage(d.p,th(i,TT,st)),stage(d.a,th(i,PT,st))]}
+const done_=i=>{const[a,b]=sst(i);return a>=4&&b>=3};
+const allDone=()=>SC.every((_,i)=>done_(i));
+const totalStars=()=>S.stars.reduce((a,b)=>a+b,0);
+const lockedDecos=()=>DECOS.filter(d=>!S.decos.includes(d.id));
+const lockedHats=()=>HATS.filter(h=>!S.hats.includes(h.id));
+const lockedWx=()=>SPECIAL_WX.filter(w=>!S.specialWx.includes(w.id));
+const lockedHidden=()=>[...lockedHats().map(h=>({k:"hat",item:h})),...lockedWx().map(w=>({k:"wx",item:w}))];
+const totalOwnedColl=()=>S.decos.length+S.hats.length+S.specialWx.length;
+
+// Achievement System (with instant notification & claimable ticket rewards)
+let notifiedAchs=new Set();
+function getAchievements(){
+ dayCheck();
+ const cs=curStreak();
+ const bestStreak=Math.max(cs,S.daily.maxStreak||0);
+ const bestToday=Math.max(S.daily.todayDone||0,S.daily.maxToday||0);
+ const hiddenOwned=S.hats.length+S.specialWx.length;
+ return[
+  {id:"first",e:"🌱",n:"初入森林",d:"完成第 1 個任務",rw:1,ok:S.done>=1},
+  {id:"ten",e:"📝",n:"行動派",d:"累計完成 10 個任務",rw:2,ok:S.done>=10},
+  {id:"day5",e:"⚡",n:"效率達人",d:"單日完成 5 個任務",rw:2,ok:bestToday>=5},
+  {id:"streak3",e:"🔥",n:"持之以恆",d:"連續簽到滿 3 天",rw:2,ok:bestStreak>=3},
+  {id:"pull10",e:"🎰",n:"扭蛋收藏家",d:"累計扭蛋 10 次",rw:2,ok:S.pulls>=10},
+  {id:"sc0",e:"🌳",n:"綠手指",d:"完成第 1 個場景培育",rw:2,ok:done_(0)||S.unlocked>=1||S.stars[0]>0},
+  {id:"allsc",e:"🏆",n:"森林守護者",d:"四個場景全部培育滿等",rw:4,ok:S.allEverDone||allDone()},
+  {id:"deco4",e:"🎨",n:"空間設計師",d:"收集至少 4 件場景裝飾品",rw:2,ok:S.decos.length>=4},
+  {id:"star1",e:"⭐",n:"生態轉生",d:"將任一場景進行升星轉生",rw:3,ok:totalStars()>=1},
+  {id:"hid3",e:"👑",n:"時尚天氣師",d:"收集至少 3 件夥伴頭飾或限定天氣",rw:3,ok:hiddenOwned>=3},
+   {id:"star5",e:"🌟",n:"傳說生態",d:"將任一場景晉升至 ★5「傳說」",rw:5,ok:Math.max(...S.stars)>=5},
+   {id:"honor50",e:"🏅",n:"榮譽守護者",d:"累計獲得 50 點榮譽值",rw:3,ok:S.honorTotal>=50}
+ ];
+}
+function checkAchievements(silent=false){
+ const achs=getAchievements();
+ const claimable=achs.filter(a=>a.ok&&!S.achClaimed.includes(a.id));
+ const b=$("aBadge");
+ b.textContent=claimable.length;
+ b.style.display=claimable.length?"":"none";
+ $("statOpen").classList.toggle("ready",claimable.length>0);
+ if(silent){
+  claimable.forEach(a=>notifiedAchs.add(a.id));
+  return;
+ }
+ const freshNew=claimable.filter(a=>!notifiedAchs.has(a.id));
+ if(freshNew.length){
+  freshNew.forEach(a=>notifiedAchs.add(a.id));
+  showAchBanner(freshNew[0]);
+  tone([659,880,1046]);
+ }
+}
+
+function renderDecosInScene(){
+ const layer=$("decoLayer"),vi=S.view;
+ const active=DECOS.filter(d=>d.sc===vi&&S.decos.includes(d.id)&&S.placed[d.id]&&S.placed[d.id].on);
+ layer.innerHTML=active.map(d=>{
+  const p=S.placed[d.id];
+  return '<div class="deco-item" data-did="'+d.id+'" title="'+d.n+'（可拖曳移動）" style="left:'+p.x+'%;top:'+p.y+'%">'+d.i+'</div>';
+ }).join("");
+ $("decoCnt").textContent=totalOwnedColl()+"/"+TOTAL_COLL;
+}
+
+function renderCollectionModal(){
+ $("decoTitle").textContent="🎨 森林收藏圖鑑（"+totalOwnedColl()+"/"+TOTAL_COLL+"）";
+ document.querySelectorAll("#cTabs .ctab").forEach(b=>b.classList.toggle("on",b.dataset.ct===colTab));
+ if(colTab==="deco"){
+  $("decoSub").textContent=S.allEverDone
+   ?(lockedDecos().length?"裝飾品池已開放（全部滿等時必出，升星後培育中每抽 50% 機率）！點選已解鎖小物可擺放或收回，也能在場景中拖曳移動。":"全 12 件場景裝飾品收集完成！點選可擺放或收回，也能在場景中拖曳移動位置。")
+   :"將四個場景全部培育完成後，扭蛋機就會開放抽取 12 件專屬場景裝飾品。";
+  $("decoGrid").innerHTML=SC.map((c,si)=>{
+   const list=DECOS.filter(d=>d.sc===si);
+   const owned=list.filter(d=>S.decos.includes(d.id)).length;
+   const cur=si===S.view;
+   return '<div class="dsec'+(cur?" cur":"")+'"><div class="dsec-h"><b>'+c.ic+' '+c.n+(cur?"（目前場景）":"")+'</b><small>'+owned+'/'+list.length+'</small></div><div class="dgrid">'+list.map(d=>{
+    const has=S.decos.includes(d.id),on=has&&S.placed[d.id]&&S.placed[d.id].on;
+    return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="deco" data-id="'+d.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?d.i:"🔒")+'</span><b>'+(has?d.n:"未解鎖")+'</b><small>'+(has?(on?"已擺放":"點一下擺放"):"滿等後獲得")+'</small></button>';
+   }).join("")+'</div></div>';
+  }).join("");
+ }else if(colTab==="hat"){
+  const c=SC[S.view],eq=S.equippedHat[S.view];
+  $("decoSub").textContent=lockedDecos().length===0
+   ?"隱藏限定池已開放！點選已解鎖的頭飾，即可幫目前場景「"+c.ic+" "+c.n+"」的夥伴戴上或取下。"
+   :"收集完 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 6 款夥伴頭飾！";
+  $("decoGrid").innerHTML='<div class="dsec cur"><div class="dsec-h"><b>目前對象：'+c.ic+' '+c.n+'的夥伴</b><small>'+S.hats.length+'/'+HATS.length+'</small></div><div class="dgrid">'+HATS.map(h=>{
+   const has=S.hats.includes(h.id),on=has&&eq===h.id;
+   return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="hat" data-id="'+h.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?h.i:"🔒")+'</span><b>'+(has?h.n:"未解鎖")+'</b><small>'+(has?(on?"已配戴":"點一下配戴"):"隱藏池抽得")+'</small></button>';
+  }).join("")+'</div></div>';
+ }else{
+  $("decoSub").textContent=lockedDecos().length===0
+   ?"隱藏限定池已開放！解鎖限定天氣券後，點選即可立即切換並自動記憶，也能隨時從天氣按鈕輪換。"
+   :"收集完 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 3 種限定夢幻天氣！";
+  $("decoGrid").innerHTML='<div class="dsec cur"><div class="dsec-h"><b>🌠 隱藏限定天氣</b><small>'+S.specialWx.length+'/'+SPECIAL_WX.length+'</small></div><div class="dgrid">'+SPECIAL_WX.map(w=>{
+   const has=S.specialWx.includes(w.id),on=has&&curWeather===w.id;
+   return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="wx" data-id="'+w.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?w.i:"🔒")+'</span><b>'+(has?w.n:"未解鎖")+'</b><small>'+(has?(on?"套用中":"點一下套用"):"隱藏池抽得")+'</small></button>';
+  }).join("")+'</div></div>';
+ }
+}
+
+function renderWorld(){
+ const i=S.view,c=SC[i],d=S.sc[i],st=S.stars[i]||0,[ts,ps]=sst(i);
+ const sb=$("sceneBox");
+ const tier=Math.min(st,5);
+ sb.classList.remove("star-1","star-2","star-3","star-4","star-5");
+ if(tier)sb.classList.add("star-"+tier);
+ renderAura(tier);
+ $("hill").style.background=c.hill;
+ document.querySelectorAll(".cloud").forEach(e=>e.textContent=c.dc);
+ $("tree").innerHTML=c.svg(ts);
+ $("petBody").textContent=c.A[ps];
+ $("pet").style.fontSize=PS[ps]+"px";
+ const hatId=S.equippedHat[i],hatObj=HATS.find(h=>h.id===hatId&&S.hats.includes(h.id));
+ const ph=$("petHat");
+ ph.textContent=hatObj?hatObj.i:"";
+ ph.className="pet-hat"+(hatObj&&hatObj.id==="shades"?" shades":"");
+ const starTxt=st>0?" ★"+st:"";
+ $("tName").textContent=c.P[ts]+" Lv."+(ts+1)+starTxt;
+ $("pName").textContent=c.A[ps]+" "+c.AN[ps]+" Lv."+(ps+1)+starTxt;
+ let m=meter(d.p,th(i,TT,st),ts);$("tBar").style.width=m.pct+"%";$("tTxt").textContent=m.txt;
+ m=meter(d.a,th(i,PT,st),ps);$("pBar").style.width=m.pct+"%";$("pTxt").textContent=m.txt;
+
+ // World action bar (outside scene so it never blocks HUD/tree/bubble)
+ const canAscend=S.allEverDone&&done_(i);
+ const canPickGrow=!done_(i)&&S.grow!==i;
+ $("ascendBtn").style.display=canAscend?"":"none";
+ if(canAscend&&!ascendTimer)$("ascendBtn").textContent="⭐ 升星轉生（晉升 ★"+(st+1)+"）";
+ $("growPickBtn").style.display=canPickGrow?"":"none";
+ $("worldAct").classList.toggle("on",canAscend||canPickGrow);
+
+ // Gacha odds description
+ {const growing=!done_(S.grow),parts=[];let alwaysDeco=false;
+  if(growing){const gst=S.stars[S.grow]||0;parts.push('綠色道具讓植物長大，橘色道具讓夥伴長大。目前培育中：<b id="gTarget">'+SC[S.grow].ic+' '+SC[S.grow].n+(gst?' ★'+gst:'')+'</b>')}
+  else if(!S.allEverDone)parts.push('目前目標場景已滿等，請切換至尚未滿等的場景設為培育目標。');
+  if(S.allEverDone){
+   const remD=lockedDecos().length,remH=lockedHidden().length;
+   if(remD){alwaysDeco=!growing;parts.push(growing?'🎨 每抽有 <b>50%</b> 機率獲得「場景裝飾品」（剩餘 '+remD+' 件）':'🎉 四個場景皆滿等！現在扭蛋必出<b>「場景裝飾品」</b>（剩餘 '+remD+' 件）。升星轉生後仍會繼續掉落。')}
+   else if(remH)parts.push('✨ <b>隱藏限定池</b>開放中！每抽 35% 機率（連續 5 抽沒出稀有，第 6 抽必出）獲得<b>夥伴頭飾／限定天氣</b>（剩餘 '+remH+' 件）');
+   else if(!growing)parts.push('🏆 全圖鑑 '+TOTAL_COLL+' 件收藏達成！可幫任意場景<b>「⭐ 升星轉生」</b>解鎖更高星級光環。');
+  }
+  if(!growing&&!alwaysDeco)parts.push('🏅 目標已滿等，成長值會轉為<b>榮譽值</b>（'+S.honor+'/'+HONOR_PER+'），每滿 '+HONOR_PER+' 點自動回饋 1 張扭蛋券。');
+  if(growing)parts.push('連續 5 抽沒出稀有，第 6 抽必出稀有。');
+  $("gOdds").innerHTML=parts.join('<br>');
+ }
+ $("tabs").innerHTML=SC.map((x,k)=>{
+  const locked=k>S.unlocked,kst=S.stars[k]||0,isGrow=k===S.grow&&!done_(k);
+  const stTag=kst>0?'<span class="st-tag">★'+kst+'</span>':"";
+  return '<button class="sc'+(k===i?" on":"")+'" data-i="'+k+'" '+(locked?"disabled":"")+' title="'+x.n+'">'+stTag+(locked?"🔒":x.ic)+"<small>"+(locked?"未解鎖":done_(k)?"滿等":isGrow?"培育中":"待培育")+"</small></button>";
+ }).join("");
+ renderDecosInScene();
+ renderAtmosphere();
+}
+
+function renderStats(){
+ dayCheck();
+ const doneScenes=SC.filter((_,i)=>done_(i)).length;
+ const cs=curStreak();
+ const bestStreak=Math.max(cs,S.daily.maxStreak||0);
+ const bestToday=Math.max(S.daily.todayDone||0,S.daily.maxToday||0);
+ const hiddenOwned=S.hats.length+S.specialWx.length;
+ const hiddenTotal=HATS.length+SPECIAL_WX.length;
+ const cards=[
+  {v:S.done,l:"總完成任務"},
+  {v:S.daily.todayDone||0,l:"今日完成（最高 "+bestToday+"）"},
+  {v:S.pulls,l:"累計扭蛋次數"},
+  {v:cs+" 天",l:"連續簽到（最高 "+bestStreak+" 天）"},
+  {v:"★"+totalStars(),l:"場景累計星級（滿等 "+doneScenes+"/4）"},
+  {v:totalOwnedColl()+" / "+TOTAL_COLL,l:"裝飾 "+S.decos.length+"/12・限定 "+hiddenOwned+"/"+hiddenTotal},
+   {v:"★"+Math.max(...S.stars)+(Math.max(...S.stars)?" "+starTitle(Math.max(...S.stars)):""),l:"最高星級"},
+   {v:S.honorTotal,l:"累計榮譽值（回饋 "+S.honorTk+" 張券）"}
+ ];
+ $("sGrid").innerHTML=cards.map(c=>'<div class="sbox"><b>'+c.v+'</b><small>'+c.l+'</small></div>').join("");
+ const achs=getAchievements();
+ const okCnt=achs.filter(a=>a.ok||S.achClaimed.includes(a.id)).length;
+ const claimable=achs.filter(a=>a.ok&&!S.achClaimed.includes(a.id));
+ $("achCnt").textContent="（"+okCnt+" / "+achs.length+"）";
+ $("achClaimAll").style.display=claimable.length>=2?"":"none";
+ if(claimable.length>=2){
+  const sumRw=claimable.reduce((s,a)=>s+a.rw,0);
+  $("achClaimAll").textContent="一鍵領取（+"+sumRw+" 🎟️）";
+ }
+ $("achList").innerHTML=achs.map(a=>{
+  const claimed=S.achClaimed.includes(a.id);
+  const canClaim=a.ok&&!claimed;
+  const cls=canClaim?" claim":(claimed||a.ok?" ok":"");
+  const right=canClaim
+   ?'<button class="claim-btn" data-aid="'+a.id+'">領取 +'+a.rw+'🎟️</button>'
+   :'<span class="st">'+(claimed?"已領取":"+"+a.rw+"🎟️")+'</span>';
+  return '<div class="ach'+cls+'"><span class="ae">'+a.e+'</span><div class="at"><b>'+a.n+'</b><small>'+a.d+'</small></div>'+right+'</div>';
+ }).join("");
+}
+
+// Build hierarchical task list with optional "sink done" sorting and parent folding
+function buildRenderTasks(){
+ const T=S.tasks;
+ const roots=[];
+ const stack=[];
+ for(let i=0;i<T.length;i++){
+  const node={task:T[i],children:[]};
+  while(stack.length&&stack[stack.length-1].task.level>=node.task.level)stack.pop();
+  if(stack.length)stack[stack.length-1].children.push(node);
+  else roots.push(node);
+  stack.push(node);
+ }
+ function calcStats(node){
+  let total=0,done=0;
+  for(const ch of node.children){
+   const s=calcStats(ch);
+   total+=1+s.total;
+   done+=(ch.task.done?1:0)+s.done;
+  }
+  node.subTotal=total;
+  node.subDone=done;
+  if(prefs.sinkDone&&node.children.length>1){
+   node.children.sort((a,b)=>(a.task.done?1:0)-(b.task.done?1:0));
+  }
+  return{total,done};
+ }
+ roots.forEach(calcStats);
+ if(prefs.sinkDone&&roots.length>1){
+  roots.sort((a,b)=>(a.task.done?1:0)-(b.task.done?1:0));
+ }
+ const flat=[];
+ function walk(nodes){
+  for(const nd of nodes){
+   flat.push(nd);
+   if(!nd.task.collapsed&&nd.children.length)walk(nd.children);
+  }
+ }
+ walk(roots);
+ return flat;
+}
+
+function renderTasks(){
+ dayCheck();if(typeof clearDelCfm==="function")clearDelCfm();
+ const flat=buildRenderTasks();
+ $("list").innerHTML=flat.length?flat.map(nd=>{
+  const t=nd.task;
+  const hasSub=nd.subTotal>0;
+  const foldBtn=hasSub?'<button class="fold-btn" data-a="fold" data-id="'+t.id+'" title="'+(t.collapsed?"展開細項":"折疊細項")+'" aria-label="'+(t.collapsed?"展開細項":"折疊細項")+'">'+(t.collapsed?"▸":"▾")+'</button>':"";
+  const cnt=hasSub?'<em class="cnt">'+nd.subDone+"/"+nd.subTotal+"</em>":"";
+  const lk=lockLeft(t),blk=!t.done&&nd.subDone<nd.subTotal;
+  const cdSpan=lk>0?'<span class="cd" data-id="'+t.id+'" title="新任務冷卻中，倒數結束後才能勾選">⏳'+fmtLeft(lk)+'</span>':"";
+  const chkTitle=t.done?' title="點一下可取消完成（需退回扭蛋券）"':blk?' title="還有細項未完成"':lk>0?' title="冷卻中"':"";
+  const repTag=t.repeat?'<button class="rep-tag" data-a="rep" data-id="'+t.id+'" title="每日重複任務（點一下取消重複）">🔁 每日</button>':(!t.done?'<button class="rep-tag off" data-a="rep" data-id="'+t.id+'" title="設為每日重複任務（習慣模式）" aria-label="設為每日重複任務">🔁</button>':"");
+  return '<div class="task l'+t.level+(t.done?" done":"")+(t.id===newTaskId?" new":"")+(lk>0?" locked":"")+'" style="--lv:'+t.level+'">'+foldBtn+'<input type="checkbox" data-a="chk" data-id="'+t.id+'" '+(t.done?"checked":"")+chkTitle+' aria-label="'+(t.done?"取消完成任務":"完成任務")+'"><span class="lv-ic">'+L[t.level].i+'</span><span class="nm" data-id="'+t.id+'"'+(t.done?"":' title="點 ✏️ 或雙擊可編輯名稱"')+'>'+esc(t.name)+"</span>"+cdSpan+repTag+cnt+'<span class="rw">+'+L[t.level].t+"🎟️</span>"+(!t.done?'<button data-a="edit" data-id="'+t.id+'" title="編輯任務名稱" aria-label="編輯任務名稱">✏️</button>':"")+(t.level<2&&!t.done?'<button data-a="sub" data-id="'+t.id+'" title="在底下新增細項" aria-label="新增下層任務">＋</button>':"")+'<button data-a="del" data-id="'+t.id+'" aria-label="刪除">✕</button></div>';
+ }).join(""):'<div class="empty">🌼 森林還是一片空地<br>先新增一個任務吧！</div>';
+ newTaskId=null;$("tk").textContent=S.tickets;$("gBadge").textContent=S.tickets;dailyBadge();$("gOpen").classList.toggle("ready",S.tickets>0);$("spin").disabled=S.tickets<1||busy;$("spinAll").disabled=S.tickets<2||busy;$("spinAll").textContent=S.tickets>1?"一鍵扭完（"+S.tickets+" 顆）":"一鍵扭完（需 2 張以上）";
+ $("spin").textContent=S.tickets>0?"扭一下！（剩 "+S.tickets+" 張）":"完成任務就能獲得扭蛋券"}
+function renderAll(silentAch=false){renderTasks();renderWorld();checkAchievements(silentAch);save()}
+
+function startEditTask(id){
+ const t=S.tasks.find(x=>x.id===id);if(!t||t.done)return;
+ const nm=$("list").querySelector('.nm[data-id="'+id+'"]');if(!nm)return;
+ const inp=document.createElement("input");
+ inp.className="nm-edit";inp.maxLength=60;inp.value=t.name;
+ nm.replaceWith(inp);inp.focus();inp.select();
+ setTimeout(()=>{try{inp.scrollIntoView({block:"center",behavior:"smooth"})}catch(e){}},120);
+ let doneEdit=false;
+ const commit=saveIt=>{
+  if(doneEdit)return;doneEdit=true;
+  if(saveIt){const v=inp.value.trim();if(v&&v!==t.name){t.name=v;toast("已更新任務名稱")}}
+  renderAll();
+ };
+ inp.onkeydown=ev=>{if(ev.key==="Enter"&&!ev.isComposing)commit(true);if(ev.key==="Escape")commit(false)};
+ inp.onblur=()=>commit(true);
+}
+
+function addTask(){
+ const name=$("inp").value.trim();if(!name){toast("先寫下一個任務喔");$("inp").focus();return}
+ let level=+$("lv").value,at=S.tasks.length;
+ if(parent){
+  const i=S.tasks.findIndex(t=>t.id===parent);
+  if(i>-1){
+   S.tasks[i].collapsed=false;
+   level=Math.min(2,S.tasks[i].level+1);at=i+1;
+   while(at<S.tasks.length&&S.tasks[at].level>S.tasks[i].level)at++;
+  }
+ }
+ let note="";
+ if(!(parent&&S.tasks.some(t=>t.id===parent))&&level>0){
+  let anc=null;
+  for(let k=S.tasks.length-1;k>=0;k--){if(S.tasks[k].level<level){anc=S.tasks[k];break}}
+  if(anc){
+   if(S.tasks.some(t=>t!==anc&&t.level<level)){const an=anc.name.length>10?anc.name.slice(0,10)+"…":anc.name;note="已加到「"+an+"」底下（想換位置：先按該任務的 ＋ 再新增）"}
+  }else{level=0;note="目前沒有可掛靠的上層任務，已建立為大任務"}
+ }
+ const nid=uid();
+ S.tasks.splice(at,0,{id:nid,name,level,done:false,repeat:newRepeat,collapsed:false,created:Date.now()});newTaskId=nid;
+ $("inp").value="";clearParent();renderAll();$("inp").focus();if(note)toast(note)}
+function setParent(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;parent=id;$("lv").value=Math.min(2,t.level+1);$("hint").innerHTML="加到「"+esc(t.name)+"」底下 <button id=\"cp\">取消</button>";$("hint").classList.add("on");$("cp").onclick=clearParent;$("inp").focus()}
+function clearParent(){parent=null;$("hint").classList.remove("on")}
+function complete(id,el){
+ const idx=S.tasks.findIndex(x=>x.id===id),t=S.tasks[idx];if(!t||t.done)return;
+ const lk=lockLeft(t);
+ if(lk>0){el.checked=false;toast("新任務冷卻中，再等 "+fmtLeft(lk)+" 才能完成喔（防止刷券）");return}
+ const und=undoneDesc(idx);
+ if(und>0){el.checked=false;toast("還有 "+und+" 個細項未完成，先把細項完成吧！");return}
+ dayCheck();
+ const D=S.daily,snap={small:D.small,claimed:D.claimed,maxToday:D.maxToday||0,day:D.d},claimedBefore=new Set(S.achClaimed);
+ // 完成此任務，並向上連動：上層的細項全部完成且已過冷卻時自動完成
+ t.done=true;t.doneDay=D.d;const chain=[t];
+ let cdParent=null,cdLeft=0;
+ for(let ci=idx;;){
+  const pi=parentIdx(ci);if(pi<0)break;
+  const p=S.tasks[pi];if(p.done||undoneDesc(pi)>0)break;
+  const plk=lockLeft(p);
+  if(plk>0){cdParent=p;cdLeft=plk;break}
+  p.done=true;p.doneDay=D.d;chain.push(p);ci=pi;
+ }
+ let gain=0;chain.forEach(x=>{gain+=L[x.level].t;if(x.level<=1)D.small=true});
+ S.done+=chain.length;D.todayDone=(D.todayDone||0)+chain.length;D.maxToday=Math.max(snap.maxToday,D.todayDone);S.tickets+=gain;
+ const r=el.getBoundingClientRect();fx(r.left+10,r.top+10,["🎟️","✨","🌿"],chain.length>1?12:7);tone(chain.length>1?[587,880,1175]:[587,880]);
+ $("pill").classList.remove("bump");void $("pill").offsetWidth;$("pill").classList.add("bump");
+ const top=chain[chain.length-1];
+ const extraMsg=chain.length>1
+  ?"（細項全完成，「"+shortNm(top.name)+"」自動完成）"
+  :(cdParent?"（細項全完成！上層「"+shortNm(cdParent.name)+"」冷卻中，再 "+fmtLeft(cdLeft)+" 即可勾選）":"");
+ toast("完成！獲得 "+gain+" 張扭蛋券"+extraMsg,()=>undoComplete(chain,gain,snap,claimedBefore));
+ renderAll()}
+function uncomplete(id,el){
+ const idx=S.tasks.findIndex(x=>x.id===id),t=S.tasks[idx];if(!t||!t.done)return;
+ dayCheck();
+ const D=S.daily,chain=[t];
+ for(let ci=idx;;){const pi=parentIdx(ci);if(pi<0)break;const p=S.tasks[pi];if(p.done)chain.push(p);ci=pi}
+ const gain=chain.reduce((s,x)=>s+L[x.level].t,0);
+ const todayCnt=chain.filter(x=>!x.doneDay||x.doneDay===D.d).length;
+ const back={done:S.done,todayDone:D.todayDone,small:D.small,claimed:D.claimed};
+ chain.forEach(x=>x.done=false);
+ S.done=Math.max(0,S.done-chain.length);
+ D.todayDone=Math.max(0,(D.todayDone||0)-todayCnt);
+ const stillSmall=S.tasks.some(x=>x.done&&x.level<=1&&(!x.doneDay||x.doneDay===D.d));
+ let cost=gain;
+ const resetSmall=!stillSmall&&back.small;
+ const revokeDaily=resetSmall&&D.claimed;
+ if(revokeDaily)cost+=2;
+ const revoke=getAchievements().filter(a=>!a.ok&&S.achClaimed.includes(a.id));
+ cost+=revoke.reduce((s,a)=>s+a.rw,0);
+ if(S.tickets<cost){
+  chain.forEach(x=>x.done=true);
+  S.done=back.done;D.todayDone=back.todayDone;D.small=back.small;D.claimed=back.claimed;
+  if(el)el.checked=true;
+  toast("扭蛋券不足（需退回 "+cost+" 張券），無法取消完成");return;
+ }
+ S.tickets-=cost;
+ chain.forEach(x=>x.doneDay="");
+ if(resetSmall){D.small=false;if(revokeDaily)D.claimed=false}
+ S.achClaimed=S.achClaimed.filter(aid=>!revoke.some(a=>a.id===aid));
+ revoke.forEach(a=>notifiedAchs.delete(a.id));
+ tone([440,330]);
+ renderAll(true);
+ if($("sov").classList.contains("on"))renderStats();
+ if($("dov").classList.contains("on"))renderDaily();
+ toast("已取消完成，退回 "+cost+" 張扭蛋券"+(chain.length>1?"（含上層連動任務）":""));
+}
+function undoComplete(chain,gain,snap,claimedBefore){
+ if(chain.some(x=>!S.tasks.includes(x)||!x.done)){toast("任務已變更，無法復原");return}
+ const D=S.daily,sameDay=D.d===snap.day;
+ const back={done:S.done,todayDone:D.todayDone,maxToday:D.maxToday};
+ // 先試算還原後的狀態，再計算需收回的獎勵
+ chain.forEach(x=>x.done=false);
+ S.done=Math.max(0,S.done-chain.length);
+ if(sameDay){D.todayDone=Math.max(0,(D.todayDone||0)-chain.length);D.maxToday=Math.max(snap.maxToday,D.todayDone)}
+ let cost=gain;
+ const resetSmall=sameDay&&!snap.small;
+ const revokeDaily=resetSmall&&D.claimed&&!snap.claimed;
+ if(revokeDaily)cost+=2;
+ const revoke=getAchievements().filter(a=>!a.ok&&S.achClaimed.includes(a.id)&&!claimedBefore.has(a.id));
+ cost+=revoke.reduce((s,a)=>s+a.rw,0);
+ if(S.tickets<cost){
+  chain.forEach(x=>x.done=true);S.done=back.done;D.todayDone=back.todayDone;D.maxToday=back.maxToday;
+  toast("相關扭蛋券已使用，無法復原");return}
+ S.tickets-=cost;
+ chain.forEach(x=>x.doneDay="");
+ if(resetSmall){D.small=false;if(revokeDaily)D.claimed=false}
+ S.achClaimed=S.achClaimed.filter(id=>!revoke.some(a=>a.id===id));
+ revoke.forEach(a=>notifiedAchs.delete(a.id));
+ renderAll(true);
+ if($("sov").classList.contains("on"))renderStats();
+ if($("dov").classList.contains("on"))renderDaily();
+ toast("已復原任務狀態"+(cost>gain?"（一併收回相關獎勵 "+(cost-gain)+" 張券）":""));
+}
+
+function pick(){
+ if(S.allEverDone){
+  const remD=lockedDecos(),growing=!done_(S.grow);
+  // 曾全部滿等即開放收藏池；升星後培育中每抽 50% 出裝飾，其餘時間必出
+  if(remD.length&&(!growing||Math.random()<0.5)){
+   const d=remD[Math.floor(Math.random()*remD.length)];
+   return{n:d.n,i:d.i,k:"deco",deco:d,v:0,r:1,c:d.c};
+  }
+  const remH=lockedHidden();
+  if(!remD.length&&remH.length&&(S.dry>=5||Math.random()<0.35)){
+   const pickH=remH[Math.floor(Math.random()*remH.length)];
+   return{n:pickH.item.n,i:pickH.item.i,k:pickH.k,item:pickH.item,v:0,r:1,c:pickH.item.c};
+  }
+ }
+ let pool=S.dry>=5?PRIZES.filter(p=>p.r):PRIZES;
+ let x=Math.random()*pool.reduce((a,p)=>a+p.w,0);
+ for(const p of pool){x-=p.w;if(x<=0)return p}return pool[0]}
+
+function advanceGrowAfterDone(gi){
+ const msgs=[];
+ if(gi<3&&S.unlocked===gi){
+  S.unlocked=gi+1;S.grow=gi+1;
+  msgs.push("🎉 「"+SC[gi].n+"」培育完成！解鎖新場景「"+SC[gi+1].n+"」！");
+  return msgs;
+ }
+ const nextUnmax=SC.findIndex((_,k)=>k<=S.unlocked&&!done_(k));
+ if(nextUnmax>-1){
+  S.grow=nextUnmax;
+  const st=S.stars[gi]||0;
+  msgs.push("🌟 「"+SC[gi].n+(st?" ★"+st:"")+"」滿等完成！已切換培育「"+SC[nextUnmax].n+"」");
+  return msgs;
+ }
+ const firstTimeAll=!S.allEverDone;
+ S.allEverDone=true;S.unlocked=3;
+ if(firstTimeAll)msgs.push("🏆 四個場景全部培育完成！開放抽取「場景裝飾品」與「⭐ 升星轉生」！");
+ else if((S.stars[gi]||0)>0)msgs.push("🌟 「"+SC[gi].n+" ★"+S.stars[gi]+"」再次培育滿等！可繼續升星或抽收藏池！");
+ return msgs;
+}
+
+function spin(){
+ if(busy||S.tickets<1)return;
+ busy=true;S.tickets--;S.pulls++;
+ const p=pick();S.dry=p.r?0:S.dry+1;
+ $("spin").disabled=true;$("spinAll").disabled=true;
+ $("mach").classList.remove("shake");void $("mach").offsetWidth;$("mach").classList.add("shake");
+ $("knob").classList.add("turn");tone([180,220,180,240,200]);
+ $("drop").style.setProperty("--c",p.c);$("drop").classList.remove("go");
+ setTimeout(()=>$("drop").classList.add("go"),900);
+ setTimeout(()=>reveal(p),1600)}
+
+function applyPrize(p){
+ if(p.k==="deco"){
+  const d=p.deco;
+  if(!S.decos.includes(d.id))S.decos.push(d.id);
+  S.placed[d.id]={on:true,x:d.x,y:d.y};
+  const up=["🎨 解鎖「"+SC[d.sc].n+"」裝飾："+d.i+d.n];
+  if(!lockedDecos().length)up.push("✨ 全 12 件裝飾收齊！隱藏限定池已開放！");
+  return{up,desc:"",k:"both",view:d.sc};
+ }
+ if(p.k==="hat"){
+  const h=p.item;
+  if(!S.hats.includes(h.id))S.hats.push(h.id);
+  S.equippedHat[S.view]=h.id;
+  return{up:["👑 隱藏限定！獲得頭飾："+h.i+h.n],desc:"",k:"pet",view:S.view};
+ }
+ if(p.k==="wx"){
+  const w=p.item;
+  if(!S.specialWx.includes(w.id))S.specialWx.push(w.id);
+  curWeather=w.id;wxManual=true;syncWxPref();
+  return{up:["🌠 隱藏限定！解鎖天氣："+w.i+w.n],desc:"",k:"both",view:S.view};
+ }
+ const gi=S.grow,c=SC[gi],[ot,op]=sst(gi),d=S.sc[gi],up=[];
+ if(ot>=4&&op>=3){
+  // 目標已滿等：成長值轉為榮譽值，每滿 HONOR_PER 點回饋 1 張券
+  const hv=p.k==="both"?p.v*2:p.v;let got=0;
+  S.honor+=hv;S.honorTotal+=hv;
+  while(S.honor>=HONOR_PER){S.honor-=HONOR_PER;S.tickets++;S.honorTk++;got++}
+  if(got)up.push("🏅 榮譽值集滿！回饋 +"+got+" 🎟️");
+  return{up,desc:"🏅 榮譽值 +"+hv+"（"+S.honor+"/"+HONOR_PER+"，集滿換 1 張券）",k:p.k,view:gi};
+ }
+ let desc="",effK=p.k;
+ if(p.k==="both"){d.p+=p.v;d.a+=p.v;desc=c.pl+"和"+c.pn+" +"+p.v+" 成長值"}
+ else if(p.k==="tree"){
+  if(ot>=4&&op<3){d.a+=p.v;effK="pet";desc=c.pl+"已滿等，自動轉給"+c.pn+" +"+p.v+" 成長值"}
+  else{d.p+=p.v;desc=c.pl+" +"+p.v+" 成長值"}
+ }else{
+  if(op>=3&&ot<4){d.p+=p.v;effK="tree";desc=c.pn+"已滿等，自動轉給"+c.pl+" +"+p.v+" 成長值"}
+  else{d.a+=p.v;desc=c.pn+" +"+p.v+" 成長值"}
+ }
+ const[nt,np]=sst(gi);
+ if(nt>ot)up.push("🌱 "+c.pl+"長大了：「"+c.P[nt]+"」！");
+ if(np>op)up.push("🐾 "+c.pn+"進化了：「"+c.AN[np]+"」！");
+ if(done_(gi)&&!(ot>=4&&op>=3))up.push(...advanceGrowAfterDone(gi));
+ return{up,desc,k:effK,view:gi};
+}
+
+function reveal(p){
+ const r=applyPrize(p);
+ lastI=r.view;lastK=r.k;
+ let n=(p.r?"稀有！":"")+p.n,d=r.desc,u=r.up.join(" "),f=p.r?["🌟","🎊","✨",p.i]:["✨",p.i,"🎉"],nf=p.r?16:10,big=!!(p.r||r.up.length);
+ if(p.k==="deco"){
+  const dd=p.deco;
+  n="解鎖場景裝飾："+dd.n;d="已自動擺放到「"+SC[dd.sc].n+"」場景，可在畫面中拖曳移動！";
+  u=lockedDecos().length?"裝飾品收集進度："+S.decos.length+" / "+DECOS.length:"🏆 全 12 件裝飾品收齊！隱藏限定池（夥伴頭飾與限定天氣）正式解鎖！";
+  f=["🌟","🎊","✨",dd.i];nf=16;big=true;
+ }else if(p.k==="hat"){
+  const h=p.item;
+  n="隱藏限定！夥伴頭飾："+h.n;d="已幫目前場景「"+SC[S.view].n+"」的夥伴戴上囉！可至收藏圖鑑隨時更換。";
+  u="夥伴頭飾收集進度："+S.hats.length+" / "+HATS.length;f=["👑","🌟","✨",h.i];nf=16;big=true;
+ }else if(p.k==="wx"){
+  const w=p.item;
+  n="隱藏限定！天氣券："+w.n;d="已立即套用「"+w.n+"」天象並記憶，之後也能從天氣按鈕隨時切換！";
+  u="限定天氣收集進度："+S.specialWx.length+" / "+SPECIAL_WX.length;f=["🌠","🌌","✨",w.i];nf=16;big=true;
+ }
+ $("pE").textContent=p.i;$("pN").textContent=n;$("pD").textContent=d;$("pU").textContent=u;
+ $("ov").classList.add("on");$("pOk").focus();
+ fx(innerWidth/2,innerHeight/2,f,nf);
+ tone(big?[523,659,784,1046,1318]:[523,659,784]);
+ $("knob").classList.remove("turn");$("mach").classList.remove("shake");$("drop").classList.remove("go");
+ lastSingle=true;busy=false;renderAll()}
+
+function spinAll(){
+ if(busy||S.tickets<2)return;
+ busy=true;$("spin").disabled=true;$("spinAll").disabled=true;
+ $("mach").classList.remove("shake");void $("mach").offsetWidth;$("mach").classList.add("shake");$("knob").classList.add("turn");tone([180,220,180,240,200,260]);
+ setTimeout(()=>{
+  const n=S.tickets,got=[],ups=[],cnt={},specialsGot=[];let lastDecoSc=null;S.tickets=0;S.pulls+=n;
+  for(let j=0;j<n;j++){
+   const p=pick();S.dry=p.r?0:S.dry+1;got.push(p);
+   if(p.k==="deco"){specialsGot.push(p.i+p.n);lastDecoSc=p.deco.sc}
+   else if(p.k==="hat"||p.k==="wx"){specialsGot.push(p.i+p.n)}
+   else cnt[p.n]=(cnt[p.n]||0)+1;
+   ups.push(...applyPrize(p).up);
+  }
+  const summaryParts=[];
+  if(specialsGot.length)summaryParts.push("✨ 收藏："+specialsGot.join("、"));
+  const normSummary=PRIZES.filter(p=>cnt[p.n]).map(p=>(p.r?"⭐":"")+p.i+p.n+" ×"+cnt[p.n]).join("、");
+  if(normSummary)summaryParts.push(normSummary);
+  $("pE").textContent=got.some(p=>p.r)?"🎊":"🎁";$("pN").textContent="一鍵扭完 "+n+" 顆！";
+  $("pD").textContent=summaryParts.join("｜");
+  $("pU").innerHTML=ups.join("<br>");
+  $("ov").classList.add("on");$("pOk").focus();
+  fx(innerWidth/2,innerHeight/2,["🌟","🎊","✨","🎉"],16);tone([523,659,784,1046,1318]);
+  $("knob").classList.remove("turn");$("mach").classList.remove("shake");
+  lastK="both";lastI=lastDecoSc!==null?lastDecoSc:S.grow;lastSingle=false;busy=false;renderAll()},1400)}
+
+function closePop(){
+ // 單抽且還有券時，只關結果視窗、扭蛋機保持開啟
+ const keepG=lastSingle&&S.tickets>0&&$("gov").classList.contains("on");
+ $("ov").classList.remove("on");if(!keepG)$("gov").classList.remove("on");
+ const k=lastK;if(lastI!==null)S.view=lastI;renderWorld();save();
+ if(keepG){$("spin").focus();return}
+ if(k!=="pet"){bounce("tree","boing")}
+ if(k!=="tree"){bounce("pet","hop")}}
+function bounce(id,c){const e=$(id);e.classList.remove(c);void e.offsetWidth;e.classList.add(c);const r=e.getBoundingClientRect();fx(r.left+r.width/2,r.top+r.height/3,id==="tree"?["🍃","🌸","✨"]:["💖","✨","⭐"],7)}
+let bt,lastLine="";
+function showBubble(pool){
+ const filtered=pool.length>1?pool.filter(s=>s!==lastLine):pool;
+ const chosen=filtered[Math.floor(Math.random()*filtered.length)];
+ lastLine=chosen;
+ $("bub").textContent=chosen;
+ $("bub").classList.add("on");clearTimeout(bt);bt=setTimeout(()=>$("bub").classList.remove("on"),3400);
+}
+function say(){
+ dayCheck();
+ const c=SC[S.view],ps=sst(S.view)[1],td=S.daily.todayDone||0;
+ const stagePool=c.lines[ps];
+ const moodKey=td===0?"z":td<=2?"m":"h";
+ const moodPool=c.mood[moodKey].map(s=>s.replace("{n}",td));
+ showBubble([...stagePool,...moodPool]);
+}
+function sayTree(){showBubble(TREE_LINES)}
+
+// Scene Ascension (轉生升星)
+let ascendTimer=null;
+$("ascendBtn").onclick=()=>{
+ const i=S.view,c=SC[i];
+ if(!S.allEverDone||!done_(i))return;
+ const b=$("ascendBtn");
+ if(!ascendTimer){
+  b.textContent="⭐ 再按一次確認轉生";
+  ascendTimer=setTimeout(()=>{ascendTimer=null;renderWorld()},3500);
+  return;
+ }
+ clearTimeout(ascendTimer);ascendTimer=null;
+ S.stars[i]=(S.stars[i]||0)+1;
+ S.sc[i]={p:0,a:0};
+ S.grow=i;
+ const r=$("sceneBox").getBoundingClientRect();
+ fx(r.left+r.width/2,r.top+r.height/2,["⭐","🌟","✨","🎊"],18);
+ tone([523,659,784,1046,1318]);
+ toast("🎉 「"+c.n+"」升星轉生成功！晉升 ★"+S.stars[i]+"「"+starTitle(S.stars[i])+"」"+(S.stars[i]>5?"，傳說光環持續閃耀！":"，解鎖新的星級外觀光環！"));
+ renderAll();
+};
+$("growPickBtn").onclick=()=>{
+ if(done_(S.view))return;
+ S.grow=S.view;
+ tone([587,880]);
+ toast("扭蛋機培育目標已切換為「"+SC[S.view].n+"」");
+ renderAll();
+};
+
+{let dragEl=null,dragId=null;
+ $("decoLayer").addEventListener("pointerdown",e=>{
+  const el=e.target.closest(".deco-item");if(!el)return;
+  e.preventDefault();dragEl=el;dragId=el.dataset.did;el.setPointerCapture(e.pointerId);
+ });
+ $("decoLayer").addEventListener("pointermove",e=>{
+  if(!dragEl)return;
+  const r=$("sceneBox").getBoundingClientRect();
+  const x=Math.max(6,Math.min(94,Math.round((e.clientX-r.left)/r.width*100)));
+  const y=Math.max(14,Math.min(90,Math.round((e.clientY-r.top)/r.height*100)));
+  dragEl.style.left=x+"%";dragEl.style.top=y+"%";
+  if(S.placed[dragId]){S.placed[dragId].x=x;S.placed[dragId].y=y;}
+ });
+ const endDrag=()=>{if(!dragEl)return;dragEl=null;dragId=null;save()};
+ $("decoLayer").addEventListener("pointerup",endDrag);
+ $("decoLayer").addEventListener("pointercancel",endDrag);
+}
+
+function initGlobe(){
+ const cs=["#ff9a9e","#ffd86f","#84fab0","#a1c4fd","#d4a5ff","#fbc2eb","#ffb27a"],pos=[[10,6],[46,4],[82,6],[118,6],[26,36],[64,34],[100,36]];
+ $("globe").innerHTML=pos.map((p,i)=>'<span class="cap" style="left:'+p[0]+"px;bottom:"+p[1]+"px;--c:"+cs[i]+";animation-delay:"+i*.17+'s"></span>').join("")}
+
+$("timeBtn").onclick=()=>{
+ timeMode=TIME_ORDER[(TIME_ORDER.indexOf(timeMode)+1)%TIME_ORDER.length];
+ syncWxPref();renderAtmosphere();save();
+ toast(timeMode==="auto"?"已切回真實時間天色":"已設定「"+TIME_CFG[timeMode].n+"」天色");
+};
+$("wxBtn").onclick=()=>{
+ wxManual=true;
+ const list=availWxList();
+ const idx=list.indexOf(curWeather);
+ curWeather=list[(idx+1)%list.length];
+ syncWxPref();renderAtmosphere();save();
+ toast("天氣已切換為："+WX_CFG[curWeather].n+"（已記憶）");
+};
+
+$("themeBtn").onclick=()=>{
+ const order=["auto","light","dark"],cur=prefs.theme||"auto";
+ prefs.theme=order[(order.indexOf(cur)+1)%3];
+ savePrefs();applyPrefs();
+ toast(prefs.theme==="auto"?"深淺色：已切回跟隨系統":prefs.theme==="dark"?"深淺色：已切換為深色模式":"深淺色：已切換為淺色模式");
+};
+$("muteBtn").onclick=()=>{prefs.muted=!prefs.muted;savePrefs();applyPrefs();if(!prefs.muted)tone([660,880]);toast(prefs.muted?"已靜音":"已開啟音效")};
+$("sinkBtn").onclick=()=>{prefs.sinkDone=!prefs.sinkDone;savePrefs();applyPrefs();renderTasks();toast(prefs.sinkDone?"已開啟：已完成任務自動沉底":"已切回原始任務順序")};
+$("repBtn").onclick=()=>{
+ newRepeat=!newRepeat;
+ $("repBtn").classList.toggle("on",newRepeat);
+ $("repBtn").setAttribute("aria-pressed",String(newRepeat));
+};
+
+$("statOpen").onclick=()=>{renderStats();$("sov").classList.add("on")};
+$("sClose").onclick=()=>$("sov").classList.remove("on");
+$("sov").onclick=e=>{if(e.target.id==="sov")$("sov").classList.remove("on")};
+$("achList").onclick=e=>{
+ const b=e.target.closest(".claim-btn");if(!b)return;
+ const aid=b.dataset.aid;
+ const a=getAchievements().find(x=>x.id===aid);
+ if(!a||!a.ok||S.achClaimed.includes(aid))return;
+ S.achClaimed.push(aid);S.tickets+=a.rw;
+ const r=b.getBoundingClientRect();
+ fx(r.left+r.width/2,r.top,["🎟️","🏆","✨"],10);tone([523,659,784,1046]);
+ toast("領取成就「"+a.n+"」獎勵：+"+a.rw+" 🎟️");
+ renderAll(true);renderStats();
+};
+$("achClaimAll").onclick=()=>{
+ const claimable=getAchievements().filter(a=>a.ok&&!S.achClaimed.includes(a.id));
+ if(!claimable.length)return;
+ let sum=0;
+ claimable.forEach(a=>{S.achClaimed.push(a.id);sum+=a.rw});
+ S.tickets+=sum;
+ fx(innerWidth/2,innerHeight/2,["🎟️","🏆","🌟","✨"],16);tone([523,659,784,1046,1318]);
+ toast("已一鍵領取 "+claimable.length+" 項成就獎勵，共獲得 +"+sum+" 🎟️！");
+ renderAll(true);renderStats();
+};
+
+$("decoOpen").onclick=()=>{renderCollectionModal();$("decov").classList.add("on")};
+$("decoClose").onclick=()=>$("decov").classList.remove("on");
+$("decov").onclick=e=>{if(e.target.id==="decov")$("decov").classList.remove("on")};
+$("cTabs").onclick=e=>{
+ const b=e.target.closest(".ctab");if(!b)return;
+ colTab=b.dataset.ct;renderCollectionModal();
+};
+$("decoGrid").onclick=e=>{
+ const b=e.target.closest(".dcard");if(!b||b.disabled)return;
+ const kind=b.dataset.kind,id=b.dataset.id;
+ if(kind==="deco"){
+  const d=DECOS.find(x=>x.id===id);if(!d)return;
+  if(!S.placed[id])S.placed[id]={on:true,x:d.x,y:d.y};
+  else S.placed[id].on=!S.placed[id].on;
+  if(d.sc!==S.view&&d.sc<=S.unlocked)S.view=d.sc;
+  tone(S.placed[id].on?[587,880]:[440,330]);
+ }else if(kind==="hat"){
+  if(S.equippedHat[S.view]===id){delete S.equippedHat[S.view];tone([440,330])}
+  else{S.equippedHat[S.view]=id;tone([587,880])}
+ }else if(kind==="wx"){
+  if(curWeather===id){curWeather="clear";wxManual=false;tone([440,330])}
+  else{curWeather=id;wxManual=true;tone([587,880])}
+  syncWxPref();
+ }
+ renderWorld();renderCollectionModal();save();
+};
+
+$("addBtn").onclick=addTask;
+$("inp").onkeydown=e=>{if(e.key==="Enter"&&!e.isComposing)addTask()};
+let delCfmId=null,delCfmBtn=null,delCfmT=null;
+function clearDelCfm(){
+ clearTimeout(delCfmT);delCfmT=null;delCfmId=null;
+ if(delCfmBtn){delCfmBtn.classList.remove("del-cfm");delCfmBtn.textContent="✕";delCfmBtn=null}
+}
+$("list").addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;
+ const id=b.dataset.id,a=b.dataset.a;
+ if(a==="edit"){startEditTask(id);return}
+ if(a==="sub"){setParent(id);return}
+ if(a==="fold"){
+  const t=S.tasks.find(x=>x.id===id);
+  if(t){t.collapsed=!t.collapsed;renderTasks();save()}
+  return;
+ }
+ if(a==="rep"){
+  const t=S.tasks.find(x=>x.id===id);
+  if(t){t.repeat=!t.repeat;renderAll();toast(t.repeat?"已設為每日重複任務":"已取消每日重複")}
+  return;
+ }
+ if(a==="del"){
+  const idx=S.tasks.findIndex(t=>t.id===id);
+  if(idx>-1){
+   const lv=S.tasks[idx].level;
+   let end=idx+1;
+   while(end<S.tasks.length&&S.tasks[end].level>lv)end++;
+   const targets=S.tasks.slice(idx,end);
+   const hasUndone=targets.some(x=>!x.done);
+   if(hasUndone&&delCfmId!==id){
+    clearDelCfm();
+    delCfmId=id;
+    delCfmBtn=b;
+    b.classList.add("del-cfm");
+    b.textContent="確認?";
+    toast(targets.length>1?"尚有未完成項目（含細項共 "+targets.length+" 項），再按一次確認刪除":"此任務尚未完成，再按一次確認刪除");
+    delCfmT=setTimeout(clearDelCfm,3000);
+    return;
+   }
+   clearDelCfm();
+   const removed=S.tasks.splice(idx,end-idx);
+   if(removed.some(x=>x.id===parent))clearParent();
+   renderAll();
+   toast(removed.length>1?"已一併刪除 "+removed.length+" 項任務（含子項目）":"已刪除任務",()=>{
+    S.tasks.splice(Math.min(idx,S.tasks.length),0,...removed);
+    renderAll(true);toast("已復原刪除");
+   });
+  }
+ }
+});
+$("list").addEventListener("dblclick",e=>{
+ const nm=e.target.closest(".nm");if(!nm)return;
+ startEditTask(nm.dataset.id);
+});
+$("list").addEventListener("change",e=>{if(e.target.dataset.a==="chk"){if(e.target.checked)complete(e.target.dataset.id,e.target);else uncomplete(e.target.dataset.id,e.target)}});
+$("gOpen").onclick=()=>{$("gov").classList.add("on");$("spin").focus()};$("gClose").onclick=()=>{if(!busy)$("gov").classList.remove("on")};$("gov").onclick=e=>{if(e.target.id==="gov"&&!busy)$("gov").classList.remove("on")};
+addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&!busy){
+  if($("ov").classList.contains("on")){closePop();return}
+  $("gov").classList.remove("on");$("dov").classList.remove("on");$("bov").classList.remove("on");$("sov").classList.remove("on");$("decov").classList.remove("on");$("pwaov").classList.remove("on");
+ }
+});
+$("spin").onclick=spin;$("knob").onclick=spin;$("spinAll").onclick=spinAll;$("pOk").onclick=closePop;
+$("clrDone").onclick=()=>{
+ // 已完成且非每日的任務才清除；若底下還有要保留的細項，上層也保留，避免層級錯亂
+ const T=S.tasks,keep=new Array(T.length).fill(false);
+ for(let i=T.length-1;i>=0;i--){
+  let k=!(T[i].done&&!T[i].repeat);
+  if(!k){const e=subEnd(i);for(let j=i+1;j<e;j++)if(keep[j]){k=true;break}}
+  keep[i]=k;
+ }
+ const rm=keep.filter(k=>!k).length;
+ const keepRep=T.filter(t=>t.done&&t.repeat).length;
+ const keepPar=T.filter((t,i)=>t.done&&!t.repeat&&keep[i]).length;
+ if(!rm){toast(keepRep||keepPar?"已完成的項目為每日習慣或底下仍有細項，已保留":"目前沒有可清除的已完成任務");return}
+ S.tasks=T.filter((_,i)=>keep[i]);
+ if(parent&&!S.tasks.some(t=>t.id===parent))clearParent();
+ renderAll();
+ const extra=[];if(keepRep)extra.push(keepRep+" 項每日習慣");if(keepPar)extra.push(keepPar+" 項含細項的上層任務");
+ toast("已清除 "+rm+" 項已完成任務"+(extra.length?"（已保留 "+extra.join("、")+"）":""));
+};
+{let ct=null;const b=$("clrAll");b.onclick=()=>{if(!S.tasks.length){toast("清單已經是空的");return}if(!ct){b.textContent="再按一次確認清空";ct=setTimeout(()=>{ct=null;b.textContent="清空清單"},3000);return}clearTimeout(ct);ct=null;b.textContent="清空清單";const n=S.tasks.length;S.tasks=[];clearParent();renderAll();toast("已清空 "+n+" 項任務，扭蛋券與成長都保留")}}
+$("tabs").onclick=e=>{
+ const b=e.target.closest(".sc");
+ if(b&&!b.disabled){
+  clearTimeout(ascendTimer);ascendTimer=null;
+  S.view=+b.dataset.i;
+  if(!wxManual)rollWeather(S.view);
+  renderWorld();save();tone([660,880]);
+ }
+};
+$("dOpen").onclick=()=>{renderDaily();$("dov").classList.add("on")};$("dClose").onclick=()=>$("dov").classList.remove("on");$("dov").onclick=e=>{if(e.target.id==="dov")$("dov").classList.remove("on")};
+$("dList").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;dayCheck();const D=S.daily,r=b.getBoundingClientRect();let g=0;
+ if(b.dataset.q==="sign"&&!D.signed){D.streak=D.last===yest()?D.streak+1:1;D.maxStreak=Math.max(D.maxStreak||0,D.streak);D.last=D.d;D.signed=true;g=2+(D.streak>=3?1:0)}
+ else if(b.dataset.q==="claim"&&D.small&&!D.claimed){D.claimed=true;g=2}
+ if(!g)return;S.tickets+=g;fx(r.left+r.width/2,r.top,["🎟️","✨","⭐"],9);tone([523,659,784]);toast("領取成功！獲得 "+g+" 張扭蛋券");renderAll();renderDaily()};
+$("tree").onclick=()=>{bounce("tree","boing");sayTree();tone([523,659])};
+$("pet").onclick=()=>{bounce("pet","hop");say();tone([660,880])};
+const kbClick=(el,fn)=>el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();fn()}});
+kbClick($("tree"),()=>$("tree").click());
+kbClick($("pet"),()=>$("pet").click());
+let rt;$("reset").onclick=()=>{if(!rt){$("reset").textContent="再按一次確認清空";rt=setTimeout(()=>{rt=null;$("reset").textContent="重新開始"},3000);return}clearTimeout(rt);rt=null;$("reset").textContent="重新開始";S=fresh();notifiedAchs.clear();applySavedAtmosphere();clearParent();renderAll(true);toast("森林已重置，開始新的冒險！")};
+
+if(!load()){S.tasks=[{id:uid(),name:"完成期末報告",level:0,done:false,repeat:false,collapsed:false},{id:uid(),name:"整理參考資料",level:1,done:false,repeat:false,collapsed:false},{id:uid(),name:"找 3 篇文獻",level:2,done:false,repeat:false,collapsed:false},{id:uid(),name:"寫出報告大綱",level:1,done:false,repeat:false,collapsed:false}]}
+
+const BK2="TFOREST2:",BK1="TFOREST1:";
+function encodeBackup(obj){
+ const bytes=new TextEncoder().encode(JSON.stringify(obj));
+ let bin="";
+ for(let i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+ return BK2+btoa(bin);
+}
+function decodeBackup(raw){
+ const prefix=raw.startsWith(BK2)?BK2:raw.startsWith(BK1)?BK1:"";
+ if(!prefix)throw new Error("bad prefix");
+ const bin=atob(raw.slice(prefix.length));
+ const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+ return JSON.parse(new TextDecoder().decode(bytes));
+}
+$("bkOpen").onclick=()=>{$("bkOut").value=encodeBackup(S);$("bkIn").value="";$("bov").classList.add("on")};
+$("bClose").onclick=()=>$("bov").classList.remove("on");
+$("bov").onclick=e=>{if(e.target.id==="bov")$("bov").classList.remove("on")};
+$("bCopy").onclick=async()=>{const t=$("bkOut");t.select();try{await navigator.clipboard.writeText(t.value);{markBk();toast("備份碼已複製")}}catch(e){try{document.execCommand("copy");{markBk();toast("備份碼已複製")}}catch(e2){toast("請手動全選後複製")}}};
+{let rt2=null;const b=$("bRestore");b.onclick=()=>{
+ const raw=$("bkIn").value.trim();let o;
+ try{o=decodeBackup(raw);if(!Array.isArray(o.tasks)||!Array.isArray(o.sc))throw 0}catch(e){toast("備份碼格式不正確，請重新複製完整內容");return}
+ if(!rt2){b.textContent="再按一次確認覆蓋目前進度";rt2=setTimeout(()=>{rt2=null;b.textContent="還原"},3000);return}
+ clearTimeout(rt2);rt2=null;b.textContent="還原";
+ S=normalize(o);markBk();notifiedAchs.clear();applySavedAtmosphere();$("bkIn").value="";$("bov").classList.remove("on");clearParent();renderAll(true);toast("已還原備份進度")}}
+
+
+// ---- backup reminder / persistent storage ----
+function markBk(){prefs.lastBackup=Date.now();savePrefs()}
+function backupNudge(){
+ const now=Date.now();
+ if(!prefs.lastBackup){prefs.lastBackup=now;savePrefs();return}
+ if(S.done>=10&&now-prefs.lastBackup>14*864e5&&now-(prefs.nudgeAt||0)>3*864e5){
+  prefs.nudgeAt=now;savePrefs();
+  setTimeout(()=>toast("已超過 14 天沒備份了，建議到「備份／還原」複製備份碼保存"),2000);
+ }
+}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+
+// ---- multi-tab sync ----
+function syncFromStorage(){
+ if(busy){setTimeout(syncFromStorage,1500);return}
+ let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
+ if(!raw)return;
+ try{
+  S=normalize(JSON.parse(raw));lastSer=ser();
+  applySavedAtmosphere();clearParent();renderAll(true);
+  toast("已同步另一個分頁的最新進度");
+ }catch(e){}
+}
+addEventListener("storage",e=>{if(e.key===KEY&&e.newValue)syncFromStorage()});
+
+// ---- follow system theme changes ----
+try{matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{if(prefs.theme==="auto")applyPrefs()})}catch(e){}
+
+// ---- dialog focus management (focus in, trap Tab, restore on close) ----
+{
+ const OVS=[...document.querySelectorAll(".ov")],openers=new Map();
+ let lastTrigger=null;
+ addEventListener("click",e=>{lastTrigger=e.target.closest?e.target.closest("button,[role=button]"):null},true);
+ const FOC='button,input,select,textarea,[tabindex]:not([tabindex="-1"])';
+ const focusables=root=>[...root.querySelectorAll(FOC)].filter(el=>!el.disabled&&el.getClientRects().length);
+ const topOv=()=>{const o=OVS.filter(x=>x.classList.contains("on"));return $("ov").classList.contains("on")?$("ov"):(o[o.length-1]||null)};
+ const mo=new MutationObserver(ms=>{
+  for(const m of ms){
+   const ov=m.target,was=(m.oldValue||"").split(/\s+/).includes("on"),is=ov.classList.contains("on");
+   if(is&&!was){
+    let op=lastTrigger;
+    if(!op||!document.contains(op)||ov.contains(op))op=ov.contains(document.activeElement)?null:document.activeElement;
+    openers.set(ov,op);
+    if(!ov.contains(document.activeElement)){const f=focusables(ov);if(f[0])f[0].focus()}
+   }else if(!is&&was){
+    const o=openers.get(ov);openers.delete(ov);
+    if(o&&o!==document.body&&document.contains(o)&&!topOv())o.focus();
+   }
+  }
+ });
+ OVS.forEach(o=>mo.observe(o,{attributes:true,attributeFilter:["class"],attributeOldValue:true}));
+ addEventListener("keydown",e=>{
+  if(e.key!=="Tab")return;
+  const top=topOv();if(!top)return;
+  const f=focusables(top);if(!f.length)return;
+  const first=f[0],last=f[f.length-1],cur=document.activeElement;
+  if(!top.contains(cur)){e.preventDefault();first.focus()}
+  else if(e.shiftKey&&cur===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&cur===last){e.preventDefault();first.focus()}
+ });
+}
+
+// ---- PWA 支援（Service Worker 註冊、iOS 桌面圖示動態合成、安裝引導） ----
+{
+ // 動態為 iOS Safari 合成 PNG 格式的 apple-touch-icon（免額外圖檔）
+ try{
+  const cv=document.createElement("canvas");cv.width=180;cv.height=180;
+  const ctx=cv.getContext("2d");
+  if(ctx){
+   ctx.fillStyle="#2f9e6e";ctx.fillRect(0,0,180,180);
+   ctx.fillStyle="#e6f6ea";ctx.beginPath();ctx.arc(90,90,70,0,Math.PI*2);ctx.fill();
+   ctx.font="98px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";
+   ctx.fillText("🌳",90,95);
+   const ic=$("appleIcon");if(ic)ic.href=cv.toDataURL("image/png");
+  }
+ }catch(e){}
+
+ if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1")){
+  addEventListener("load",()=>{navigator.serviceWorker.register("./sw.js").catch(()=>{})});
+ }
+
+ let deferredPrompt=null;
+ const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+ const pwaBtn=$("pwaBtn");
+ if(isStandalone()&&pwaBtn)pwaBtn.style.display="none";
+ addEventListener("beforeinstallprompt",e=>{
+  e.preventDefault();deferredPrompt=e;
+  if(pwaBtn&&!isStandalone())pwaBtn.style.display="";
+ });
+ addEventListener("appinstalled",()=>{
+  deferredPrompt=null;if(pwaBtn)pwaBtn.style.display="none";
+  $("pwaov").classList.remove("on");
+  toast("🎉 已將「任務森林」安裝到主畫面，支援離線遊玩！");
+ });
+ $("pwaClose").onclick=()=>$("pwaov").classList.remove("on");
+ $("pwaov").onclick=e=>{if(e.target.id==="pwaov")$("pwaov").classList.remove("on")};
+ if(pwaBtn)pwaBtn.onclick=async()=>{
+  if(deferredPrompt){
+   deferredPrompt.prompt();
+   try{await deferredPrompt.userChoice}catch(e){}
+   deferredPrompt=null;return;
+  }
+  const ua=navigator.userAgent||"";
+  const isIOS=/iPad|iPhone|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  if(isStandalone()){
+   $("pwaDesc").innerHTML="✅ 你目前已經在「主畫面 App 模式」下使用任務森林囉！所有資料與畫面皆已支援離線開啟。";
+  }else if(isIOS){
+   $("pwaDesc").innerHTML="在 iPhone／iPad 安裝到主畫面：<br>1. 點選 Safari 下方（或右上角）的<b>「分享」</b>按鈕 📤<br>2. 往下滑點選<b>「加入主畫面」</b>➕<br>3. 點選右上角<b>「新增」</b>，即可像 App 一樣全螢幕開啟並離線使用！";
+  }else{
+   $("pwaDesc").innerHTML="將任務森林安裝到手機或電腦桌面：<br>1. 點選瀏覽器右上角選單 <b>⋮</b>（或網址列右側的安裝圖示 📲）<br>2. 選擇<b>「安裝應用程式」</b>或<b>「加到主畫面」</b><br>3. 安裝後即可全螢幕遊玩，沒網路也能離線打開！";
+  }
+  $("pwaAct").onclick=()=>$("pwaov").classList.remove("on");
+  $("pwaov").classList.add("on");
+ };
+}
+
+applyPrefs();initGlobe();initStars();dayCheck();applySavedAtmosphere();lastSer=ser();renderAll(true);backupNudge();
+setInterval(()=>{
+ if(dayCheck()){renderAll(true);if($("dov").classList.contains("on"))renderDaily()}
+ if(timeMode==="auto")renderAtmosphere();
+},60000);
+// 新任務冷卻倒數（只更新倒數文字，不重繪整個清單）
+setInterval(()=>{
+ document.querySelectorAll("#list .cd").forEach(el=>{
+  const t=S.tasks.find(x=>x.id===el.dataset.id),left=t?lockLeft(t):0;
+  if(left<=0){const row=el.closest(".task");if(row){row.classList.remove("locked");const cb=row.querySelector('input[type="checkbox"]');if(cb&&cb.title==="冷卻中")cb.removeAttribute("title")}el.remove()}
+  else el.textContent="⏳"+fmtLeft(left);
+ });
+},1000);
+setInterval(()=>{if(!wxManual&&Math.random()<0.35){rollWeather(S.view);renderAtmosphere()}},180000);
+</script>
+</body>
+</html>

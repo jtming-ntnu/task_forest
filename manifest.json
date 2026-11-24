@@ -1,0 +1,26 @@
+{
+  "name": "任務森林｜扭蛋養樹與毛孩",
+  "short_name": "任務森林",
+  "description": "完成待辦任務、收集扭蛋券，在四個療癒場景中培育專屬植物與毛孩夥伴！支援每日習慣模式、成就系統與本機備份。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e6f6ea",
+  "theme_color": "#2f9e6e",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='42' fill='%232f9e6e'/><circle cx='96' cy='96' r='74' fill='%23e6f6ea'/><text x='96' y='132' font-size='104' text-anchor='middle'>🌳</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='112' fill='%232f9e6e'/><circle cx='256' cy='256' r='198' fill='%23e6f6ea'/><text x='256' y='352' font-size='276' text-anchor='middle'>🌳</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
