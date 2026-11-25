@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
 <title>任務森林｜扭蛋養樹與毛孩</title>
-<meta name="description" content="完成待辦任務、收集扭蛋券，在四個療癒場景中培育專屬植物與毛孩夥伴！支援每日習慣模式、成就系統與本機備份。">
+<meta name="description" content="完成待辦任務、收集扭蛋券，在八個療癒場景中培育專屬植物與毛孩夥伴！支援每日習慣模式、成就系統、離線安裝與本機備份。">
 <meta property="og:title" content="任務森林｜扭蛋養樹與毛孩">
-<meta property="og:description" content="把待辦清單變成療癒養成遊戲！完成任務抽扭蛋，培育森林、花田、沙漠與雪地的植物與夥伴。">
+<meta property="og:description" content="把待辦清單變成療癒養成遊戲！完成任務抽扭蛋，解鎖四季自然與奇幻秘境八大場景的植物與夥伴。">
 <meta property="og:type" content="website">
 <meta name="theme-color" id="themeColor" content="#2f9e6e">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,7 +28,7 @@ button{cursor:pointer}
 html,body{min-height:100%}
 @media(min-width:900px) and (min-height:521px){html,body{height:100%;overflow:hidden}}
 .wrap{max-width:1100px;margin:auto;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));padding:12px;display:grid;gap:12px;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 1fr;grid-template-areas:"top" "world" "tasks"}
-@media(max-width:899px){body{overflow-x:hidden;overflow-y:auto}#world .scene{flex:none;height:clamp(145px,23dvh,215px)}#list{overflow:visible;min-height:160px}}
+@media(max-width:899px){body{overflow-x:hidden;overflow-y:auto}#world .scene{flex:none;height:clamp(138px,21.5dvh,205px)}#list{overflow:visible;min-height:160px}}
 @media(min-width:900px) and (min-height:521px){.wrap{height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "tasks world"}}
 @media(max-height:520px) and (orientation:landscape){body{overflow-x:hidden;overflow-y:auto}.wrap{height:auto;min-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-rows:auto 1fr;grid-template-areas:"top top" "tasks world";align-items:start;gap:8px;padding:8px}#world{position:sticky;top:8px}#world .scene{flex:none;height:clamp(150px,50dvh,230px)}#list{overflow:visible;min-height:140px;margin-top:6px}.meter,.foot-tip,.top p,.hud-tx,.rw{display:none!important}h1{font-size:18px}.card{padding:10px}.tabs{margin-top:6px}.sc{font-size:16px;padding:2px 0}.sc small{display:none}.world-act{margin-top:6px;gap:6px}.wact-btn{min-width:0;padding:4px 8px;font-size:12px}.task-head{margin-bottom:6px}.add{grid-template-columns:1fr auto auto;gap:6px}.add input{grid-column:1 / -1}.add input,.add select,.add-rep,.add .btn{padding:6px 10px;font-size:14px}.foot{margin-top:8px;font-size:12px}.fa{width:100%;justify-content:space-between;gap:6px 8px}}
 .top{grid-area:top;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
@@ -80,8 +80,9 @@ h2{margin:0 0 10px;font-size:19px}
 .sun{position:absolute;right:16px;top:10px;font-size:38px;pointer-events:none;z-index:2;transition:transform .4s}
 .cloud{position:absolute;font-size:34px;animation:drift 30s linear infinite;pointer-events:none;z-index:2}
 .hill{position:absolute;bottom:-40px;left:-10%;width:70%;height:110px;border-radius:50%;background:#6cc47b;pointer-events:none;z-index:1;transition:background .8s ease}
-#starLayer,#weatherLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-#starLayer{z-index:1;opacity:0;transition:opacity .8s ease}
+#starLayer,#skyFx,#weatherLayer{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#starLayer,#skyFx{z-index:1}
+#starLayer{opacity:0;transition:opacity .8s ease}
 #starLayer.on{opacity:1}
 #nightShade{position:absolute;inset:0;z-index:7;pointer-events:none;background:#6f7fc0;mix-blend-mode:multiply;opacity:0;transition:opacity .8s ease}
 .star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fffbe0;box-shadow:0 0 6px #fff;animation:twinkle 2.6s ease-in-out infinite alternate}
@@ -91,8 +92,11 @@ h2{margin:0 0 10px;font-size:19px}
 .wp-snow{position:absolute;top:-20px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 5px #fff;opacity:.85;animation:snowFall linear infinite}
 .wp-meteor{position:absolute;width:64px;height:2px;border-radius:99px;background:linear-gradient(90deg,transparent,#fff8c4,#ffffff);box-shadow:0 0 8px #ffe484;opacity:0;animation:meteorFall linear infinite}
 .wp-aurora{position:absolute;top:-10%;left:-10%;width:120%;height:58%;background:linear-gradient(120deg,transparent 10%,#38f9d755 32%,#7b6cf666 56%,#ff6f9144 76%,transparent 92%);filter:blur(14px);mix-blend-mode:screen;animation:auroraWave 7s ease-in-out infinite alternate}
-.wp-rainbow{position:absolute;left:50%;top:14%;width:92%;height:78%;transform:translateX(-50%);border-radius:50% 50% 0 0;border:16px solid transparent;box-shadow:inset 0 0 0 4px #ff6f9155,inset 0 0 0 8px #ffc93c55,inset 0 0 0 12px #8fe08f55,inset 0 0 0 16px #6fd0ff55,inset 0 0 0 20px #b78cff55;opacity:.75;pointer-events:none}
+.wp-rainbow{position:absolute;left:50%;bottom:34%;width:98%;max-height:60%;transform:translateX(-50%);filter:blur(1.2px);-webkit-mask-image:linear-gradient(180deg,#000 52%,#0009 80%,transparent 98%);mask-image:linear-gradient(180deg,#000 52%,#0009 80%,transparent 98%);pointer-events:none}
 .wp-sparkle{position:absolute;font-size:13px;opacity:.85;animation:twinkle 1.8s ease-in-out infinite alternate}
+.wp-bubble{position:absolute;bottom:-22px;border-radius:50%;border:1.5px solid #ffffffbb;background:radial-gradient(circle at 30% 30%,#ffffffaa,#6fd0ff22);animation:bubbleRise linear infinite}
+.wp-spore{position:absolute;bottom:-16px;border-radius:50%;opacity:.85;animation:bubbleRise linear infinite}
+.wp-feather{position:absolute;top:-24px;font-size:15px;opacity:.9;animation:featherFall linear infinite}
 .scene-hud{position:absolute;left:10px;top:10px;z-index:9;display:flex;flex-wrap:nowrap;gap:6px;max-width:calc(100% - 62px)}
 .deco-btn{border:2px solid #ffffffaa;background:#ffffffcc;color:#22352c;border-radius:99px;padding:4px 10px;font-size:12px;display:inline-flex;align-items:center;gap:4px;backdrop-filter:blur(4px);transition:transform .15s;white-space:nowrap}
 .deco-btn:hover{transform:scale(1.05)}
@@ -175,7 +179,11 @@ h2{margin:0 0 10px;font-size:19px}
 .odds{margin:10px 0 0;font-size:13px;color:var(--mut)}
 .gbtn{position:relative;width:52px;height:52px;border-radius:50%;border:3px solid var(--pink);background:var(--card);font-size:25px;display:grid;place-items:center;box-shadow:0 4px 0 #b3314f;transition:transform .15s}.gbtn:hover{transform:rotate(-8deg) scale(1.08)}.gbtn.ready{animation:wob 1.8s infinite}.gbtn b{position:absolute;right:-6px;top:-6px;min-width:22px;padding:0 6px;border-radius:99px;background:var(--pink);color:#fff;font-size:13px;font-weight:400;line-height:22px}.gx{position:absolute;right:12px;top:10px;border:0;background:var(--soft);width:32px;height:32px;border-radius:50%;color:var(--mut)}
 @keyframes wob{0%,70%,100%{transform:none}78%{transform:rotate(-12deg)}86%{transform:rotate(12deg)}94%{transform:rotate(-6deg)}}
-.tabs{display:flex;gap:6px;margin-top:8px}.sc{position:relative;flex:1;border:2px solid var(--line);background:var(--soft);border-radius:14px;padding:3px 0;font-size:20px;line-height:1.2}.sc small{display:block;font-size:12px;color:var(--mut)}.sc.on{border-color:var(--g);background:var(--card);box-shadow:0 3px 0 var(--g)}.sc:disabled{opacity:.5;cursor:not-allowed}
+.ch-bar{display:flex;gap:6px;margin-top:7px}
+.ch-btn{flex:1;border:1.5px solid var(--line);background:var(--soft);color:var(--mut);border-radius:99px;padding:3px 10px;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:4px;transition:border-color .15s,background .15s,color .15s;white-space:nowrap}
+.ch-btn.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 14%,var(--card));color:var(--g)}
+.ch-btn.lock{opacity:.6}
+.tabs{display:flex;gap:6px;margin-top:6px}.sc{position:relative;flex:1;border:2px solid var(--line);background:var(--soft);border-radius:14px;padding:3px 0;font-size:20px;line-height:1.2}.sc small{display:block;font-size:12px;color:var(--mut)}.sc.on{border-color:var(--g);background:var(--card);box-shadow:0 3px 0 var(--g)}.sc.locked{opacity:.52}
 .sc .st-tag{position:absolute;right:4px;top:2px;font-size:11px;padding:0 5px;border-radius:99px;background:var(--sun);color:#4a3000;line-height:1.5}
 .gbtn.d{border-color:var(--g);box-shadow:0 4px 0 var(--gd)}.gbtn.d b{background:#e8384f}
 .q{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center;text-align:left;padding:12px;margin-top:10px;border:2px solid var(--line);border-radius:18px;background:var(--soft)}.q .e{font-size:30px}.q p{margin:0;color:var(--mut);font-size:13px}.q.ok{opacity:.6}.q .btn{padding:8px 14px;font-size:15px}.q .btn:disabled{opacity:.5;box-shadow:none}
@@ -228,6 +236,8 @@ h2{margin:0 0 10px;font-size:19px}
 @keyframes rainFall{0%{transform:translate(0,0) rotate(12deg)}100%{transform:translate(-28px,380px) rotate(12deg)}}
 @keyframes petalFall{0%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(22px,180px) rotate(160deg)}100%{transform:translate(-16px,380px) rotate(320deg)}}
 @keyframes snowFall{0%{transform:translate(0,0)}50%{transform:translate(16px,180px)}100%{transform:translate(-12px,380px)}}
+@keyframes bubbleRise{0%{transform:translate(0,0) scale(.85);opacity:0}15%{opacity:.85}55%{transform:translate(14px,-170px) scale(1)}100%{transform:translate(-10px,-360px) scale(1.1);opacity:0}}
+@keyframes featherFall{0%{transform:translate(0,0) rotate(-15deg)}50%{transform:translate(26px,175px) rotate(20deg)}100%{transform:translate(-14px,360px) rotate(-12deg)}}
 @keyframes meteorFall{0%{transform:translate(0,0) rotate(-32deg);opacity:0}12%{opacity:1}70%{opacity:.9}100%{transform:translate(-240px,150px) rotate(-32deg);opacity:0}}
 @keyframes auroraWave{0%{transform:translateX(-6%) skewX(-8deg) scaleY(.92);opacity:.65}50%{transform:translateX(6%) skewX(8deg) scaleY(1.08);opacity:.95}100%{transform:translateX(-3%) skewX(-4deg) scaleY(.96);opacity:.75}}
 @keyframes bob{50%{transform:translateY(-7px)}}
@@ -248,7 +258,8 @@ h2{margin:0 0 10px;font-size:19px}
  .pill{padding:4px 9px;font-size:13px;gap:4px}.pill-tx{display:none}
  .gbtn{width:38px;height:38px;font-size:19px}.gbtn b{min-width:18px;padding:0 4px;font-size:11px;line-height:18px;right:-4px;top:-4px}
  .ibtn{width:33px;height:33px;font-size:15px}.ibtn::after{content:"";position:absolute;inset:-4px}
- .tabs{margin-top:6px;gap:5px}.sc{font-size:17px;padding:2px 0;border-radius:12px}.sc small{font-size:11px}
+ .ch-bar{margin-top:5px;gap:5px}.ch-btn{padding:2px 8px;font-size:11.5px}
+ .tabs{margin-top:5px;gap:5px}.sc{font-size:17px;padding:2px 0;border-radius:12px}.sc small{font-size:11px}
  .meter small{display:none}.meter{margin-top:5px;font-size:13px;gap:2px 8px}.bar{height:10px}
  .task-head{margin-bottom:7px}h2{font-size:17px}
  .add{grid-template-columns:1fr auto auto;gap:6px}.add input{grid-column:1 / -1;padding:8px 11px;font-size:15px}.add select{padding:7px 9px;font-size:14px}.add-rep{padding:7px 9px;font-size:13px}.add .btn{padding:7px 14px;font-size:15px}
@@ -267,7 +278,7 @@ h2{margin:0 0 10px;font-size:19px}
     <div class="top-l">
       <button class="gbtn d" id="dOpen" aria-label="開啟每日任務" title="每日任務">📅<b id="dBadge">0</b></button>
       <button class="ibtn" id="statOpen" aria-label="開啟森林紀錄" title="森林紀錄與成就">🏆<b class="abdg" id="aBadge" style="display:none">0</b></button>
-      <div><h1>任務森林</h1><p>完成任務、扭蛋，培育四個場景的植物與夥伴</p></div>
+      <div><h1>任務森林</h1><p>完成任務、扭蛋，培育八大場景的植物與夥伴</p></div>
     </div>
     <div class="top-r">
       <button class="ibtn" id="muteBtn" aria-label="切換音效" title="開啟／關閉音效">🔊</button>
@@ -280,11 +291,12 @@ h2{margin:0 0 10px;font-size:19px}
   <section class="card" id="world">
     <div class="scene" id="sceneBox">
       <div class="scene-hud">
-        <button class="deco-btn" id="decoOpen" title="查看與穿戴裝飾品、頭飾與限定天氣">🎨 <span class="hud-tx">收藏 </span><span id="decoCnt">0/21</span></button>
+        <button class="deco-btn" id="decoOpen" title="查看與穿戴裝飾品、頭飾與限定天氣">🎨 <span class="hud-tx">收藏 </span><span id="decoCnt">0/33</span></button>
         <button class="deco-btn" id="timeBtn" title="目前時段（點一下可預覽不同時段）"><span id="timeIc">☀️</span><span class="hud-tx" id="timeTx"> 白天</span></button>
         <button class="deco-btn" id="wxBtn" title="目前天氣（點一下可切換天氣）"><span id="wxIc">🌤️</span><span class="hud-tx" id="wxTx"> 晴朗</span></button>
       </div>
       <div id="starLayer"></div>
+      <div id="skyFx"></div>
       <div id="nightShade"></div>
       <div class="sun" id="sun">☀️</div>
       <div class="cloud" style="top:18px">☁️</div>
@@ -297,6 +309,7 @@ h2{margin:0 0 10px;font-size:19px}
       <div id="pet" tabindex="0" role="button" aria-label="摸摸毛孩" title="摸摸毛孩"><span id="petHat" class="pet-hat"></span><span id="petBody"></span></div>
       <div id="weatherLayer"></div>
     </div>
+    <div class="ch-bar" id="chBar"></div>
     <div class="tabs" id="tabs"></div>
     <div class="world-act" id="worldAct">
       <button class="wact-btn ascend" id="ascendBtn" style="display:none" title="重置此場景成長條並晉升星級，解鎖隱藏光環與星級徽章">⭐ 升星轉生</button>
@@ -410,7 +423,19 @@ const DECOS=[
  {id:"lamp",sc:2,i:"🏮",n:"旅人營燈",x:24,y:78,c:"#ff6f61"},
  {id:"snowman",sc:3,i:"⛄",n:"圍巾雪人",x:68,y:74,c:"#a1c4fd"},
  {id:"cabin",sc:3,i:"🏠",n:"暖爐木屋",x:22,y:70,c:"#d98a5b"},
- {id:"aurora",sc:3,i:"🌌",n:"極光緞帶",x:48,y:22,c:"#7b6cf6"}
+ {id:"aurora",sc:3,i:"🌌",n:"極光緞帶",x:48,y:22,c:"#7b6cf6"},
+ {id:"shell",sc:4,i:"🐚",n:"貝殼風鈴",x:18,y:78,c:"#ffb3c7"},
+ {id:"anchor",sc:4,i:"⚓",n:"沉船船錨",x:56,y:78,c:"#ffd95a"},
+ {id:"jelly",sc:4,i:"🪼",n:"發光水母",x:48,y:26,c:"#6fd0ff"},
+ {id:"onsen",sc:5,i:"♨️",n:"露天溫泉",x:56,y:78,c:"#ff8a65"},
+ {id:"torii",sc:5,i:"⛩️",n:"朱紅鳥居",x:18,y:72,c:"#e8384f"},
+ {id:"tea",sc:5,i:"🍵",n:"竹亭茶席",x:42,y:82,c:"#8fe08f"},
+ {id:"castle",sc:6,i:"🏰",n:"雲中城堡",x:18,y:70,c:"#b78cff"},
+ {id:"hourglass",sc:6,i:"⏳",n:"星象沙漏",x:56,y:78,c:"#ffd95a"},
+ {id:"chime",sc:6,i:"🎐",n:"風之風鈴",x:48,y:24,c:"#6fd0ff"},
+ {id:"gem",sc:7,i:"💎",n:"巨型紫晶",x:18,y:76,c:"#a78bfa"},
+ {id:"orb",sc:7,i:"⚗️",n:"星光煉金瓶",x:56,y:78,c:"#38f9d7"},
+ {id:"cart",sc:7,i:"🛤️",n:"尋寶礦車道",x:42,y:82,c:"#ffc93c"}
 ];
 const HATS=[
  {id:"crown",i:"👑",n:"黃金皇冠",c:"#ffc93c"},
@@ -448,15 +473,20 @@ const WX_CFG={
  rain:{n:"微雨",ic:"🌧️"},
  petal:{n:"飄花瓣",ic:"🌸"},
  snow:{n:"下小雪",ic:"❄️"},
+ bubble:{n:"漂浮氣泡",ic:"🫧",scReq:4},
+ maple:{n:"飄落楓葉",ic:"🍁",scReq:5},
+ feather:{n:"飄落白羽",ic:"🪶",scReq:6},
+ spore:{n:"螢光孢子",ic:"✨",scReq:7},
  meteor:{n:"流星雨",ic:"🌠",special:true},
  aurora:{n:"極光之夜",ic:"🌌",special:true},
  rainbow:{n:"彩虹微風",ic:"🌈",special:true}
 };
 const TIME_ORDER=["auto","dawn","day","dusk","night"];
 const BASE_WX=["clear","rain","petal","snow"];
+const CH2_WX=["bubble","maple","feather","spore"];
 let timeMode="auto",curWeather="clear",wxManual=false,colTab="deco",newRepeat=false;
 
-const TT=[2,5,9,14],PT=[2,6,12],MUL=[1,1.4,1.8,2.2];
+const TT=[2,5,9,14],PT=[2,6,12],MUL=[1,1.4,1.8,2.2,2.4,2.6,2.8,3.0];
 // 星級難度：★1~★5 每星 +20%，★6 起每星 +10%（持續成長但趨緩）
 const th=(i,a,st=0)=>a.map(x=>Math.round(x*MUL[i]*(1+Math.min(st,5)*0.2+Math.max(0,st-5)*0.1)));
 const PS=[46,54,64,78];
@@ -523,14 +553,68 @@ const SC=[
   z:["雪地很寧靜，深呼吸一下，先從最不費力的一件開始吧。","今天剛起步，不用急，我會安靜陪在你旁邊。","先倒杯溫水，挑一件最溫和的小事，慢慢進入狀態就好。","沒關係的，開始永遠不嫌晚，現在就是剛剛好的時候。"],
   m:["你已經穩穩完成 {n} 項任務了，喝口熱水再繼續吧。","默默累積了 {n} 件事，這份踏實感最讓人安心了。","一步一腳印走了 {n} 步，雪地上留下了很漂亮的足跡呢。","做得很好喔，眼睛看累了記得看看遠方休息一分鐘。"],
   h:["今天完成了 {n} 項任務，真的非常努力，該給自己一個溫暖的擁抱了。","{n} 項任務都完成了！今晚可以安心在雪光下好好放鬆囉。","謝謝你今天這麼照顧自己的目標，完成 {n} 件事真的很了不起。","辛苦了，今天已經足夠閃耀，剩下的交給明天的自己就好。"]
+ }},
+{n:"珊瑚海灣",ch:1,ic:"🌊",pl:"珊瑚",pn:"海豚",skyTop:"#38b6ff,#9be8ff 64%",ground:"#f7e3af 64%,#dfbe7d",hill:"#56cfe1",sun:"☀️",dc:"🫧",wxPool:["bubble","bubble","clear"],svg:coralSVG,P:["🫧 海藻芽","🌿 螢光水草","🪸 粉紅珊瑚","🪸 寶石珊瑚礁","🐚 珍珠母貝神樹"],A:["🫧","🐠","🐢","🐬"],AN:["泡泡卵","小丑魚","小海龜","海豚王"],
+ tLines:["咕嚕嚕～海浪輕輕拍著珊瑚，也在替你的堅持鼓掌喔！","每一顆努力的小氣泡，最後都會匯聚成閃亮的珍珠✨","深呼吸，像在溫暖的海灣漂浮一樣放鬆肩膀吧。","潮汐有起有落，照著自己的步調游就已經很棒了！"],
+ lines:[
+  ["咕嚕…泡泡裡暖洋洋的，聽得到海浪替你加油的聲音喔。","輕輕漂浮中～再完成一點小事我就游出來找你玩！","不用急著游到對岸，先享受划出第一下的感覺吧。","海灣很溫柔，慢慢來也沒關係喔。"],
+  ["噗嚕嚕！我是小丑魚，在珊瑚叢裡穿梭超開心的！","把大任務當成一片大海草，一口一口就能輕鬆解決！","游累了就吐個泡泡休息一下，我陪你！","今天的海水閃閃發亮，就像認真生活的你一樣！"],
+  ["慢慢游也很穩喔！你看海龜從不慌張，但總能抵達終點。","背著殼一步一划，每一分累積都算數！","遇到暗流別緊張，順著呼吸把眼前的小事做好就對了。","你踏實前進的模樣，是整片海灣最美的風景！"],
+  ["啾——！海豚王為你躍出水面畫一道勝利弧線！","乘風破浪的感覺太棒了，謝謝你一路帶我成長！","不管風浪多大，你總能找到自己的節奏漂亮破浪！","今天也辛苦了，讓海風把疲憊都吹散吧🌊"]
+ ],
+ mood:{
+  z:["海風吹來囉～先挑一件最輕鬆的小事下水暖身吧！","還沒出發嗎？先划出第一下，水流就會帶你往前囉！","像吐一顆小泡泡一樣簡單，挑個 5 分鐘小任務開始吧！","海灣準備好了，隨時等你一起啟航！"],
+  m:["咕嚕嚕！已經完成 {n} 項任務，游得超順暢呢！","推進 {n} 件事囉！像順著洋流一樣優雅前進吧～","{n} 項達標！珊瑚礁都因為你的行動亮起來了✨","節奏超棒！喝口水補充水分，我們再往下一站游！"],
+  h:["太神啦！今天完成了 {n} 項任務，整片海灣都在為你歡呼躍水！","整整 {n} 項達成！海豚王特別為你表演三連跳🌊","完成了 {n} 件事，你就是這片海洋最閃耀的領航員！","豐收的一天！現在就安心漂浮在溫暖海面上好好休息吧！"]
+ }},
+{n:"竹林溫泉",ch:1,ic:"🎋",pl:"翠竹",pn:"貓熊",skyTop:"#a8e6cf,#e8f8f0 64%",ground:"#99c978 64%,#649950",hill:"#7db562",sun:"🌤️",dc:"☁️",wxPool:["maple","maple","clear","rain"],svg:bambooSVG,P:["🌱 小春筍","🎍 嫩青竹","🎋 翠竹叢","🍁 紅楓竹林","🏮 祈願金竹"],A:["🥚","🐦","🦊","🐼"],AN:["溫玉蛋","竹林雀","小赤狐","功夫貓熊"],
+ tLines:["沙沙…竹子在破土前先紮了幾年的根，你的累積也一樣珍貴。","微風穿過竹林的聲音，是不是讓心靜下來了呢？","竹節一節一節往上長，任務一件一件慢慢做就好🎋","累了就看看這片翠綠，泡個暖呼呼的溫泉喘口氣吧。"],
+ lines:[
+  ["呼…溫泉邊的蒸氣暖呼呼的，蛋殼裡好舒服呀。","靜下心來，聽聽竹葉沙沙作響，準備好就開始吧。","不疾不徐，好心情會帶來好效率喔。","我在溫暖的竹林裡安靜陪著你。"],
+  ["啾啾！停在竹枝上看你努力，連風都變得輕快了！","一件小事接一件小事，就像在竹林間輕巧跳躍！","卡住的時候深呼吸三次，靈感就會飛過來喔！","今天的陽光穿過竹葉，正好照在認真的你身上！"],
+  ["嘿嘿～小赤狐來幫你巡視清單囉，我們聰明地各個擊破吧！","別被長長的清單嚇到，先挑最順手的那件下手！","專注的時候你眼神超帥氣，連楓葉都停下來看你了🍁","做完這件，我們就去溫泉邊泡腳放鬆一下吧！"],
+  ["呼哈！功夫貓熊登場！動靜皆宜才是真正的高手！","能專注衝刺、也懂得好好休息，你的節奏拿捏得真好！","看著祈願金竹閃閃發光，那都是你親手累積的成果喔！","今天也穩穩過關！來杯熱茶，給自己拍拍手吧🍵"]
+ ],
+ mood:{
+  z:["先砌杯茶、深呼吸，挑一件最小的事當今日起手式吧。","竹林很清幽，不用急躁，寫下或勾掉第一件小事就好。","萬事起頭難，只要開始動手，心就會跟著定下來喔。","準備好了嗎？我們一節一節穩穩往上長吧🎋"],
+  m:["已經穩穩完成 {n} 項任務了，像翠竹一樣節節高升呢！","推進 {n} 件事囉！保持這份氣定神閒最棒了。","完成 {n} 項！轉轉脖子、放鬆肩膀，再順順往下走吧。","節奏真好，竹林裡的風都在替你輕輕鼓掌！"],
+  h:["太了不起了，今天完成了 {n} 項任務！快來露天溫泉泡個湯犒賞自己♨️","整整 {n} 項圓滿達成！連功夫貓熊都對你抱拳佩服！","一天累積 {n} 件事，祈願金竹都為你亮起滿滿祝福了！","今日功德圓滿！放下待辦清單，安心享受清閒時光吧。"]
+ }},
+{n:"雲端浮島",ch:1,ic:"☁️",pl:"世界樹",pn:"鳳凰",skyTop:"#c3b1ff,#fde2f3 64%",ground:"#ffffff 64%,#e2dcff",hill:"#f3efff",sun:"🌞",dc:"☁️",wxPool:["feather","feather","clear"],svg:skyTreeSVG,P:["🌱 星塵種","☁️ 雲朵苗","💎 水晶枝","🌙 月光浮空樹","🌌 星河世界樹"],A:["🥚","🐰","🦄","🐦‍🔥"],AN:["星紋蛋","雲朵兔","小獨角獸","浴火鳳凰"],
+ tLines:["叮鈴～星河世界樹的葉片正把你的努力化為點點星光✨","站在雲端往下看，原本覺得難的事其實也沒那麼可怕喔。","每一片飄落的白羽，都在祝福你心想事成🪶","慢慢呼吸，讓雲朵托住你的疲憊，輕盈地往前走吧。"],
+ lines:[
+  ["一閃一閃…蛋殼上的星紋正在回應你的行動喔！","雲朵軟綿綿的，把壓力放下，輕鬆跨出第一步吧。","你每專注一分鐘，浮島就往上飛高一點點✨","別擔心做不好，願意開始本身就是一種魔法！"],
+  ["蹦蹦！我是雲朵兔，跳過一朵雲就像完成一件小任務！","把煩人的待辦想像成棉花糖，一口吃掉就沒問題啦！","累了就躺在雲朵上發呆三分鐘，充飽電再跳起來！","你的努力讓整座浮島都染上甜甜的粉紫色霞光了！"],
+  ["嘶鳴～小獨角獸用星光角替你加持「思緒清晰」祝福！","一步步實現目標的你，比傳說中的魔法還要耀眼！","遇到複雜的大任務，拆成三朵小雲朵就會變得很簡單喔！","相信自己的步調，你一直都在往理想的方向飛翔！"],
+  ["唳——！浴火鳳凰展翅高飛，見證你每一次華麗蛻變！","所有看似平凡的日常堅持，最後都會綻放成璀璨星河！","謝謝你從未放棄照顧自己的目標，這片天空因你而閃耀！","飛得高也要記得停棲休息，今晚讓星光溫柔守護你吧🌌"]
+ ],
+ mood:{
+  z:["歡迎來到雲端浮島！先挑一件最輕盈的小事乘風起飛吧～","還沒開工也沒關係，點亮第一顆星就會照亮整條路喔！","深呼吸，給自己一點點魔法勇氣，從最小的一步開始！","雲朵已經準備好載你飛行囉，我們出發吧☁️"],
+  m:["哇！已經完成 {n} 項任務，浮島正輕快地往星空升起！","完成了 {n} 件事！每打一個勾就像在天空點亮一顆星星✨","{n} 項達標！你的專注力就像順風一樣帶我們飛得好穩！","手感超棒～伸個懶腰，我們再摘下下一顆星吧！"],
+  h:["太夢幻了！今天完成了 {n} 項任務，鳳凰與星河都在為你共舞！","{n} 項任務全數閃耀達成！整片天空都下起慶祝的光羽🪶","一天完成 {n} 件事，你已經創造屬於自己的小奇蹟了！","辛苦飛翔了一整天，現在請安心降落在柔軟雲朵上休息吧！"]
+ }},
+{n:"地底晶洞",ch:1,ic:"🔮",pl:"聖晶樹",pn:"晶龍",skyTop:"#1f1638,#3c2a6e 64%",ground:"#463866 64%,#2b2144",hill:"#382b59",sun:"🔮",dc:"✨",wxPool:["spore","spore","clear"],svg:crystalSVG,P:["🪨 礦石芽","💜 紫晶簇","🍄 發光巨蕈","💎 熔岩晶樹","🌈 七彩聖晶神木"],A:["🥚","🦎","🦇","🐉"],AN:["晶礦蛋","火蠑螈","水晶蝠","聖晶龍王"],
+ tLines:["叮——水晶共鳴出清脆的泛音，正在回應你的專注力💎","在幽靜的地底深處，越是沉澱，結晶就越是透亮耀眼。","每一件完成的任務，都像在原石上琢磨出一道璀璨切面！","不用急著發光，耐心地累積，你本來就是獨一無二的寶石。"],
+ lines:[
+  ["咔啦…晶礦蛋裡閃著微光，已經迫不及待想跟你去尋寶了！","就算在黑暗的洞窟裡，只要踏出一步就會亮起螢光喔！","把待辦清單當成藏寶圖，解決一項就離寶藏更近一步！","準備好了嗎？拿起十字鎬，我們敲開第一個目標吧！"],
+  ["咻咻！火蠑螈的小尾巴燃起溫暖火光，幫你照亮前路！","遇到硬石頭別怕，多敲幾下（拆成小步驟）一定能突破！","專注起來的熱度超棒，連紫水晶都被你映得閃閃發亮！","每完成一件小事，就是替自己挖到一顆漂亮原石！"],
+  ["吱吱～水晶蝠用聲波幫你掃描過啦，前面一路順暢！","在安靜的環境裡專心做事，效率真的會翻倍喔！","你默默耕耘的努力，洞窟裡的每一顆寶石都看在眼裡✨","累了就閉上眼睛聽聽清脆的水晶回音，放鬆一下吧。"],
+  ["吼——！聖晶龍王展開七彩晶翼，為你的超強執行力喝采！","經過時間與堅持的淬鍊，你的成果就像聖晶一樣無可取代！","能夠一路開拓到最深處的秘境，證明你的自律真的超強大！","偉大的探險家，今天戰果豐碩，好好休息迎接明天的寶藏吧💎"]
+ ],
+ mood:{
+  z:["探險開始！先挑一顆最好敲的小礦石（小任務）開張吧！","晶洞裡閃著微光，只要開始動手，靈感就會跟著發亮喔！","別猶豫，跨出第一步，我們一起去挖掘今天的成就感！","裝備檢查完畢！挑個順眼的任務，敲下第一槌吧💎"],
+  m:["漂亮！已經挖出 {n} 顆寶石（完成任務），背包越來越滿囉！","連破 {n} 項任務！晶洞裡的螢光因為你變得好璀璨✨","完成 {n} 件了！保持這個探險節奏，穩穩往深處推進！","幹得漂亮！喝口水擦擦汗，下一顆水晶就在眼前！"],
+  h:["傳奇探險家！今天完成了 {n} 項任務，整座地底晶洞都在七彩共鳴！","狂掃 {n} 項任務！連聖晶龍王都把最珍貴的寶石獻給你🐉","一天搞定 {n} 件事，這份專注力簡直像鑽石一樣堅不可摧！","滿載而歸！今晚就伴著溫柔的螢光孢子，好好睡一覺吧！"]
  }}
 ];
+const N_SC=SC.length,CH2_STAR=[0,2,4,6],CH2_HON=[0,20,40,60];
 function fresh(){
  return{
   tasks:[],tickets:1,
-  sc:[0,1,2,3].map(()=>({p:0,a:0})),
-  stars:[0,0,0,0],
-  unlocked:0,grow:0,view:0,allEverDone:false,
+  sc:Array.from({length:N_SC},()=>({p:0,a:0})),
+  stars:new Array(N_SC).fill(0),
+  scEver:new Array(N_SC).fill(false),
+  unlocked:0,grow:0,view:0,allEverDone:false,ch2EverDone:false,
   pulls:0,dry:0,done:0,
   decos:[],placed:{},
   hats:[],equippedHat:{},
@@ -584,14 +668,41 @@ function syncWxPref(){
  S.wxPref={manual:wxManual,wx:curWeather,time:timeMode};
 }
 
+function canOpenScene(k,m=S){
+ if(k<=0)return true;
+ if(k<4)return !!(m.scEver&&m.scEver[k-1]);
+ if(k===4)return !!m.allEverDone;
+ const idx=k-4,stSum=(m.stars||[]).reduce((a,b)=>a+b,0);
+ return !!(m.scEver&&m.scEver[k-1])&&(stSum>=CH2_STAR[idx]||(m.honorTotal||0)>=CH2_HON[idx]);
+}
+function unlockReqText(k){
+ if(k<4)return"🔒 先將「"+SC[k-1].n+"」培育滿等即可解鎖！";
+ if(k===4)return"🔒 將第一章 4 個場景全部培育滿等即可解鎖！";
+ const idx=k-4;
+ return"🔒 需先完成「"+SC[k-1].n+"」滿等，且累計 ★"+CH2_STAR[idx]+"（或累計 "+CH2_HON[idx]+" 榮譽值）解鎖！";
+}
+function syncUnlocks(m=S){
+ const opened=[];
+ for(let i=0;i<N_SC;i++){
+  if(stage(m.sc[i].p,th(i,TT,m.stars[i]||0))>=4&&stage(m.sc[i].a,th(i,PT,m.stars[i]||0))>=3)m.scEver[i]=true;
+ }
+ if([0,1,2,3].every(i=>m.scEver[i]))m.allEverDone=true;
+ if(m.scEver.every(Boolean))m.ch2EverDone=true;
+ while(m.unlocked<N_SC-1&&canOpenScene(m.unlocked+1,m)){
+  m.unlocked++;
+  opened.push(m.unlocked);
+ }
+ return opened;
+}
+
 function normalize(o){
  const base=fresh();
  const m=Object.assign(base,o);
  m.daily=Object.assign(base.daily,o.daily||{});
  m.wxPref=Object.assign(base.wxPref,o.wxPref||{});
- const scBase=[0,1,2,3].map(()=>({p:0,a:0}));
+ const scBase=Array.from({length:N_SC},()=>({p:0,a:0}));
  if(Array.isArray(o.sc)){
-  for(let i=0;i<4;i++){
+  for(let i=0;i<N_SC;i++){
    if(o.sc[i]&&typeof o.sc[i]==="object"){
     scBase[i]={p:Math.max(0,+o.sc[i].p||0),a:Math.max(0,+o.sc[i].a||0)};
    }
@@ -600,8 +711,8 @@ function normalize(o){
  m.sc=scBase;
  if(o.tree!==undefined&&!o.sc)m.sc[0]={p:Math.max(0,+o.tree||0),a:Math.max(0,+o.pet||0)};
  delete m.tree;delete m.pet;
- const stBase=[0,0,0,0];
- if(Array.isArray(o.stars)){for(let i=0;i<4;i++)stBase[i]=Math.max(0,Math.floor(+o.stars[i]||0))}
+ const stBase=new Array(N_SC).fill(0);
+ if(Array.isArray(o.stars)){for(let i=0;i<N_SC;i++)stBase[i]=Math.max(0,Math.floor(+o.stars[i]||0))}
  m.stars=stBase;
  const nn=(v,lo,hi,def)=>{v=+v;return isFinite(v)?Math.max(lo,Math.min(hi,v)):def};
  const cnt=v=>Math.max(0,Math.floor(nn(v,0,1e9,0)));
@@ -622,15 +733,24 @@ function normalize(o){
  if(m.placed&&typeof m.placed==="object")DECOS.forEach(d=>{const q=m.placed[d.id];if(q&&typeof q==="object")pl[d.id]={on:!!q.on,x:Math.round(nn(q.x,6,94,d.x)),y:Math.round(nn(q.y,14,90,d.y))}});
  m.placed=pl;
  const eh={};
- if(m.equippedHat&&typeof m.equippedHat==="object")[0,1,2,3].forEach(i=>{const h=m.equippedHat[i];if(HATS.some(x=>x.id===h)&&m.hats.includes(h))eh[i]=h});
+ if(m.equippedHat&&typeof m.equippedHat==="object")SC.forEach((_,i)=>{const h=m.equippedHat[i];if(HATS.some(x=>x.id===h)&&m.hats.includes(h))eh[i]=h});
  m.equippedHat=eh;
- {const wp=m.wxPref;m.wxPref={manual:!!wp.manual,wx:BASE_WX.concat(SPECIAL_WX.map(w=>w.id)).includes(wp.wx)?wp.wx:"clear",time:TIME_ORDER.includes(wp.time)?wp.time:"auto"}}
- m.grow=Math.max(0,Math.min(3,+m.grow||0));
- m.unlocked=Math.max(m.grow,Math.min(3,o.unlocked!==undefined?(+o.unlocked||0):m.grow));
+ const allWxIds=BASE_WX.concat(CH2_WX,SPECIAL_WX.map(w=>w.id));
+ {const wp=m.wxPref;m.wxPref={manual:!!wp.manual,wx:allWxIds.includes(wp.wx)?wp.wx:"clear",time:TIME_ORDER.includes(wp.time)?wp.time:"auto"}}
+ m.grow=Math.max(0,Math.min(N_SC-1,+m.grow||0));
+ m.unlocked=Math.max(m.grow,Math.min(N_SC-1,o.unlocked!==undefined?(+o.unlocked||0):m.grow));
+ const ch1MaxNow=[0,1,2,3].every(i=>stage(m.sc[i].p,th(i,TT,m.stars[i]))>=4&&stage(m.sc[i].a,th(i,PT,m.stars[i]))>=3);
+ m.allEverDone=!!(o.allEverDone||ch1MaxNow||m.stars.some(x=>x>0)||m.decos.length>0||m.hats.length>0||m.specialWx.length>0);
+ if(m.allEverDone&&m.unlocked<3)m.unlocked=3;
+ const evBase=new Array(N_SC).fill(false);
+ for(let i=0;i<N_SC;i++){
+  const isMax=stage(m.sc[i].p,th(i,TT,m.stars[i]))>=4&&stage(m.sc[i].a,th(i,PT,m.stars[i]))>=3;
+  evBase[i]=!!((Array.isArray(o.scEver)&&o.scEver[i])||isMax||m.stars[i]>0||i<m.unlocked||(i<4&&m.allEverDone));
+ }
+ m.scEver=evBase;
+ m.ch2EverDone=!!(o.ch2EverDone||evBase.every(Boolean));
+ syncUnlocks(m);
  m.view=Math.max(0,Math.min(m.unlocked,+m.view||0));
- const allMaxNow=[0,1,2,3].every(i=>stage(m.sc[i].p,th(i,TT,m.stars[i]))>=4&&stage(m.sc[i].a,th(i,PT,m.stars[i]))>=3);
- m.allEverDone=!!(o.allEverDone||allMaxNow||m.stars.some(x=>x>0)||m.decos.length>0||m.hats.length>0||m.specialWx.length>0);
- if(m.allEverDone)m.unlocked=3;
  {const D=m.daily,ds=v=>/^\d{4}-\d{1,2}-\d{1,2}$/.test(v)?v:"";D.d=ds(D.d);D.last=ds(D.last);D.signed=!!D.signed;D.small=!!D.small;D.claimed=!!D.claimed;D.streak=cnt(D.streak);D.maxStreak=cnt(D.maxStreak);D.todayDone=cnt(D.todayDone);D.maxToday=cnt(D.maxToday)}
  m.daily.maxStreak=Math.max(m.daily.maxStreak||0,m.daily.streak||0);
  m.daily.maxToday=Math.max(m.daily.maxToday||0,m.daily.todayDone||0);
@@ -703,15 +823,18 @@ function initStars(){
  }
  $("starLayer").innerHTML=h;
 }
-function availWxList(){return [...BASE_WX,...S.specialWx.filter(id=>WX_CFG[id])]}
+function availWxList(){
+ const ch2=CH2_WX.filter(id=>WX_CFG[id]&&S.unlocked>=WX_CFG[id].scReq);
+ return [...BASE_WX,...ch2,...S.specialWx.filter(id=>WX_CFG[id])];
+}
 function rollWeather(scIdx){
  const pool=SC[scIdx].wxPool;
  curWeather=pool[Math.floor(Math.random()*pool.length)];
 }
 function renderWeatherParticles(){
- if(wxBuilt===curWeather)return;wxBuilt=curWeather;const w=$("weatherLayer");
- if(curWeather==="clear"){w.innerHTML="";return}
- let h="";
+ if(wxBuilt===curWeather)return;wxBuilt=curWeather;const w=$("weatherLayer"),sf=$("skyFx");
+ if(curWeather==="clear"){w.innerHTML="";sf.innerHTML="";return}
+ let h="",sh="";
  if(curWeather==="rain"){
   for(let i=0;i<22;i++){
    const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*4).toFixed(2),dur=(0.7+Math.random()*0.45).toFixed(2);
@@ -727,6 +850,26 @@ function renderWeatherParticles(){
    const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*4).toFixed(2),dur=(3.8+Math.random()*2.6).toFixed(2),sz=(4+Math.random()*4).toFixed(1);
    h+='<span class="wp-snow" style="left:'+left+'%;width:'+sz+'px;height:'+sz+'px;animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
   }
+ }else if(curWeather==="bubble"){
+  for(let i=0;i<15;i++){
+   const left=(Math.random()*94+3).toFixed(1),delay=(Math.random()*5).toFixed(2),dur=(4.2+Math.random()*2.8).toFixed(2),sz=(7+Math.random()*9).toFixed(1);
+   h+='<span class="wp-bubble" style="left:'+left+'%;width:'+sz+'px;height:'+sz+'px;animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
+  }
+ }else if(curWeather==="maple"){
+  for(let i=0;i<14;i++){
+   const left=(Math.random()*106-3).toFixed(1),delay=(Math.random()*5).toFixed(2),dur=(4.8+Math.random()*2.8).toFixed(2),em=i%3===0?"🍂":"🍁";
+   h+='<span class="wp-petal" style="left:'+left+'%;animation-duration:'+dur+'s;animation-delay:-'+delay+'s">'+em+'</span>';
+  }
+ }else if(curWeather==="feather"){
+  for(let i=0;i<13;i++){
+   const left=(Math.random()*102-2).toFixed(1),delay=(Math.random()*5).toFixed(2),dur=(5.2+Math.random()*2.8).toFixed(2),em=i%4===0?"✨":"🪶";
+   h+='<span class="wp-feather" style="left:'+left+'%;animation-duration:'+dur+'s;animation-delay:-'+delay+'s">'+em+'</span>';
+  }
+ }else if(curWeather==="spore"){
+  for(let i=0;i<18;i++){
+   const left=(Math.random()*94+3).toFixed(1),delay=(Math.random()*5).toFixed(2),dur=(4.5+Math.random()*3).toFixed(2),sz=(4+Math.random()*4).toFixed(1),col=i%2===0?"#38f9d7":"#c77dff";
+   h+='<span class="wp-spore" style="left:'+left+'%;width:'+sz+'px;height:'+sz+'px;background:'+col+';box-shadow:0 0 7px '+col+';animation-duration:'+dur+'s;animation-delay:-'+delay+'s"></span>';
+  }
  }else if(curWeather==="meteor"){
   for(let i=0;i<8;i++){
    const left=(30+Math.random()*75).toFixed(1),top=(2+Math.random()*36).toFixed(1),delay=(Math.random()*4.5).toFixed(2),dur=(1.8+Math.random()*1.4).toFixed(2);
@@ -735,12 +878,14 @@ function renderWeatherParticles(){
  }else if(curWeather==="aurora"){
   h+='<div class="wp-aurora"></div><div class="wp-aurora" style="animation-delay:-3.5s;top:4%;opacity:.55"></div>';
  }else if(curWeather==="rainbow"){
-  h+='<div class="wp-rainbow"></div>';
+  const rb=["#ff6f91","#ffa45b","#ffe066","#7be495","#6fd0ff","#b78cff"];
+  sh='<svg class="wp-rainbow" viewBox="0 0 400 190"><path d="M36 190A164 142 0 0 1 364 190" fill="none" stroke="#fff" stroke-width="44" opacity=".18"/>'+rb.map((c,k)=>{const rx=182-k*6.5,ry=160-k*6.5;return'<path d="M'+(200-rx)+' 190A'+rx+' '+ry+' 0 0 1 '+(200+rx)+' 190" fill="none" stroke="'+c+'" stroke-width="7.5" opacity=".62"/>'}).join("")+'</svg>';
   for(let i=0;i<10;i++){
    const left=(10+Math.random()*80).toFixed(1),top=(12+Math.random()*45).toFixed(1),delay=(Math.random()*2).toFixed(2);
    h+='<span class="wp-sparkle" style="left:'+left+'%;top:'+top+'%;animation-delay:-'+delay+'s">✨</span>';
   }
  }
+ sf.innerHTML=sh;
  w.innerHTML=h;
 }
 function renderAtmosphere(){
@@ -807,6 +952,49 @@ function pineSVG(s){
   o+='<polygon points="'+(100-hw)+','+yb+' '+(100+hw)+','+yb+' 100,'+ya+'" fill="#2f8f64"/><polygon points="'+(100-hw*.42)+','+(ya+(yb-ya)*.4)+' '+(100+hw*.42)+','+(ya+(yb-ya)*.4)+' 100,'+ya+'" fill="#fff"/>'}
  if(s===4)o+='<text x="88" y="54" font-size="24">⭐</text><circle cx="76" cy="150" r="5" fill="#e8384f"/><circle cx="126" cy="128" r="5" fill="#ffc93c"/><circle cx="92" cy="104" r="5" fill="#6fd0ff"/>';
  return o+'</svg>'}
+function coralSVG(s){
+ let o=G+sh(s)+'<ellipse cx="100" cy="184" rx="'+(32+s*7)+'" ry="9" fill="#f3d59b"/>';
+ if(s===0)return o+'<path d="M94 182q-10-12-4-24 10 10 8 24zM106 182q10-12 4-22-10 10-8 22z" fill="#38d9a9"/><circle cx="100" cy="148" r="4" fill="#fff" opacity=".8"/></svg>';
+ if(s===1)return o+'<path d="M88 182q-14-24-4-46 14 18 10 46zM102 182q8-28 0-54 14 22 8 54zM114 182q16-20 8-40-14 16-12 40z" fill="#2ec4b6"/><circle cx="85" cy="134" r="4" fill="#a8f9ff"/><circle cx="102" cy="126" r="5" fill="#a8f9ff"/></svg>';
+ o+='<path d="M100 182v-54M100 156l-26-24M100 146l28-24" stroke="#ff6f91" stroke-width="'+(10+s*2)+'" stroke-linecap="round" fill="none"/>';
+ if(s>=3)o+='<path d="M76 182q-18-22-22-46M124 182q18-22 22-44M74 132l-14-20M128 122l14-20M100 128l-14-26M100 128l16-24" stroke="#ff8fab" stroke-width="11" stroke-linecap="round" fill="none"/><path d="M62 182q-10-16-6-32M138 182q10-16 6-32" stroke="#38d9a9" stroke-width="9" stroke-linecap="round" fill="none"/>';
+ if(s===4)o+='<ellipse cx="100" cy="154" rx="28" ry="14" fill="#ffd6e0" stroke="#ff8fab" stroke-width="3"/><path d="M72 150q28-28 56 0z" fill="#fff0f5" stroke="#ffb3c7" stroke-width="3"/><circle cx="100" cy="150" r="11" fill="#fffdf2"/><circle cx="97" cy="147" r="4" fill="#fff"/><text x="148" y="48" font-size="20">🫧</text><text x="36" y="64" font-size="18">✨</text>';
+ return o+'</svg>'}
+function bambooSVG(s){
+ let o=G+sh(s)+'<ellipse cx="100" cy="184" rx="'+(30+s*7)+'" ry="8" fill="#6b8e4e"/>';
+ if(s===0)return o+'<polygon points="88,184 112,184 100,148" fill="#8ac926"/><path d="M91 174l16-8M94 164l11-6" stroke="#558b2f" stroke-width="2.5"/><path d="M100 148q-8-8-2-15 8 5 2 15z" fill="#52b788"/></svg>';
+ const stalks=s===1?[[100,126,9,"#40916c"]]:s===2?[[82,114,8,"#52b788"],[104,96,10,"#2d6a4f"],[122,124,8,"#40916c"]]:[[70,104,8,"#40916c"],[92,76,11,"#2d6a4f"],[114,86,10,"#52b788"],[132,112,8,"#40916c"]];
+ stalks.forEach(([x,top,w,col])=>{
+  const stCol=s===4&&x===92?"#e9b84a":col;
+  o+='<line x1="'+x+'" y1="184" x2="'+x+'" y2="'+top+'" stroke="'+stCol+'" stroke-width="'+w+'" stroke-linecap="round"/>';
+  for(let y=164;y>top+10;y-=22)o+='<line x1="'+(x-w*.6)+'" y1="'+y+'" x2="'+(x+w*.6)+'" y2="'+y+'" stroke="#d8f3dc" stroke-width="2"/>';
+  o+='<path d="M'+x+' '+(top+8)+'q-18-6-24-18 18 0 24 18zM'+x+' '+(top+16)+'q18-6 24-18-18 0-24 18z" fill="'+(s===4?"#74c69d":"#52b788")+'"/>';
+ });
+ if(s>=3)[[62,92],[138,88],[104,66]].forEach(([x,y])=>o+='<circle cx="'+x+'" cy="'+y+'" r="11" fill="#e85d04" opacity=".88"/><circle cx="'+(x+7)+'" cy="'+(y+5)+'" r="8" fill="#dc2f02" opacity=".85"/>');
+ if(s===4){[[70,112,"#ff6f91"],[114,98,"#6fd0ff"],[132,122,"#ffd166"]].forEach(([x,y,c])=>o+='<line x1="'+x+'" y1="'+(y-8)+'" x2="'+x+'" y2="'+y+'" stroke="#fff" stroke-width="1.5"/><rect x="'+(x-5)+'" y="'+y+'" width="10" height="18" rx="2" fill="'+c+'"/>');o+='<text x="146" y="48" font-size="20">✨</text>'}
+ return o+'</svg>'}
+function skyTreeSVG(s){
+ let o=G+'<ellipse cx="100" cy="186" rx="'+(26+s*7)+'" ry="6" fill="#7b6cf633"/>';
+ o+='<ellipse cx="100" cy="174" rx="'+(28+s*7)+'" ry="11" fill="#fff"/><ellipse cx="82" cy="172" rx="16" ry="9" fill="#f3efff"/><ellipse cx="118" cy="172" rx="16" ry="9" fill="#fde2f3"/>';
+ if(s===0)return o+'<circle cx="100" cy="162" r="8" fill="#ffd95a"/><text x="92" y="148" font-size="16">✨</text></svg>';
+ if(s===1)return o+'<path d="M100 170v-32" stroke="#b78cff" stroke-width="6" stroke-linecap="round"/><circle cx="88" cy="136" r="12" fill="#e0c3fc"/><circle cx="112" cy="136" r="12" fill="#bde0fe"/><circle cx="100" cy="126" r="14" fill="#ffc8dd"/></svg>';
+ const top=[0,0,122,96,84][s];
+ o+='<path d="M94 170L97 '+top+'h6L106 170z" fill="'+(s===4?"#fff3b0":"#cdb4db")+'"/>';
+ const puffs=s===2?[[100,110,26,"#cdb4db"],[78,122,18,"#bde0fe"],[122,122,18,"#ffc8dd"]]:[[100,78,40,"#b8c0ff"],[64,102,28,"#ffc8dd"],[136,102,28,"#bde0fe"],[100,104,30,"#e7c6ff"]];
+ puffs.forEach(([x,y,r,c])=>o+='<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'"/>');
+ if(s>=3)o+='<text x="132" y="64" font-size="20">🌙</text>';
+ if(s===4)o+='<ellipse cx="100" cy="94" rx="58" ry="14" fill="none" stroke="#ffd95a" stroke-width="3" transform="rotate(-14 100 94)"/><text x="40" y="58" font-size="20">🌟</text><text x="92" y="48" font-size="18">✨</text>';
+ return o+'</svg>'}
+function crystalSVG(s){
+ let o=G+sh(s)+'<ellipse cx="100" cy="184" rx="'+(30+s*7)+'" ry="9" fill="#32264d"/>';
+ if(s===0)return o+'<polygon points="92,184 108,184 104,158 96,162" fill="#9d4edd"/><polygon points="100,184 108,184 104,158" fill="#c77dff"/></svg>';
+ if(s===1)return o+'<polygon points="88,184 104,184 98,132 90,140" fill="#9d4edd"/><polygon points="74,184 88,184 78,148 70,154" fill="#7b2cbf"/><polygon points="104,184 120,184 122,144 112,138" fill="#c77dff"/></svg>';
+ if(s===2)return o+'<path d="M94 184l3-42h6l3 42z" fill="#7209b7"/><path d="M64 146q36-46 72 0z" fill="#4cc9f0"/><circle cx="88" cy="134" r="4" fill="#fff"/><circle cx="106" cy="128" r="5" fill="#b8f2e6"/><circle cx="118" cy="138" r="3.5" fill="#fff"/></svg>';
+ o+='<polygon points="90,184 110,184 104,104 96,104" fill="#7209b7"/><polygon points="62,184 78,184 68,136 56,144" fill="#560bad"/><polygon points="122,184 138,184 144,142 132,136" fill="#b5179e"/>';
+ const gems=s===3?[[100,62,22,46,"#4cc9f0"],[70,96,16,34,"#c77dff"],[130,96,16,34,"#f72585"]]:[[100,46,24,54,"#38f9d7"],[66,82,18,40,"#ff6f91"],[134,82,18,40,"#ffd166"],[82,70,16,36,"#6fd0ff"],[118,70,16,36,"#c77dff"]];
+ gems.forEach(([x,y,hw,hh,c])=>o+='<polygon points="'+x+','+y+' '+(x+hw)+','+(y+hh*.55)+' '+x+','+(y+hh)+' '+(x-hw)+','+(y+hh*.55)+'" fill="'+c+'" opacity=".9"/><polygon points="'+x+','+y+' '+(x+hw)+','+(y+hh*.55)+' '+x+','+(y+hh)+'" fill="#fff" opacity=".22"/>');
+ if(s===4)o+='<text x="148" y="48" font-size="20">✨</text><text x="34" y="60" font-size="18">💎</text>';
+ return o+'</svg>'}
 
 const key=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 const yest=()=>key(new Date(Date.now()-864e5));
@@ -835,9 +1023,12 @@ function renderDaily(){dayCheck();const D=S.daily,ns=D.signed?D.streak:(D.last==
 
 function sst(i){const d=S.sc[i],st=S.stars[i]||0;return[stage(d.p,th(i,TT,st)),stage(d.a,th(i,PT,st))]}
 const done_=i=>{const[a,b]=sst(i);return a>=4&&b>=3};
+const ch1Done=()=>[0,1,2,3].every(i=>done_(i));
 const allDone=()=>SC.every((_,i)=>done_(i));
 const totalStars=()=>S.stars.reduce((a,b)=>a+b,0);
 const lockedDecos=()=>DECOS.filter(d=>!S.decos.includes(d.id));
+const availLockedDecos=()=>DECOS.filter(d=>d.sc<=S.unlocked&&!S.decos.includes(d.id));
+const ch1DecosDone=()=>DECOS.filter(d=>d.sc<4).every(d=>S.decos.includes(d.id));
 const lockedHats=()=>HATS.filter(h=>!S.hats.includes(h.id));
 const lockedWx=()=>SPECIAL_WX.filter(w=>!S.specialWx.includes(w.id));
 const lockedHidden=()=>[...lockedHats().map(h=>({k:"hat",item:h})),...lockedWx().map(w=>({k:"wx",item:w}))];
@@ -858,8 +1049,11 @@ function getAchievements(){
   {id:"streak3",e:"🔥",n:"持之以恆",d:"連續簽到滿 3 天",rw:2,ok:bestStreak>=3},
   {id:"pull10",e:"🎰",n:"扭蛋收藏家",d:"累計扭蛋 10 次",rw:2,ok:S.pulls>=10},
   {id:"sc0",e:"🌳",n:"綠手指",d:"完成第 1 個場景培育",rw:2,ok:done_(0)||S.unlocked>=1||S.stars[0]>0},
-  {id:"allsc",e:"🏆",n:"森林守護者",d:"四個場景全部培育滿等",rw:4,ok:S.allEverDone||allDone()},
+  {id:"allsc",e:"🏆",n:"森林守護者",d:"第一章四個場景全部培育滿等",rw:4,ok:S.allEverDone||ch1Done()},
+  {id:"ch2open",e:"🌊",n:"踏入秘境",d:"解鎖第二章「奇幻秘境」",rw:3,ok:S.unlocked>=4},
+  {id:"allsc2",e:"🗺️",n:"秘境開拓者",d:"八大場景全部培育滿等",rw:6,ok:S.ch2EverDone||allDone()},
   {id:"deco4",e:"🎨",n:"空間設計師",d:"收集至少 4 件場景裝飾品",rw:2,ok:S.decos.length>=4},
+  {id:"deco16",e:"🏛️",n:"秘境造景師",d:"收集至少 16 件場景裝飾品",rw:4,ok:S.decos.length>=16},
   {id:"star1",e:"⭐",n:"生態轉生",d:"將任一場景進行升星轉生",rw:3,ok:totalStars()>=1},
   {id:"hid3",e:"👑",n:"時尚天氣師",d:"收集至少 3 件夥伴頭飾或限定天氣",rw:3,ok:hiddenOwned>=3},
    {id:"star5",e:"🌟",n:"傳說生態",d:"將任一場景晉升至 ★5「傳說」",rw:5,ok:Math.max(...S.stars)>=5},
@@ -900,30 +1094,31 @@ function renderCollectionModal(){
  document.querySelectorAll("#cTabs .ctab").forEach(b=>b.classList.toggle("on",b.dataset.ct===colTab));
  if(colTab==="deco"){
   $("decoSub").textContent=S.allEverDone
-   ?(lockedDecos().length?"裝飾品池已開放（全部滿等時必出，升星後培育中每抽 50% 機率）！點選已解鎖小物可擺放或收回，也能在場景中拖曳移動。":"全 12 件場景裝飾品收集完成！點選可擺放或收回，也能在場景中拖曳移動位置。")
-   :"將四個場景全部培育完成後，扭蛋機就會開放抽取 12 件專屬場景裝飾品。";
+   ?(lockedDecos().length?"裝飾品池已開放（會抽出目前已解鎖場景的專屬裝飾，培育中每抽 50% 機率、滿等時必出）！點選小物可擺放或收回，也能在畫面中拖曳。":"全 "+DECOS.length+" 件場景裝飾品收集完成！點選可擺放或收回，也能在場景中拖曳移動位置。")
+   :"將第一章四個場景全部培育完成後，扭蛋機就會開放抽取專屬場景裝飾品。";
   $("decoGrid").innerHTML=SC.map((c,si)=>{
    const list=DECOS.filter(d=>d.sc===si);
    const owned=list.filter(d=>S.decos.includes(d.id)).length;
-   const cur=si===S.view;
-   return '<div class="dsec'+(cur?" cur":"")+'"><div class="dsec-h"><b>'+c.ic+' '+c.n+(cur?"（目前場景）":"")+'</b><small>'+owned+'/'+list.length+'</small></div><div class="dgrid">'+list.map(d=>{
+   const cur=si===S.view,scLock=si>S.unlocked;
+   const chTag=si===0?"🌿 第一章・":si===4?"✨ 第二章・":"";
+   return '<div class="dsec'+(cur?" cur":"")+'"><div class="dsec-h"><b>'+chTag+(scLock?"🔒 ???":c.ic+" "+c.n)+(cur?"（目前場景）":"")+'</b><small>'+owned+'/'+list.length+'</small></div><div class="dgrid">'+list.map(d=>{
     const has=S.decos.includes(d.id),on=has&&S.placed[d.id]&&S.placed[d.id].on;
-    return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="deco" data-id="'+d.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?d.i:"🔒")+'</span><b>'+(has?d.n:"未解鎖")+'</b><small>'+(has?(on?"已擺放":"點一下擺放"):"滿等後獲得")+'</small></button>';
+    return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="deco" data-id="'+d.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?d.i:"🔒")+'</span><b>'+(has?d.n:"未解鎖")+'</b><small>'+(has?(on?"已擺放":"點一下擺放"):(scLock?"解鎖場景後開放":"扭蛋獲得"))+'</small></button>';
    }).join("")+'</div></div>';
   }).join("");
  }else if(colTab==="hat"){
   const c=SC[S.view],eq=S.equippedHat[S.view];
-  $("decoSub").textContent=lockedDecos().length===0
+  $("decoSub").textContent=ch1DecosDone()
    ?"隱藏限定池已開放！點選已解鎖的頭飾，即可幫目前場景「"+c.ic+" "+c.n+"」的夥伴戴上或取下。"
-   :"收集完 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 6 款夥伴頭飾！";
+   :"收集完第一章 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 6 款夥伴頭飾！";
   $("decoGrid").innerHTML='<div class="dsec cur"><div class="dsec-h"><b>目前對象：'+c.ic+' '+c.n+'的夥伴</b><small>'+S.hats.length+'/'+HATS.length+'</small></div><div class="dgrid">'+HATS.map(h=>{
    const has=S.hats.includes(h.id),on=has&&eq===h.id;
    return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="hat" data-id="'+h.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?h.i:"🔒")+'</span><b>'+(has?h.n:"未解鎖")+'</b><small>'+(has?(on?"已配戴":"點一下配戴"):"隱藏池抽得")+'</small></button>';
   }).join("")+'</div></div>';
  }else{
-  $("decoSub").textContent=lockedDecos().length===0
+  $("decoSub").textContent=ch1DecosDone()
    ?"隱藏限定池已開放！解鎖限定天氣券後，點選即可立即切換並自動記憶，也能隨時從天氣按鈕輪換。"
-   :"收集完 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 3 種限定夢幻天氣！";
+   :"收集完第一章 12 件場景裝飾品後，扭蛋機將開啟「隱藏限定池」，有機會抽到 3 種限定夢幻天氣！";
   $("decoGrid").innerHTML='<div class="dsec cur"><div class="dsec-h"><b>🌠 隱藏限定天氣</b><small>'+S.specialWx.length+'/'+SPECIAL_WX.length+'</small></div><div class="dgrid">'+SPECIAL_WX.map(w=>{
    const has=S.specialWx.includes(w.id),on=has&&curWeather===w.id;
    return '<button class="dcard'+(has?(on?" on":""):" lock")+'" data-kind="wx" data-id="'+w.id+'" '+(has?"":"disabled")+'><span class="de">'+(has?w.i:"🔒")+'</span><b>'+(has?w.n:"未解鎖")+'</b><small>'+(has?(on?"套用中":"點一下套用"):"隱藏池抽得")+'</small></button>';
@@ -941,7 +1136,9 @@ function renderWorld(){
  $("hill").style.background=c.hill;
  document.querySelectorAll(".cloud").forEach(e=>e.textContent=c.dc);
  $("tree").innerHTML=c.svg(ts);
+ $("tree").title="戳戳"+c.pl;$("tree").setAttribute("aria-label","戳戳"+c.pl);
  $("petBody").textContent=c.A[ps];
+ $("pet").title="摸摸"+c.pn;$("pet").setAttribute("aria-label","摸摸"+c.pn);
  $("pet").style.fontSize=PS[ps]+"px";
  const hatId=S.equippedHat[i],hatObj=HATS.find(h=>h.id===hatId&&S.hats.includes(h.id));
  const ph=$("petHat");
@@ -966,19 +1163,30 @@ function renderWorld(){
   if(growing){const gst=S.stars[S.grow]||0;parts.push('綠色道具讓植物長大，橘色道具讓夥伴長大。目前培育中：<b id="gTarget">'+SC[S.grow].ic+' '+SC[S.grow].n+(gst?' ★'+gst:'')+'</b>')}
   else if(!S.allEverDone)parts.push('目前目標場景已滿等，請切換至尚未滿等的場景設為培育目標。');
   if(S.allEverDone){
-   const remD=lockedDecos().length,remH=lockedHidden().length;
-   if(remD){alwaysDeco=!growing;parts.push(growing?'🎨 每抽有 <b>50%</b> 機率獲得「場景裝飾品」（剩餘 '+remD+' 件）':'🎉 四個場景皆滿等！現在扭蛋必出<b>「場景裝飾品」</b>（剩餘 '+remD+' 件）。升星轉生後仍會繼續掉落。')}
-   else if(remH)parts.push('✨ <b>隱藏限定池</b>開放中！每抽 35% 機率（連續 5 抽沒出稀有，第 6 抽必出）獲得<b>夥伴頭飾／限定天氣</b>（剩餘 '+remH+' 件）');
-   else if(!growing)parts.push('🏆 全圖鑑 '+TOTAL_COLL+' 件收藏達成！可幫任意場景<b>「⭐ 升星轉生」</b>解鎖更高星級光環。');
+   const remD=availLockedDecos().length,remAllD=lockedDecos().length,remH=lockedHidden().length;
+   if(remD){alwaysDeco=!growing;parts.push(growing?'🎨 每抽有 <b>50%</b> 機率獲得已解鎖場景的「裝飾品」（目前池內剩 '+remD+' 件）':'🎉 目前培育場景已滿等！扭蛋必出<b>「場景裝飾品」</b>（目前池內剩 '+remD+' 件）。')}
+   else if(ch1DecosDone()&&remH)parts.push('✨ <b>隱藏限定池</b>開放中！每抽 35% 機率（連 5 抽沒出稀有，第 6 抽必出）獲得<b>夥伴頭飾／限定天氣</b>（剩餘 '+remH+' 件）');
+   else if(!growing&&!remAllD&&!remH)parts.push('🏆 全圖鑑 '+TOTAL_COLL+' 件收藏達成！可幫任意場景<b>「⭐ 升星轉生」</b>解鎖更高星級光環。');
+   if(S.unlocked<N_SC-1&&!growing)parts.push('🗺️ 下一秘境：'+unlockReqText(S.unlocked+1).slice(2));
   }
   if(!growing&&!alwaysDeco)parts.push('🏅 目標已滿等，成長值會轉為<b>榮譽值</b>（'+S.honor+'/'+HONOR_PER+'），每滿 '+HONOR_PER+' 點自動回饋 1 張扭蛋券。');
   if(growing)parts.push('連續 5 抽沒出稀有，第 6 抽必出稀有。');
   $("gOdds").innerHTML=parts.join('<br>');
  }
- $("tabs").innerHTML=SC.map((x,k)=>{
-  const locked=k>S.unlocked,kst=S.stars[k]||0,isGrow=k===S.grow&&!done_(k);
+ const curCh=Math.floor(i/4),growCh=Math.floor(S.grow/4),growActive=!done_(S.grow);
+ const ch2Lock=S.unlocked<4;
+ $("chBar").innerHTML=[
+  {ch:0,lb:"🌿 第一章：四季自然",lock:false},
+  {ch:1,lb:(ch2Lock?"🔒":"✨")+" 第二章：奇幻秘境",lock:ch2Lock}
+ ].map(x=>'<button class="ch-btn'+(curCh===x.ch?" on":"")+(x.lock?" lock":"")+'" data-ch="'+x.ch+'">'+x.lb+(growActive&&growCh===x.ch?" 🌱":"")+"</button>").join("");
+ const baseIdx=curCh*4;
+ $("tabs").innerHTML=SC.slice(baseIdx,baseIdx+4).map((x, idx)=>{
+  const k=baseIdx+idx,locked=k>S.unlocked,kst=S.stars[k]||0,isGrow=k===S.grow&&!done_(k);
   const stTag=kst>0?'<span class="st-tag">★'+kst+'</span>':"";
-  return '<button class="sc'+(k===i?" on":"")+'" data-i="'+k+'" '+(locked?"disabled":"")+' title="'+x.n+'">'+stTag+(locked?"🔒":x.ic)+"<small>"+(locked?"未解鎖":done_(k)?"滿等":isGrow?"培育中":"待培育")+"</small></button>";
+  let sub="未解鎖";
+  if(!locked)sub=done_(k)?"滿等":isGrow?"培育中":"待培育";
+  else if(k>=5&&S.scEver[k-1])sub="需★"+CH2_STAR[k-4];
+  return '<button class="sc'+(k===i?" on":"")+(locked?" locked":"")+'" data-i="'+k+'" aria-disabled="'+locked+'" title="'+(locked?unlockReqText(k):x.n)+'">'+stTag+(locked?"🔒":x.ic)+"<small>"+sub+"</small></button>";
  }).join("");
  renderDecosInScene();
  renderAtmosphere();
@@ -997,8 +1205,8 @@ function renderStats(){
   {v:S.daily.todayDone||0,l:"今日完成（最高 "+bestToday+"）"},
   {v:S.pulls,l:"累計扭蛋次數"},
   {v:cs+" 天",l:"連續簽到（最高 "+bestStreak+" 天）"},
-  {v:"★"+totalStars(),l:"場景累計星級（滿等 "+doneScenes+"/4）"},
-  {v:totalOwnedColl()+" / "+TOTAL_COLL,l:"裝飾 "+S.decos.length+"/12・限定 "+hiddenOwned+"/"+hiddenTotal},
+  {v:"★"+totalStars(),l:"場景累計星級（滿等 "+doneScenes+"/"+N_SC+"）"},
+  {v:totalOwnedColl()+" / "+TOTAL_COLL,l:"裝飾 "+S.decos.length+"/"+DECOS.length+"・限定 "+hiddenOwned+"/"+hiddenTotal},
    {v:"★"+Math.max(...S.stars)+(Math.max(...S.stars)?" "+starTitle(Math.max(...S.stars)):""),l:"最高星級"},
    {v:S.honorTotal,l:"累計榮譽值（回饋 "+S.honorTk+" 張券）"}
  ];
@@ -1216,14 +1424,14 @@ function undoComplete(chain,gain,snap,claimedBefore){
 
 function pick(){
  if(S.allEverDone){
-  const remD=lockedDecos(),growing=!done_(S.grow);
-  // 曾全部滿等即開放收藏池；升星後培育中每抽 50% 出裝飾，其餘時間必出
+  const remD=availLockedDecos(),growing=!done_(S.grow);
+  // 曾完成第一章即開放收藏池；升星或培育新場景時每抽 50% 出已解鎖場景裝飾，目標滿等時必出
   if(remD.length&&(!growing||Math.random()<0.5)){
    const d=remD[Math.floor(Math.random()*remD.length)];
    return{n:d.n,i:d.i,k:"deco",deco:d,v:0,r:1,c:d.c};
   }
   const remH=lockedHidden();
-  if(!remD.length&&remH.length&&(S.dry>=5||Math.random()<0.35)){
+  if(!remD.length&&ch1DecosDone()&&remH.length&&(S.dry>=5||Math.random()<0.35)){
    const pickH=remH[Math.floor(Math.random()*remH.length)];
    return{n:pickH.item.n,i:pickH.item.i,k:pickH.k,item:pickH.item,v:0,r:1,c:pickH.item.c};
   }
@@ -1234,11 +1442,16 @@ function pick(){
 
 function advanceGrowAfterDone(gi){
  const msgs=[];
- if(gi<3&&S.unlocked===gi){
-  S.unlocked=gi+1;S.grow=gi+1;
-  msgs.push("🎉 「"+SC[gi].n+"」培育完成！解鎖新場景「"+SC[gi+1].n+"」！");
+ const wasCh1=S.allEverDone,wasCh2=S.ch2EverDone;
+ const opened=syncUnlocks(S);
+ if(S.allEverDone&&!wasCh1)msgs.push("🏆 第一章全部培育完成！開放「場景裝飾品」、「⭐ 升星轉生」與第二章秘境！");
+ if(opened.length){
+  const firstNew=opened[0];
+  S.grow=firstNew;
+  msgs.push("🎉 解鎖新場景「"+SC[firstNew].ic+" "+SC[firstNew].n+"」！已自動設為培育目標！");
   return msgs;
  }
+ if(S.ch2EverDone&&!wasCh2)msgs.push("🗺️ 八大場景全部培育完成！恭喜成為秘境開拓者！");
  const nextUnmax=SC.findIndex((_,k)=>k<=S.unlocked&&!done_(k));
  if(nextUnmax>-1){
   S.grow=nextUnmax;
@@ -1246,10 +1459,11 @@ function advanceGrowAfterDone(gi){
   msgs.push("🌟 「"+SC[gi].n+(st?" ★"+st:"")+"」滿等完成！已切換培育「"+SC[nextUnmax].n+"」");
   return msgs;
  }
- const firstTimeAll=!S.allEverDone;
- S.allEverDone=true;S.unlocked=3;
- if(firstTimeAll)msgs.push("🏆 四個場景全部培育完成！開放抽取「場景裝飾品」與「⭐ 升星轉生」！");
- else if((S.stars[gi]||0)>0)msgs.push("🌟 「"+SC[gi].n+" ★"+S.stars[gi]+"」再次培育滿等！可繼續升星或抽收藏池！");
+ if(S.unlocked<N_SC-1){
+  msgs.push("🌟 「"+SC[gi].n+"」滿等完成！"+unlockReqText(S.unlocked+1).slice(2));
+ }else if((S.stars[gi]||0)>0){
+  msgs.push("🌟 「"+SC[gi].n+" ★"+S.stars[gi]+"」再次培育滿等！可繼續升星或抽收藏池！");
+ }
  return msgs;
 }
 
@@ -1267,10 +1481,12 @@ function spin(){
 function applyPrize(p){
  if(p.k==="deco"){
   const d=p.deco;
+  const hadCh1=ch1DecosDone();
   if(!S.decos.includes(d.id))S.decos.push(d.id);
   S.placed[d.id]={on:true,x:d.x,y:d.y};
   const up=["🎨 解鎖「"+SC[d.sc].n+"」裝飾："+d.i+d.n];
-  if(!lockedDecos().length)up.push("✨ 全 12 件裝飾收齊！隱藏限定池已開放！");
+  if(!hadCh1&&ch1DecosDone())up.push("✨ 第一章 12 件裝飾收齊！隱藏限定池已開放！");
+  else if(!lockedDecos().length)up.push("🏆 全 "+DECOS.length+" 件場景裝飾全部收齊！");
   return{up,desc:"",k:"both",view:d.sc};
  }
  if(p.k==="hat"){
@@ -1292,7 +1508,9 @@ function applyPrize(p){
   S.honor+=hv;S.honorTotal+=hv;
   while(S.honor>=HONOR_PER){S.honor-=HONOR_PER;S.tickets++;S.honorTk++;got++}
   if(got)up.push("🏅 榮譽值集滿！回饋 +"+got+" 🎟️");
-  return{up,desc:"🏅 榮譽值 +"+hv+"（"+S.honor+"/"+HONOR_PER+"，集滿換 1 張券）",k:p.k,view:gi};
+  const openedH=syncUnlocks(S);
+  if(openedH.length){const fn=openedH[0];S.grow=fn;up.push("🗺️ 榮譽達標！解鎖新秘境「"+SC[fn].ic+" "+SC[fn].n+"」！")}
+  return{up,desc:"🏅 榮譽值 +"+hv+"（"+S.honor+"/"+HONOR_PER+"，集滿換 1 張券）",k:p.k,view:openedH.length?openedH[0]:gi};
  }
  let desc="",effK=p.k;
  if(p.k==="both"){d.p+=p.v;d.a+=p.v;desc=c.pl+"和"+c.pn+" +"+p.v+" 成長值"}
@@ -1317,7 +1535,8 @@ function reveal(p){
  if(p.k==="deco"){
   const dd=p.deco;
   n="解鎖場景裝飾："+dd.n;d="已自動擺放到「"+SC[dd.sc].n+"」場景，可在畫面中拖曳移動！";
-  u=lockedDecos().length?"裝飾品收集進度："+S.decos.length+" / "+DECOS.length:"🏆 全 12 件裝飾品收齊！隱藏限定池（夥伴頭飾與限定天氣）正式解鎖！";
+  u=lockedDecos().length?"裝飾品收集進度："+S.decos.length+" / "+DECOS.length:"🏆 全 "+DECOS.length+" 件裝飾品全部收齊！";
+  if(r.up.length>1)u+=" "+r.up.slice(1).join(" ");
   f=["🌟","🎊","✨",dd.i];nf=16;big=true;
  }else if(p.k==="hat"){
   const h=p.item;
@@ -1385,7 +1604,7 @@ function say(){
  const moodPool=c.mood[moodKey].map(s=>s.replace("{n}",td));
  showBubble([...stagePool,...moodPool]);
 }
-function sayTree(){showBubble(TREE_LINES)}
+function sayTree(){showBubble(SC[S.view].tLines||TREE_LINES)}
 
 // Scene Ascension (轉生升星)
 let ascendTimer=null;
@@ -1399,13 +1618,16 @@ $("ascendBtn").onclick=()=>{
   return;
  }
  clearTimeout(ascendTimer);ascendTimer=null;
+ S.scEver[i]=true;
  S.stars[i]=(S.stars[i]||0)+1;
  S.sc[i]={p:0,a:0};
  S.grow=i;
+ const opened=syncUnlocks(S);
  const r=$("sceneBox").getBoundingClientRect();
  fx(r.left+r.width/2,r.top+r.height/2,["⭐","🌟","✨","🎊"],18);
  tone([523,659,784,1046,1318]);
- toast("🎉 「"+c.n+"」升星轉生成功！晉升 ★"+S.stars[i]+"「"+starTitle(S.stars[i])+"」"+(S.stars[i]>5?"，傳說光環持續閃耀！":"，解鎖新的星級外觀光環！"));
+ const openMsg=opened.length?" 並解鎖新秘境「"+SC[opened[0]].ic+" "+SC[opened[0]].n+"」！":"";
+ toast("🎉 「"+c.n+"」升星轉生成功！晉升 ★"+S.stars[i]+"「"+starTitle(S.stars[i])+"」！"+openMsg);
  renderAll();
 };
 $("growPickBtn").onclick=()=>{
@@ -1601,14 +1823,28 @@ $("clrDone").onclick=()=>{
  toast("已清除 "+rm+" 項已完成任務"+(extra.length?"（已保留 "+extra.join("、")+"）":""));
 };
 {let ct=null;const b=$("clrAll");b.onclick=()=>{if(!S.tasks.length){toast("清單已經是空的");return}if(!ct){b.textContent="再按一次確認清空";ct=setTimeout(()=>{ct=null;b.textContent="清空清單"},3000);return}clearTimeout(ct);ct=null;b.textContent="清空清單";const n=S.tasks.length;S.tasks=[];clearParent();renderAll();toast("已清空 "+n+" 項任務，扭蛋券與成長都保留")}}
-$("tabs").onclick=e=>{
- const b=e.target.closest(".sc");
- if(b&&!b.disabled){
+const lastChView=[0,4];
+$("chBar").onclick=e=>{
+ const b=e.target.closest(".ch-btn");if(!b)return;
+ const ch=+b.dataset.ch;
+ if(ch===1&&S.unlocked<4){tone([300]);toast(unlockReqText(4));return}
+ lastChView[Math.floor(S.view/4)]=S.view;
+ const target=Math.min(S.unlocked,Math.max(ch*4,lastChView[ch]||ch*4));
+ if(target!==S.view){
   clearTimeout(ascendTimer);ascendTimer=null;
-  S.view=+b.dataset.i;
+  S.view=target;
   if(!wxManual)rollWeather(S.view);
   renderWorld();save();tone([660,880]);
  }
+};
+$("tabs").onclick=e=>{
+ const b=e.target.closest(".sc");if(!b)return;
+ const k=+b.dataset.i;
+ if(k>S.unlocked){tone([300]);toast(unlockReqText(k));return}
+ clearTimeout(ascendTimer);ascendTimer=null;
+ S.view=k;lastChView[Math.floor(k/4)]=k;
+ if(!wxManual)rollWeather(S.view);
+ renderWorld();save();tone([660,880]);
 };
 $("dOpen").onclick=()=>{renderDaily();$("dov").classList.add("on")};$("dClose").onclick=()=>$("dov").classList.remove("on");$("dov").onclick=e=>{if(e.target.id==="dov")$("dov").classList.remove("on")};
 $("dList").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;dayCheck();const D=S.daily,r=b.getBoundingClientRect();let g=0;
