@@ -1,5 +1,5 @@
 // 任務森林 Service Worker（支援 GitHub Pages 子路徑與離線快取）
-const CACHE_NAME = "task-forest-pwa-v1";
+const CACHE_NAME = "task-forest-pwa-v2";
 const PRECACHE = ["./", "./index.html", "./manifest.json"];
 
 self.addEventListener("install", e => {
