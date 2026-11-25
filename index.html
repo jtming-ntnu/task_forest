@@ -48,12 +48,25 @@ h1{margin:0;font-size:26px;color:var(--gd)}
 h2{margin:0 0 10px;font-size:19px}
 .task-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
 .task-head h2{margin:0}
+.th-r{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .mini-tog{border:2px solid var(--line);background:var(--soft);color:var(--mut);border-radius:99px;padding:3px 10px;font-size:13px;display:inline-flex;align-items:center;gap:4px;transition:border-color .15s,background .15s,color .15s}
 .mini-tog.on{border-color:var(--g);background:color-mix(in srgb,var(--g) 12%,var(--card));color:var(--g)}
 #world{grid-area:world;display:flex;flex-direction:column;min-height:0}#tasks{grid-area:tasks;display:flex;flex-direction:column;min-height:0}
-#gacha,#daily,#bk,#stats,#decoPop{text-align:center;position:relative;width:100%;max-width:360px;max-height:94dvh;overflow:auto}
+#gacha,#daily,#bk,#stats,#decoPop,#helpPop{text-align:center;position:relative;width:100%;max-width:360px;max-height:94dvh;overflow:auto}
 #stats,#decoPop{max-width:440px}
-#gov,#dov,#bov,#sov,#decov{z-index:40}
+#helpPop{max-width:380px}
+#gov,#dov,#bov,#sov,#decov,#helpov{z-index:40}
+.g-ic{font-size:48px;line-height:1.15;margin:2px 0 6px;animation:bob 1.8s ease-in-out infinite}
+.g-list{display:grid;gap:8px;text-align:left;margin:12px 0}
+.g-item{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start;padding:9px 11px;border-radius:15px;border:1.5px solid var(--line);background:var(--soft);font-size:13.5px;line-height:1.45}
+.g-item span{font-size:20px;line-height:1.2;text-align:center}
+.g-item b{color:var(--gd)}:root[data-theme="dark"] .g-item b{color:#7ee0ad}@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .g-item b{color:#7ee0ad}}
+.g-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 12px}
+.g-dot{width:9px;height:9px;padding:0;border-radius:99px;border:0;background:var(--line);transition:width .2s,background .2s}
+.g-dot.on{width:22px;background:var(--g)}
+.g-nav{display:flex;gap:8px}
+.g-nav .btn{flex:1;padding:10px 12px;font-size:15px}
+.g-nav .btn.sec{background:var(--soft);color:var(--mut);border:2px solid var(--line);box-shadow:none}
 #bk textarea{display:block;width:100%;margin:8px 0;padding:10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-size:12px;word-break:break-all;resize:vertical}#bk h3{margin:18px 0 0;font-size:16px}#bk .btn{width:100%}
 /* scene */
 .scene{position:relative;flex:1;min-height:90px;border-radius:20px;overflow:hidden;background:linear-gradient(#8fd6ff,#e9fbff 64%,#8fd694 64%,#59b06a);-webkit-user-select:none;user-select:none;touch-action:pan-y;transition:background .8s ease,box-shadow .5s ease;isolation:isolate}
@@ -322,7 +335,10 @@ h2{margin:0 0 10px;font-size:19px}
   <section class="card" id="tasks">
     <div class="task-head">
       <h2>我的任務</h2>
-      <button class="mini-tog on" id="sinkBtn" title="開啟時，已完成的任務會自動排到下方">⬇️ 已完成沉底</button>
+      <div class="th-r">
+        <button class="mini-tog" id="helpOpen" title="查看玩法說明與新手指南">❓ 玩法</button>
+        <button class="mini-tog on" id="sinkBtn" title="開啟時，已完成的任務會自動排到下方">⬇️ 已完成沉底</button>
+      </div>
     </div>
     <div class="add">
       <input id="inp" maxlength="60" placeholder="寫下一個任務，按 Enter 新增" aria-label="任務名稱">
@@ -391,6 +407,18 @@ h2{margin:0 0 10px;font-size:19px}
   <h2>📲 安裝到手機／桌面</h2>
   <p class="odds" id="pwaDesc" style="text-align:left;line-height:1.65"></p>
   <button class="btn" id="pwaAct" style="margin-top:12px;width:100%">知道了</button>
+</section></div>
+
+<div class="ov" id="helpov"><section class="card" id="helpPop" role="dialog" aria-modal="true" aria-label="任務森林新手指南">
+  <button class="gx" id="helpClose" aria-label="關閉新手指南">✕</button>
+  <div class="g-ic" id="gIc"></div>
+  <h2 id="gTitle"></h2>
+  <div class="g-list" id="gBody"></div>
+  <div class="g-dots" id="gDots"></div>
+  <div class="g-nav">
+    <button class="btn sec" id="gPrev"></button>
+    <button class="btn" id="gNext"></button>
+  </div>
 </section></div>
 
 <div class="ov" id="ov"><div class="box" role="dialog" aria-modal="true" aria-label="扭蛋結果">
@@ -628,7 +656,7 @@ function fresh(){
 let S=fresh(),lastK="",lastI=null;
 let parent=null,busy=false,newTaskId=null,wxBuilt=null;
 const KEY="taskForestV2",PKEY="taskForestPrefs";
-let prefs={theme:"auto",muted:false,sinkDone:true,lastBackup:0,nudgeAt:0};
+let prefs={theme:"auto",muted:false,sinkDone:true,lastBackup:0,nudgeAt:0,guideSeen:false};
 try{const pr=localStorage.getItem(PKEY);if(pr)prefs=Object.assign(prefs,JSON.parse(pr))}catch(e){}
 function savePrefs(){try{localStorage.setItem(PKEY,JSON.stringify(prefs))}catch(e){}}
 function isDarkNow(){return prefs.theme==="dark"||(prefs.theme==="auto"&&matchMedia("(prefers-color-scheme:dark)").matches)}
@@ -1800,6 +1828,7 @@ $("gOpen").onclick=()=>{$("gov").classList.add("on");$("spin").focus()};$("gClos
 addEventListener("keydown",e=>{
  if(e.key==="Escape"&&!busy){
   if($("ov").classList.contains("on")){closePop();return}
+  if($("helpov").classList.contains("on"))closeGuide();
   $("gov").classList.remove("on");$("dov").classList.remove("on");$("bov").classList.remove("on");$("sov").classList.remove("on");$("decov").classList.remove("on");$("pwaov").classList.remove("on");
  }
 });
@@ -1858,7 +1887,65 @@ kbClick($("tree"),()=>$("tree").click());
 kbClick($("pet"),()=>$("pet").click());
 let rt;$("reset").onclick=()=>{if(!rt){$("reset").textContent="再按一次確認清空";rt=setTimeout(()=>{rt=null;$("reset").textContent="重新開始"},3000);return}clearTimeout(rt);rt=null;$("reset").textContent="重新開始";S=fresh();notifiedAchs.clear();applySavedAtmosphere();clearParent();renderAll(true);toast("森林已重置，開始新的冒險！")};
 
-if(!load()){S.tasks=[{id:uid(),name:"完成期末報告",level:0,done:false,repeat:false,collapsed:false},{id:uid(),name:"整理參考資料",level:1,done:false,repeat:false,collapsed:false},{id:uid(),name:"找 3 篇文獻",level:2,done:false,repeat:false,collapsed:false},{id:uid(),name:"寫出報告大綱",level:1,done:false,repeat:false,collapsed:false}]}
+function starterTasks(){
+ return[
+  {id:uid(),name:"歡迎來到任務森林！（細項全勾會自動完成我喔）",level:0,done:false,doneDay:"",repeat:false,collapsed:false,created:0},
+  {id:uid(),name:"1. 點左邊方框打勾，領取扭蛋券",level:1,done:false,doneDay:"",repeat:false,collapsed:false,created:0},
+  {id:uid(),name:"2. 點右上角 🎰 扭蛋機，餵養小樹與神祕蛋",level:1,done:false,doneDay:"",repeat:false,collapsed:false,created:0},
+  {id:uid(),name:"3. 點左上角 📅 每日簽到，再寫下你的第一個任務",level:1,done:false,doneDay:"",repeat:false,collapsed:false,created:0}
+ ];
+}
+const GUIDE_PAGES=[
+ {ic:"🌳🐣",t:"歡迎來到任務森林！",items:[
+  ["✅","<b>完成待辦拿扭蛋券</b>：大任務 +3、小任務 +2、子任務 +1 張 🎟️（下方已準備好免冷卻的新手任務可直接試玩！）"],
+  ["🎰","<b>扭蛋餵養植物與夥伴</b>：點右上角扭蛋機抽出養分，看著種子發芽、神祕蛋破殼進化！"],
+  ["🗺️","<b>探索八大療癒秘境</b>：培育滿等可解鎖 8 大主題場景、33 件收藏圖鑑與升星光環！"]
+ ]},
+ {ic:"📝🔁",t:"任務拆解與每日習慣",items:[
+  ["➕","<b>大任務拆細項</b>：點任務右側「＋」新增下層細項；<b>細項全部打勾後，上層會自動完成並發券！</b>"],
+  ["🔁","<b>每日習慣模式</b>：開啟「🔁 每日」的任務，每天 0 點會自動重置為未完成，適合養成日常習慣。"],
+  ["⏳","<b>防刷券冷卻與復原</b>：新建立的任務需等 1～5 分鐘才能勾選（先列清單、做完再打勾剛剛好）；勾錯隨時再點一下即可取消。"]
+ ]},
+ {ic:"📅📲",t:"每日福利與進度保存",items:[
+  ["🏆","<b>簽到與成就獎勵</b>：左上角「📅 每日任務」與「🏆 成就牆」都能額外領取扭蛋券！"],
+  ["📲","<b>安裝到手機離線玩</b>：點下方「📲 安裝 App」加到主畫面，像原生 App 全螢幕開啟且支援離線使用。"],
+  ["💾","<b>本機儲存記得備份</b>：進度儲存在目前瀏覽器，換手機或清除快取前，請至「備份／還原」複製備份碼保存。"]
+ ]}
+];
+let gStep=0;
+function renderGuide(){
+ const p=GUIDE_PAGES[gStep],last=gStep===GUIDE_PAGES.length-1;
+ $("gIc").textContent=p.ic;
+ $("gTitle").textContent=p.t+"（"+(gStep+1)+"/"+GUIDE_PAGES.length+"）";
+ $("gBody").innerHTML=p.items.map(([ic,tx])=>'<div class="g-item"><span>'+ic+'</span><div>'+tx+'</div></div>').join("");
+ $("gDots").innerHTML=GUIDE_PAGES.map((_,i)=>'<button class="g-dot'+(i===gStep?" on":"")+'" data-gi="'+i+'" aria-label="第 '+(i+1)+' 頁"></button>').join("");
+ $("gPrev").textContent=gStep===0?"略過":"⬅ 上一頁";
+ $("gNext").textContent=last?"開始體驗！🌱":"下一頁 ➔";
+}
+function openGuide(step=0){gStep=step;renderGuide();$("helpov").classList.add("on")}
+function closeGuide(){
+ $("helpov").classList.remove("on");
+ if(!prefs.guideSeen){prefs.guideSeen=true;savePrefs()}
+}
+$("helpOpen").onclick=()=>openGuide(0);
+$("helpClose").onclick=closeGuide;
+$("helpov").onclick=e=>{if(e.target.id==="helpov")closeGuide()};
+$("gDots").onclick=e=>{const b=e.target.closest(".g-dot");if(b){gStep=+b.dataset.gi;renderGuide()}};
+$("gPrev").onclick=()=>{if(gStep===0)closeGuide();else{gStep--;renderGuide()}};
+$("gNext").onclick=()=>{if(gStep<GUIDE_PAGES.length-1){gStep++;renderGuide()}else{tone([523,659,784]);closeGuide()}};
+{let gx0=null;
+ $("helpPop").addEventListener("pointerdown",e=>{gx0=e.clientX});
+ $("helpPop").addEventListener("pointerup",e=>{
+  if(gx0===null)return;const dx=e.clientX-gx0;gx0=null;
+  if(Math.abs(dx)>48){
+   if(dx<0&&gStep<GUIDE_PAGES.length-1){gStep++;renderGuide()}
+   else if(dx>0&&gStep>0){gStep--;renderGuide()}
+  }
+ });
+}
+
+const isFirstVisit=!load();
+if(isFirstVisit){S.tasks=starterTasks()}
 
 const BK2="TFOREST2:",BK1="TFOREST1:";
 function encodeBackup(obj){
@@ -2002,7 +2089,8 @@ try{matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>{if(
  };
 }
 
-applyPrefs();initGlobe();initStars();dayCheck();applySavedAtmosphere();lastSer=ser();renderAll(true);backupNudge();
+applyPrefs();initGlobe();initStars();dayCheck();applySavedAtmosphere();lastSer=ser();renderAll(true);
+if(isFirstVisit&&!prefs.guideSeen){openGuide(0)}else{backupNudge()}
 setInterval(()=>{
  if(dayCheck()){renderAll(true);if($("dov").classList.contains("on"))renderDaily()}
  if(timeMode==="auto")renderAtmosphere();
