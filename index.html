@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
-<title>任務森林｜扭蛋養成</title>
+<title>任務森林｜扭蛋養樹與毛孩</title>
 <meta name="description" content="完成待辦任務、收集扭蛋券，在四個療癒場景中培育專屬植物與毛孩夥伴！支援每日習慣模式、成就系統與本機備份。">
 <meta property="og:title" content="任務森林｜扭蛋養樹與毛孩">
 <meta property="og:description" content="把待辦清單變成療癒養成遊戲！完成任務抽扭蛋，培育森林、花田、沙漠與雪地的植物與夥伴。">
@@ -20,7 +20,8 @@
 :root{--bg:#e6f6ea;--card:#fff;--ink:#22352c;--mut:#5f7a6c;--g:#2f9e6e;--gd:#1f6b4f;--pink:#ff6f91;--sun:#ffc93c;--lil:#7b6cf6;--lilt:#6a5ae0;--line:#d3e8da;--soft:#f2faf4;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#112018;--card:#1b2e24;--ink:#e6f4ea;--mut:#9bb8a8;--line:#2c4739;--soft:#16271e;--lilt:#b9b1ff;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#112018;--card:#1b2e24;--ink:#e6f4ea;--mut:#9bb8a8;--line:#2c4739;--soft:#16271e;--lilt:#b9b1ff;color-scheme:dark}
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:focus:not(:focus-visible){outline:none}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.5}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -55,7 +56,7 @@ h2{margin:0 0 10px;font-size:19px}
 #gov,#dov,#bov,#sov,#decov{z-index:40}
 #bk textarea{display:block;width:100%;margin:8px 0;padding:10px;border-radius:14px;border:2px solid var(--line);background:var(--soft);font-size:12px;word-break:break-all;resize:vertical}#bk h3{margin:18px 0 0;font-size:16px}#bk .btn{width:100%}
 /* scene */
-.scene{position:relative;flex:1;min-height:90px;border-radius:20px;overflow:hidden;background:linear-gradient(#8fd6ff,#e9fbff 64%,#8fd694 64%,#59b06a);user-select:none;touch-action:pan-y;transition:background .8s ease,box-shadow .5s ease;isolation:isolate}
+.scene{position:relative;flex:1;min-height:90px;border-radius:20px;overflow:hidden;background:linear-gradient(#8fd6ff,#e9fbff 64%,#8fd694 64%,#59b06a);-webkit-user-select:none;user-select:none;touch-action:pan-y;transition:background .8s ease,box-shadow .5s ease;isolation:isolate}
 .scene.star-1{box-shadow:inset 0 0 0 3px #ffc93c,0 0 14px #ffc93c55}
 .scene.star-1 #tree{filter:drop-shadow(0 0 8px #ffb3c7aa) hue-rotate(-14deg) saturate(1.16)}
 .scene.star-1 #pet{filter:drop-shadow(0 0 8px #ffd95acc)}
